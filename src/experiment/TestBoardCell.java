@@ -1,5 +1,6 @@
 package experiment;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoardCell {
@@ -14,6 +15,7 @@ public class TestBoardCell {
 		super();
 		this.row = row;
 		this.col = col;
+		adjCellList = new HashSet<TestBoardCell>();
 	}
 	
 	//Add cell to adjacency list of current cell.
@@ -25,6 +27,7 @@ public class TestBoardCell {
 	 * Then return the adjacency list.
 	 */
 	public Set<TestBoardCell> getAdjList() {
+		/*
 		TestBoardCell tmpCell;
 		if (row > 0) {
 			tmpCell = new TestBoardCell(row - 1, col);
@@ -42,6 +45,7 @@ public class TestBoardCell {
 			tmpCell = new TestBoardCell(row, col + 1);
 			this.addAdjacency(tmpCell);
 		}
+		*/
 		return adjCellList;
 	}
 	
@@ -67,6 +71,5 @@ public class TestBoardCell {
 	public String toString() {
 		return "[" + row + ", " + col + "]";
 	}
-	
 	
 }
