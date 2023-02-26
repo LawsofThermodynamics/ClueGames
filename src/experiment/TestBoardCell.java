@@ -62,4 +62,11 @@ public class TestBoardCell {
 	public boolean getOccupied() {
 		return isOccupied;
 	}
+
+	@Override
+	public String toString() {
+		return "[" + row + ", " + col + "]";
+	}
+	
+	
 }
