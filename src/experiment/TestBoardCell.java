@@ -20,8 +20,28 @@ public class TestBoardCell {
 	public void addAdjacency(TestBoardCell cell ) {
 		adjCellList.add(cell);
 	}
-	//Get current adjacency cell list.
+	
+	/* Check 4 adjacency cells, if in board, add the cell to the list. 
+	 * Then return the adjacency list.
+	 */
 	public Set<TestBoardCell> getAdjList() {
+		TestBoardCell tmpCell;
+		if (row > 0) {
+			tmpCell = new TestBoardCell(row - 1, col);
+			this.addAdjacency(tmpCell);
+		}
+		if (row < TestBoard.BOARD_SIZE - 1) {
+			tmpCell = new TestBoardCell(row + 1, col);
+			this.addAdjacency(tmpCell);
+		}
+		if (col > 0) {
+			tmpCell = new TestBoardCell(row, col - 1);
+			this.addAdjacency(tmpCell);
+		}
+		if (col < TestBoard.BOARD_SIZE - 1) {
+			tmpCell = new TestBoardCell(row, col + 1);
+			this.addAdjacency(tmpCell);
+		}
 		return adjCellList;
 	}
 	
