@@ -3,6 +3,7 @@ package experiment;
 import java.util.Set;
 
 public class TestBoard {
+	public static int BOARD_SIZE = 4;
 	private Set<TestBoardCell> targetCells;
 	
 	//Default constructor.
