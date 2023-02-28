@@ -1,5 +1,5 @@
 // Sihang Wang, Michael Basey
-package experiment;
+package clueGame;
 
 import java.util.HashSet;
 import java.util.Set;

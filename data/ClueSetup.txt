@@ -1,0 +1,15 @@
+// Rooms and room cards
+Room, Room-A, A
+Room, Room-B, B
+Room, Room-C, C
+Room, Room-D, D
+Room, Room-E, E
+Room, Room-F, F
+Room, Room-G, G
+Room, Room-H, H
+Room, Room-I, I
+
+// Other spaces
+Space, Not Traversable, X
+Space, Walkway, W
+Space, secret passage, (Room1 - Room2)
