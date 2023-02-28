@@ -1,33 +1,35 @@
+// Sihang Wang, Michael Basey
+
 package experiment;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoardCell {
+	// Variable declaration
 	private int row;
 	private int col;
 	private Set<TestBoardCell> adjCellList;
 	private boolean inRoom;
 	private boolean isOccupied;
-	
-	//Basic constructor.
+
+	//Default constructor
 	public TestBoardCell(int row, int col) {
 		super();
 		this.row = row;
 		this.col = col;
 		adjCellList = new HashSet<TestBoardCell>();
 	}
-	
-	//Add cell to adjacency list of current cell.
+
+	//Add cell to adjacency list of current cell
 	public void addAdjacency(TestBoardCell cell ) {
 		adjCellList.add(cell);
 	}
-	
-	/* Check 4 adjacency cells, if in board, add the cell to the list. 
-	 * Then return the adjacency list.
+
+	/* Check 4 adjacency cells and, if valid spaces within the board boundaries, add the cell to the list
+	   Returns list of cells
 	 */
 	public Set<TestBoardCell> getAdjList() {
-		/*
 		TestBoardCell tmpCell;
 		if (row > 0) {
 			tmpCell = new TestBoardCell(row - 1, col);
@@ -45,11 +47,10 @@ public class TestBoardCell {
 			tmpCell = new TestBoardCell(row, col + 1);
 			this.addAdjacency(tmpCell);
 		}
-		*/
 		return adjCellList;
 	}
-	
-	//Set inRoom boolean to identify if this cell is in a room.
+
+	//Set inRoom boolean to identify if this cell is in a room
 	public void setRoom(boolean room) {
 		inRoom = room;
 	}
@@ -57,8 +58,8 @@ public class TestBoardCell {
 	public boolean isRoom() {
 		return inRoom;
 	}
-	
-	//Set isOccupied boolean to identify if this cell is occupied by player.
+
+	//Set isOccupied boolean to identify if this cell is occupied by player
 	public void setOccupied(boolean occupied) {
 		isOccupied = occupied;
 	}
@@ -71,5 +72,5 @@ public class TestBoardCell {
 	public String toString() {
 		return "[" + row + ", " + col + "]";
 	}
-	
+
 }

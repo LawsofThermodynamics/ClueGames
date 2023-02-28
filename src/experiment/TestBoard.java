@@ -1,14 +1,16 @@
+// Sihang Wang, Michael Basey
 package experiment;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class TestBoard {
+	// Variable declaration
 	public static int BOARD_SIZE = 4;
 	private Set<TestBoardCell> targetCells;
 	private Set<TestBoardCell> visitedCells;
-	private TestBoardCell[][] board;
-	
+
+
 	//Default constructor.
 	public TestBoard() {
 		targetCells = new HashSet<TestBoardCell>();
@@ -21,40 +23,36 @@ public class TestBoard {
 			}
 		}*/
 	}
-	
-	
-	//Recursive method.
-	public void calcTargets(TestBoardCell startCell, int pathlength) {
-		/*
-		if (pathlength == 0) {
+
+
+	//Recursive method for testing the possible location the player can move to
+	public void calcTargets(TestBoardCell startCell, int pathLength) {
+		if (pathLength == 0) {
 			if (!startCell.isRoom() && !startCell.getOccupied()) {
 				targetCells.add(startCell);
 			}
-			return;
 		}
 		else {
-			if (visitedCells.contains(startCell)) {
-				return;
+			for(TestBoardCell currentCell :startCell.getAdjList()) {
+				if (pathLength == 1) {
+					targetCells.add(currentCell);
+				} else {
+					calcTargets(currentCell, (pathLength - 1));
+				}
+				visitedCells.remove(visitedCells.size() - 1);
 			}
-			
-			visitedCells.add(startCell);
-			for (TestBoardCell x : startCell.getAdjList()) {
-				calcTargets(x, pathlength - 1);
-			}
-			visitedCells.remove(startCell);
-			return;
 		}
-		*/return;
+		return;
 	}
-	
+
+	// Returns the current cell 
 	public TestBoardCell getCell(int row, int col) {
-		//TODO, add try-catch to test if coordinates in board.
-		//return board[row][col];
 		TestBoardCell cell = new TestBoardCell(row, col);
 		return cell;
 	}
-	
+
+	// Returns current player's targetCell
 	public Set<TestBoardCell> getTargets() {
-		return targetCells;
+		return this.targetCells;
 	}
 }
