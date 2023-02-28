@@ -8,8 +8,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import clueGame.TestBoard;
-import clueGame.TestBoardCell;
+import experiment.TestBoard;
+import experiment.TestBoardCell;
 
 class BoardTestsExp {
 	TestBoard board;

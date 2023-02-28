@@ -9,11 +9,16 @@ public class Board {
 	private BoardCell grid[][];
 	private int numRows;
 	private int numColumns;
-	private String layoutConfigFile = "ClueLayout.csv";
-	private String setupConfigFiles = "ClueSetup.txt";
+	private String layoutConfigFile;
+	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 	private static Board theInstance;
 	
+	// Sets the locations of the layout and setup text files from parameters
+	public void setConfigFiles(String layout, String setup) {
+		 layoutConfigFile = layout;
+		 setupConfigFiles = setup;
+	}
 	
 	private void initialize() {
 		
@@ -26,6 +31,8 @@ public class Board {
 	private void loadLayoutConfig() {
 		
 	}
+	
+	
 }
 
 
