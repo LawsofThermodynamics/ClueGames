@@ -6,22 +6,43 @@ import java.util.Set;
 
 public class TestBoard {
 	// Variable declaration
-	public static int BOARD_SIZE = 4;
 	private Set<TestBoardCell> targetCells;
 	private Set<TestBoardCell> visitedCells;
+	private TestBoardCell[][] board;
+	final static int COLS = 4;
+	final static int ROWS = 4;
 
 
 	//Default constructor.
 	public TestBoard() {
 		targetCells = new HashSet<TestBoardCell>();
 		visitedCells = new HashSet<TestBoardCell>();
-		/*
-		board = new TestBoardCell[BOARD_SIZE][BOARD_SIZE];
-		for (int i = 0; i < BOARD_SIZE; ++i) {
-			for (int j = 0; j < BOARD_SIZE; ++j) {
+		
+		// Initialize the board cell by cell.
+		board = new TestBoardCell[ROWS][COLS];
+		for (int i = 0; i < ROWS; ++i) {
+			for (int j = 0; j < COLS; ++j) {
 				board[i][j] = new TestBoardCell(i, j);
 			}
-		}*/
+		}
+		
+		// Initialize adjList of each cell by iterating again.
+		for (int i = 0; i < COLS; ++i) {
+			for (int j = 0; j < ROWS; ++j) {
+				if (i > 0) {
+					board[i][j].addAdjacency(board[i - 1][j]);
+				}
+				if (j > 0) {
+					board[i][j].addAdjacency(board[i][j - 1]);
+				}
+				if (i < ROWS - 1) {
+					board[i][j].addAdjacency(board[i + 1][j]);
+				}
+				if (j < COLS - 1) {
+					board[i][j].addAdjacency(board[i][j + 1]);
+				}
+			}
+		}
 	}
 
 
@@ -39,7 +60,7 @@ public class TestBoard {
 				} else {
 					calcTargets(currentCell, (pathLength - 1));
 				}
-				visitedCells.remove(visitedCells.size() - 1);
+				visitedCells.remove(currentCell);
 			}
 		}
 		return;
@@ -47,8 +68,7 @@ public class TestBoard {
 
 	// Returns the current cell 
 	public TestBoardCell getCell(int row, int col) {
-		TestBoardCell cell = new TestBoardCell(row, col);
-		return cell;
+		return board[row][col];
 	}
 
 	// Returns current player's targetCell
