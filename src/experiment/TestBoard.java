@@ -46,22 +46,25 @@ public class TestBoard {
 	}
 
 
-	//Recursive method for testing the possible location the player can move to
+	/* Recursive method for testing the possible location the player can move to
+	 * Player can pass by occupied cell, but not the room/visited cell.
+	 * Player must finally move to unoccupied cell.
+	 */
 	public void calcTargets(TestBoardCell startCell, int pathLength) {
 		if (pathLength == 0) {
-			if (!startCell.isRoom() && !startCell.getOccupied()) {
+			if (!startCell.getOccupied()) {
 				targetCells.add(startCell);
 			}
 		}
 		else {
-			for(TestBoardCell currentCell :startCell.getAdjList()) {
-				if (pathLength == 1) {
-					targetCells.add(currentCell);
-				} else {
-					calcTargets(currentCell, (pathLength - 1));
+			visitedCells.add(startCell);
+			for(TestBoardCell currCell : startCell.getAdjList()) {
+				// If the adjacent cell is not room and not visited, continue recursive.
+				if (!visitedCells.contains(currCell) && !startCell.isRoom()) {
+					calcTargets(currCell, pathLength - 1);
 				}
-				visitedCells.remove(currentCell);
 			}
+			visitedCells.remove(startCell);
 		}
 		return;
 	}
