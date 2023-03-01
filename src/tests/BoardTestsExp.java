@@ -162,5 +162,25 @@ class BoardTestsExp {
 		assertTrue(targets.contains(board.getCell(2, 2)));
 		assertTrue(targets.contains(board.getCell(3, 1)));
 	}
+	
+	@Test
+	void testTargets_Mixed() {
+		// Sets Invalid cells
+		board.getCell(0, 1).setRoom(true);
+		board.getCell(2, 0).setRoom(true);
+		board.getCell(2, 1).setOccupied(true);
+		
+		TestBoardCell cell = board.getCell(0, 0);
+		board.calcTargets(cell, 5);
+		Set<TestBoardCell> targets = board.getTargets();
+		assertEquals(5, targets.size()); // Valid list size
+		
+		// Valid locations
+		assertTrue(targets.contains(board.getCell(0, 3)));
+		assertTrue(targets.contains(board.getCell(2, 3)));
+		assertTrue(targets.contains(board.getCell(3, 2)));
+		assertTrue(targets.contains(board.getCell(1, 2)));
+		assertTrue(targets.contains(board.getCell(3, 0)));
+	}
 
 }

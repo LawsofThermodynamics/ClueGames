@@ -58,10 +58,10 @@ public class TestBoard {
 		}
 		else {
 			visitedCells.add(startCell);
-			for(TestBoardCell currCell : startCell.getAdjList()) {
+			for(TestBoardCell nextCell : startCell.getAdjList()) {
 				// If the adjacent cell is not room and not visited, continue recursive.
-				if (!visitedCells.contains(currCell) && !startCell.isRoom()) {
-					calcTargets(currCell, pathLength - 1);
+				if (!visitedCells.contains(nextCell) && !nextCell.isRoom()) {
+					calcTargets(nextCell, pathLength - 1);
 				}
 			}
 			visitedCells.remove(startCell);
