@@ -34,7 +34,7 @@ public class Board {
 		 setupConfigFiles = setup;
 	}
 
-	public void loadSettupConfig() {
+	public void loadSetupConfig() {
 		
 	}
 	
@@ -42,7 +42,20 @@ public class Board {
 		
 	}
 	
+	public int getNumRows() {
+		return numRows;
+	}
 	
+	public int getNumColumns() {
+		return numColumns;
+	}
+	
+	public BoardCell getCell(int row, int col) {
+		return grid[row][col];
+	}
+	public Room getRoom(BoardCell cell) {
+		return null;
+	}
 }
 
 
