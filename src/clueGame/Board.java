@@ -12,8 +12,18 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private static Board theInstance;
 	
+	private static Board theInstance = new Board();
+	// constructor is private to ensure only one can be created
+    private Board() {
+           super();
+    }
+    
+    // this method returns the only Board
+    public static Board getInstance() {
+           return theInstance;
+    }
+    
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
 		 layoutConfigFile = layout;
