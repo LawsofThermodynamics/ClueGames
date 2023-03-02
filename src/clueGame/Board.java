@@ -23,22 +23,22 @@ public class Board {
     public static Board getInstance() {
            return theInstance;
     }
-    
+	
+	public void initialize() {
+		
+	}
+	
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
 		 layoutConfigFile = layout;
 		 setupConfigFiles = setup;
 	}
-	
-	private void initialize() {
+
+	public void loadSettupConfig() {
 		
 	}
 	
-	private void loadSettupConfig() {
-		
-	}
-	
-	private void loadLayoutConfig() {
+	public void loadLayoutConfig() {
 		
 	}
 	
