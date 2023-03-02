@@ -29,14 +29,13 @@ public class Board {
 	}
 
 	public void initialize() {
-		numRows = 50;
-		numColumns = 50;
-
+		// For tests to fail (Set all cells to empty on initialize)
+		numRows = 31;
+		numColumns = 31;
 		grid = new BoardCell[numRows][numColumns];
-
-		for (int i = 0; i < numRows; i++) {
-			for (int j = 0; j < numColumns; j++) {
-				grid[i][j] = new BoardCell();
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numColumns; col++) {
+				grid[row][col] = new BoardCell();
 			}
 		}
 
@@ -50,6 +49,8 @@ public class Board {
 		setupConfigFiles += setup;
 	}
 
+	// Loads data from setupConfigFiles
+	// Note!! currently just prints to console
 	public void loadSetupConfig() {
 		try {
 			FileReader reader = new FileReader(setupConfigFiles);// Opens file
@@ -75,8 +76,10 @@ public class Board {
 
 			in.useDelimiter(","); // Tells scanner that a comma separates each data cell
 
+			// Counters for inserting data
 			int counterRow = 0;
 			int counterCol = 0;
+			
 			// Reads data from file
 			while(in.hasNext()) {
 				grid[counterRow][counterCol] = new BoardCell();
@@ -85,15 +88,14 @@ public class Board {
 				grid[counterRow][counterCol].setInitial(temp.charAt(0));
 				System.out.print(grid[counterRow][counterCol].getInitial());
 
+				// Checks data read in to determine how to process data
 				switch (temp.length()){
-				case 1:
-					break;
-				case 2:
-					if (temp.charAt(1) == '*') {
+				case 2: // If string in cell is 2 chars long, it must be a special cell
+					if (temp.charAt(1) == '*') { // Sets cell as center
 						grid[counterRow][counterCol].setRoomCenter(true);
-					} else if (temp.charAt(1) == '#') {
+					} else if (temp.charAt(1) == '#') { // Sets cell as label
 						grid[counterRow][counterCol].setRoomLable(true);
-					} else {
+					} else { // Sets door direction based on arrow direction
 						grid[counterRow][counterCol].setDoor(true);
 						if (temp.charAt(1) == '<') {
 							grid[counterRow][counterCol].setDoorDirection(DoorDirection.LEFT);
@@ -106,8 +108,8 @@ public class Board {
 						}
 					}
 					break;
-				case 3:
-					grid[counterRow][counterCol].setSecretPassage(temp.charAt(2));
+				case 3: // If string in cell is 3 chars long, it must be a secret passage
+					grid[counterRow][counterCol].setSecretPassage(temp.charAt(2)); // Sets passage location to third char
 					break;
 
 				default:
@@ -121,7 +123,9 @@ public class Board {
 			System.out.println("File not found");
 		}
 	}
-
+	
+	
+	// Getters and setters
 	public int getNumRows() {
 		return numRows;
 	}
@@ -139,7 +143,7 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		Room room1 = new Room();
+		Room room1 = new Room(); // For tests to fail
 		return room1;
 	}
 
