@@ -47,6 +47,10 @@ public class BoardCell {
 	public char getSecretPassage() {
 		return secretPassage;
 	}
+	
+	public char getInitial() {
+		return initial;
+	}
 
 	public void setInitial(char initial) {
 		this.initial = initial;
@@ -71,6 +75,9 @@ public class BoardCell {
 	public void setSecretPassage(char secretPassage) {
 		this.secretPassage = secretPassage;
 	}
+
+
+	
 	
 	
 

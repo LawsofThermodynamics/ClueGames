@@ -3,6 +3,7 @@ package clueGame;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,8 +13,8 @@ public class Board {
 	private BoardCell grid[][];
 	private int numRows;
 	private int numColumns;
-	private String layoutConfigFile;
-	private String setupConfigFiles;
+	private String layoutConfigFile = "data//";
+	private String setupConfigFiles = "data//";
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 
 	private static Board theInstance = new Board();
@@ -28,23 +29,45 @@ public class Board {
 	}
 
 	public void initialize() {
-		grid = new BoardCell[50][50];
+		numRows = 50;
+		numColumns = 50;
+
+		grid = new BoardCell[numRows][numColumns];
+
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numColumns; j++) {
+				grid[i][j] = new BoardCell();
+			}
+		}
+
 		loadLayoutConfig();
 		loadSetupConfig();
 	}
 
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
-		layoutConfigFile = "data//";
 		layoutConfigFile += layout;
-		setupConfigFiles = "data//";
 		setupConfigFiles += setup;
 	}
 
 	public void loadSetupConfig() {
+		try {
+			FileReader reader = new FileReader(setupConfigFiles);// Opens file
+			Scanner in = new Scanner(reader);
 
+			while(in.hasNextLine()) {
+				System.out.println(in.nextLine());
+			}
+			in.close(); // Close file
+
+		} catch (FileNotFoundException e){
+			System.out.println("File not found");
+		}
 	}
 
+	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell information
+	// NOTE!! This is currently not functional as all data is continually overwriting location 0,0 as
+	// im not sure yet how to initialize the grid to the correct size without knowing how large the file is before hand
 	public void loadLayoutConfig() {
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
@@ -60,7 +83,8 @@ public class Board {
 
 				String temp = in.next();
 				grid[counterRow][counterCol].setInitial(temp.charAt(0));
-				
+				System.out.print(grid[counterRow][counterCol].getInitial());
+
 				switch (temp.length()){
 				case 1:
 					break;
@@ -85,11 +109,11 @@ public class Board {
 				case 3:
 					grid[counterRow][counterCol].setSecretPassage(temp.charAt(2));
 					break;
-					
+
 				default:
 					break;
 				}
-				
+
 			}
 			in.close(); // Close file
 
@@ -115,7 +139,8 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		return null;
+		Room room1 = new Room();
+		return room1;
 	}
 
 
