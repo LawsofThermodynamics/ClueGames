@@ -1,3 +1,69 @@
+commit 649637fe06cb3ee18ead5738f8a7dd217e4d0961
+Author: Michael <mbasey@mines.edu>
+Date:   Thu Mar 2 12:42:46 2023 -0700
+
+    All tests in FileInitTests306.java now fail -Michael
+
+commit 93c04710b81a4f056c550a2463595c6105215d78
+Author: Michael <mbasey@mines.edu>
+Date:   Thu Mar 2 12:05:46 2023 -0700
+
+    Clue Init 1 progress made. 3/5 tests fail, tests testRoomLables and FourDoorDirections error. -Michael
+
+commit ec430326ef9dc0f925cdb19543ec79c94e690b91
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 19:26:57 2023 -0700
+
+    Add new test file FileInitTest.java
+
+commit 3fa4bc06f30ca82782dc3c567c520807d8cea03d
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 19:09:58 2023 -0700
+
+    Add 4 methods in Board.java, getNumRows, getNumColumns, getCell, getRoom.
+
+commit f5872a853a10988b533ed405d33ae5c027d17bab
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 18:37:25 2023 -0700
+
+    Modify methods in Board.java to public.
+
+commit d55276ba8d1766135fbedb83f38c943a38ae23c6
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 17:41:54 2023 -0700
+
+    Apply singleton pattern in Board.java, keep only one board instance and set board constructor private. And set an instance getter.
+
+commit 9b6bd291c852b32789dc352317aea662d4430a42
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 16:44:16 2023 -0700
+
+    Add a test case with both room and occupied as required.
+
+commit 713c945f7ad72609979d63ba4a8fd7942302d5b3
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 16:26:16 2023 -0700
+
+    Modify algorithm of calcTargets() of TB to pass all targets tests.
+
+commit 3f899e32ffa20cd6ab57b3f54a4c7fc718a7e3d9
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 1 15:30:01 2023 -0700
+
+    Complete TB constrcutor, pass all adjList tests. Working on  targerts algorithm.
+
+commit 5c6b99b3ab3368338713581f2dcbff1723fe6f38
+Author: Michael <mbasey@mines.edu>
+Date:   Tue Feb 28 11:13:50 2023 -0700
+
+    Restored experiment package -Michael
+
+commit ddc5a0ccbdbca996a64d941108ec21b22470dae8
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Feb 28 10:38:04 2023 -0700
+
+    Added 'Clue Init' classes, variables and methods -Micahel
+
 commit 1028cd2cb9956d9e9c449405fc83a59a76b4cde9
 Author: Michael <mbasey@mines.edu>
 Date:   Mon Feb 27 20:28:28 2023 -0700
