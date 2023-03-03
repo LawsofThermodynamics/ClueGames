@@ -14,8 +14,8 @@ import clueGame.Room;
 public class FileInitTest{
 	// Constants used to test if the file was loaded correctly
 	public static final int LEGEND_SIZE = 12;
-	public static final int NUM_ROWS = 31;
-	public static final int NUM_COLUMNS = 31;
+	public static final int NUM_ROWS = 30;
+	public static final int NUM_COLUMNS = 30;
 
 	private static Board board;
 

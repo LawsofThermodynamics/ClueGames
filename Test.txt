@@ -1,0 +1,4 @@
+I simply check the first 4 rooms from the Setup File for the correct name and Char
+Room-A has doors that opens both LEFT and UP, and Room-B has doors that open both RIGHT and DOWN
+Checks number of doorways of all rooms, should add up to 32(8 from corner rooms[2 each], 4 from the center room, and 5 from each of the internal rooms)
+Checks Room cell from Room-A, label of Room-B, center of Room-C, secret passage of Room-E, and one random walkway cell
