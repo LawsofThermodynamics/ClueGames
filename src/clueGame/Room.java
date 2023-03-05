@@ -6,8 +6,10 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell lableCell;
 	
-	Room() {
-		
+	Room(String inName) {
+		name = inName;
+		centerCell = null;
+		lableCell = null;
 	}
 
 	public String getName() {

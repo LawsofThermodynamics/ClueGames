@@ -3,7 +3,6 @@ package clueGame;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,6 +15,8 @@ public class Board {
 	private String layoutConfigFile = "data//";
 	private String setupConfigFiles = "data//";
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	
+	private boolean debugger = true; // True for console debug statements
 
 	private static Board theInstance = new Board();
 	// constructor is private to ensure only one can be created
@@ -29,18 +30,20 @@ public class Board {
 	}
 
 	public void initialize() {
-		// For tests to fail (Set all cells to empty on initialize)
-		numRows = 31;
-		numColumns = 31;
-		grid = new BoardCell[numRows][numColumns];
-		for (int row = 0; row < numRows; row++) {
-			for (int col = 0; col < numColumns; col++) {
-				grid[row][col] = new BoardCell();
+		loadSetupConfig();
+		loadLayoutConfig();
+		if(debugger) {
+			for(int rowCount = 0; rowCount < grid.length; rowCount++)
+			{
+
+				for(int colCount = 0; colCount < grid[rowCount].length; colCount++) {
+					System.out.print("|" + grid[rowCount][colCount].getInitial());
+				}
+				System.out.println("|");
 			}
 		}
+		
 
-		loadLayoutConfig();
-		loadSetupConfig();
 	}
 
 	// Sets the locations of the layout and setup text files from parameters
@@ -55,67 +58,108 @@ public class Board {
 		try {
 			FileReader reader = new FileReader(setupConfigFiles);// Opens file
 			Scanner in = new Scanner(reader);
+			
+			String tempStr = "";
 
 			while(in.hasNextLine()) {
-				System.out.println(in.nextLine());
+				tempStr = in.nextLine();
+				if(debugger) {System.out.println(tempStr);}
 			}
 			in.close(); // Close file
 
 		} catch (FileNotFoundException e){
-			System.out.println("File not found");
+			System.out.println("Setup Config File Not Loaded Correctly");
 		}
 	}
 
 	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell information
-	// NOTE!! This is currently not functional as all data is continually overwriting location 0,0 as
-	// im not sure yet how to initialize the grid to the correct size without knowing how large the file is before hand
 	public void loadLayoutConfig() {
+		String tempStr = "";
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
 			Scanner in = new Scanner(reader);
 
-			in.useDelimiter(","); // Tells scanner that a comma separates each data cell
 
-			// Counters for inserting data
-			int counterRow = 0;
-			int counterCol = 0;
-			
+
+			// Reads data from file
+			while(in.hasNextLine()) {
+				numRows++;
+				tempStr = in.nextLine();
+			}
+
+			in.close(); // Close file			
+
+		} catch (FileNotFoundException e){
+			System.out.println("Layout Config File Not Loaded Correctly");
+		}
+
+		String[] arrOfStr = tempStr.split(",");
+		numColumns = arrOfStr.length;
+		if(debugger) {System.out.println("Rows: " + numRows); }
+		if(debugger) {System.out.println("Columns: " + numColumns);	}		
+
+		grid = new BoardCell[numRows][numColumns];
+
+		int rowCount;
+		int colCount;
+
+
+		for (rowCount = 0; rowCount < numRows; rowCount++) {
+			for (colCount = 0; colCount < numColumns; colCount++) {
+				grid[rowCount][colCount] = new BoardCell();
+			}
+		}
+
+		rowCount = 0;
+		colCount = 0;
+
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);// Opens file
+			Scanner in = new Scanner(reader);
+
+			in.useDelimiter("[,\n]"); // Tells scanner that a comma separates each data cell
+
 			// Reads data from file
 			while(in.hasNext()) {
-				grid[counterRow][counterCol] = new BoardCell();
-
 				String temp = in.next();
-				grid[counterRow][counterCol].setInitial(temp.charAt(0));
-				System.out.print(grid[counterRow][counterCol].getInitial());
+
+				if (colCount == numColumns) {
+					colCount = 0;
+					rowCount++;
+				}
+				
+				if(debugger) {System.out.println(temp); }
+
+				grid[rowCount][colCount].setInitial(temp.charAt(0));
 
 				// Checks data read in to determine how to process data
 				switch (temp.length()){
 				case 2: // If string in cell is 2 chars long, it must be a special cell
 					if (temp.charAt(1) == '*') { // Sets cell as center
-						grid[counterRow][counterCol].setRoomCenter(true);
+						grid[rowCount][colCount].setRoomCenter(true);
 					} else if (temp.charAt(1) == '#') { // Sets cell as label
-						grid[counterRow][counterCol].setRoomLable(true);
-					} else { // Sets door direction based on arrow direction
-						grid[counterRow][counterCol].setDoor(true);
+						grid[rowCount][colCount].setRoomLable(true);
+					} else if (temp.charAt(1) != '\r') { // Sets door status and direction based on arrow direction
+						grid[rowCount][colCount].setDoor(true);
 						if (temp.charAt(1) == '<') {
-							grid[counterRow][counterCol].setDoorDirection(DoorDirection.LEFT);
+							grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
 						} else if (temp.charAt(1) == '^') {
-							grid[counterRow][counterCol].setDoorDirection(DoorDirection.UP);
+							grid[rowCount][colCount].setDoorDirection(DoorDirection.UP);
 						} else if (temp.charAt(1) == '>') {
-							grid[counterRow][counterCol].setDoorDirection(DoorDirection.RIGHT);
+							grid[rowCount][colCount].setDoorDirection(DoorDirection.RIGHT);
 						} else if (temp.charAt(1) == 'v') {
-							grid[counterRow][counterCol].setDoorDirection(DoorDirection.DOWN);
+							grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
 						}
 					}
 					break;
 				case 3: // If string in cell is 3 chars long, it must be a secret passage
-					grid[counterRow][counterCol].setSecretPassage(temp.charAt(2)); // Sets passage location to third char
+					grid[rowCount][colCount].setSecretPassage(temp.charAt(2)); // Sets passage location to third char
 					break;
 
 				default:
 					break;
 				}
-
+				colCount++;
 			}
 			in.close(); // Close file
 
@@ -123,8 +167,8 @@ public class Board {
 			System.out.println("File not found");
 		}
 	}
-	
-	
+
+
 	// Getters and setters
 	public int getNumRows() {
 		return numRows;
@@ -143,7 +187,7 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		Room room1 = new Room(); // For tests to fail
+		Room room1 = new Room("Test Room"); // For tests to fail
 		return room1;
 	}
 

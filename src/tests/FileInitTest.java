@@ -14,8 +14,8 @@ import clueGame.Room;
 public class FileInitTest{
 	// Constants used to test if the file was loaded correctly
 	public static final int LEGEND_SIZE = 12;
-	public static final int NUM_ROWS = 30;
-	public static final int NUM_COLUMNS = 30;
+	public static final int NUM_ROWS = 31;
+	public static final int NUM_COLUMNS = 31;
 
 	private static Board board;
 
@@ -63,7 +63,7 @@ public class FileInitTest{
 		cell = board.getCell(7, 4);
 		assertFalse(cell.isDoorway());
 	}
-	
+
 
 	// Test for the correct number of doors
 	@Test
@@ -72,8 +72,10 @@ public class FileInitTest{
 		for (int row = 0; row < board.getNumRows(); row++)
 			for (int col = 0; col < board.getNumColumns(); col++) {
 				BoardCell cell = board.getCell(row, col);
-				if (cell.isDoorway())
+				if (cell.isDoorway()) {
+					System.out.println("Door found at (" + row + ", " + col + ")");
 					numDoors++;
+				}
 			}
 		Assert.assertEquals(32, numDoors);
 	}
@@ -97,7 +99,7 @@ public class FileInitTest{
 		assertEquals( room.getName(), "Room-B") ;
 		assertTrue( cell.isLabel() );
 		assertTrue( room.getLabelCell() == cell );
-		
+
 		// room center cell test
 		cell = board.getCell(6, 15);
 		room = board.getRoom( cell ) ;
@@ -105,14 +107,14 @@ public class FileInitTest{
 		assertEquals( room.getName(), "Room-C") ;
 		assertTrue( cell.isRoomCenter() );
 		assertTrue( room.getCenterCell() == cell );
-		
+
 		// secret passage test
 		cell = board.getCell(30, 30);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Room-E") ;
 		assertTrue( cell.getSecretPassage() == 'A' );
-		
+
 		// walkway test
 		cell = board.getCell(8, 8);
 		room = board.getRoom( cell ) ;
@@ -121,7 +123,7 @@ public class FileInitTest{
 		assertEquals( room.getName(), "Walkway") ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
-		
+
 		// test non traversable cell
 		cell = board.getCell(9, 9);
 		room = board.getRoom( cell ) ;
@@ -129,7 +131,7 @@ public class FileInitTest{
 		assertEquals( room.getName(), "Not Traversable") ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
-		
+
 	}
 
 }
