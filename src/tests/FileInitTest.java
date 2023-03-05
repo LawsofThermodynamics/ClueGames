@@ -73,7 +73,6 @@ public class FileInitTest{
 			for (int col = 0; col < board.getNumColumns(); col++) {
 				BoardCell cell = board.getCell(row, col);
 				if (cell.isDoorway()) {
-					System.out.println("Door found at (" + row + ", " + col + ")");
 					numDoors++;
 				}
 			}

@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import clueGame.Board;
@@ -76,7 +77,7 @@ public class FileInitTests306 {
 		cell = board.getCell(12, 14);
 		assertFalse(cell.isDoorway());
 	}
-	
+
 
 	// Test that we have the correct number of doors
 	@Test
@@ -85,8 +86,9 @@ public class FileInitTests306 {
 		for (int row = 0; row < board.getNumRows(); row++)
 			for (int col = 0; col < board.getNumColumns(); col++) {
 				BoardCell cell = board.getCell(row, col);
-				if (cell.isDoorway())
+				if (cell.isDoorway()) {
 					numDoors++;
+				}
 			}
 		Assert.assertEquals(17, numDoors);
 	}
@@ -110,7 +112,7 @@ public class FileInitTests306 {
 		assertEquals( room.getName(), "Lounge" ) ;
 		assertTrue( cell.isLabel() );
 		assertTrue( room.getLabelCell() == cell );
-		
+
 		// this is a room center cell to test
 		cell = board.getCell(20, 11);
 		room = board.getRoom( cell ) ;
@@ -118,14 +120,14 @@ public class FileInitTests306 {
 		assertEquals( room.getName(), "Ballroom" ) ;
 		assertTrue( cell.isRoomCenter() );
 		assertTrue( room.getCenterCell() == cell );
-		
+
 		// this is a secret passage test
 		cell = board.getCell(3, 0);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
 		assertEquals( room.getName(), "Study" ) ;
 		assertTrue( cell.getSecretPassage() == 'K' );
-		
+
 		// test a walkway
 		cell = board.getCell(5, 0);
 		room = board.getRoom( cell ) ;
@@ -134,7 +136,7 @@ public class FileInitTests306 {
 		assertEquals( room.getName(), "Walkway" ) ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
-		
+
 		// test a closet
 		cell = board.getCell(24, 18);
 		room = board.getRoom( cell ) ;
@@ -142,7 +144,7 @@ public class FileInitTests306 {
 		assertEquals( room.getName(), "Unused" ) ;
 		assertFalse( cell.isRoomCenter() );
 		assertFalse( cell.isLabel() );
-		
+
 	}
 
 }

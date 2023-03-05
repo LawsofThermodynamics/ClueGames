@@ -15,10 +15,11 @@ public class Board {
 	private String layoutConfigFile = "data//";
 	private String setupConfigFiles = "data//";
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	
-	private boolean debugger = true; // True for console debug statements
+
+	private boolean debugger = false; // True for console debug statements
 
 	private static Board theInstance = new Board();
+
 	// constructor is private to ensure only one can be created
 	private Board() {
 		super();
@@ -30,19 +31,22 @@ public class Board {
 	}
 
 	public void initialize() {
-		loadSetupConfig();
-		loadLayoutConfig();
-		if(debugger) {
-			for(int rowCount = 0; rowCount < grid.length; rowCount++)
-			{
+		try {
+			loadSetupConfig();
+			loadLayoutConfig();
+		} catch (BadConfigFormatException e) {
+			System.out.println(e);
+			System.out.println(e.getMessage());
+		}
 
-				for(int colCount = 0; colCount < grid[rowCount].length; colCount++) {
+		if (debugger) {
+			for (int rowCount = 0; rowCount < grid.length; rowCount++) {
+				for (int colCount = 0; colCount < grid[rowCount].length; colCount++) {
 					System.out.print("|" + grid[rowCount][colCount].getInitial());
 				}
 				System.out.println("|");
 			}
 		}
-		
 
 	}
 
@@ -54,43 +58,44 @@ public class Board {
 
 	// Loads data from setupConfigFiles
 	// Note!! currently just prints to console
-	public void loadSetupConfig() {
+	public void loadSetupConfig() throws BadConfigFormatException {
 		try {
 			FileReader reader = new FileReader(setupConfigFiles);// Opens file
 			Scanner in = new Scanner(reader);
-			
+
 			String tempStr = "";
 
-			while(in.hasNextLine()) {
+			while (in.hasNextLine()) {
 				tempStr = in.nextLine();
-				if(debugger) {System.out.println(tempStr);}
+				if (true) {
+					System.out.println(tempStr);
+				}
 			}
 			in.close(); // Close file
 
-		} catch (FileNotFoundException e){
-			System.out.println("Setup Config File Not Loaded Correctly");
+		} catch (FileNotFoundException e) {
+			throw new BadConfigFormatException();
 		}
 	}
 
-	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell information
-	public void loadLayoutConfig() {
+	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell
+	// information
+	public void loadLayoutConfig() throws BadConfigFormatException {
 		String tempStr = "";
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
 			Scanner in = new Scanner(reader);
-
-
 
 			// Reads data from file
 			while(in.hasNextLine()) {
 				numRows++;
 				tempStr = in.nextLine();
 			}
-
-			in.close(); // Close file			
+			in.close(); // Close file	
 
 		} catch (FileNotFoundException e){
 			System.out.println("Layout Config File Not Loaded Correctly");
+			throw new BadConfigFormatException();
 		}
 
 		String[] arrOfStr = tempStr.split(",");
@@ -122,12 +127,12 @@ public class Board {
 			// Reads data from file
 			while(in.hasNext()) {
 				String temp = in.next();
-
+				
 				if (colCount == numColumns) {
 					colCount = 0;
 					rowCount++;
 				}
-				
+
 				if(debugger) {System.out.println(temp); }
 
 				grid[rowCount][colCount].setInitial(temp.charAt(0));
@@ -139,17 +144,19 @@ public class Board {
 						grid[rowCount][colCount].setRoomCenter(true);
 					} else if (temp.charAt(1) == '#') { // Sets cell as label
 						grid[rowCount][colCount].setRoomLable(true);
-					} else if (temp.charAt(1) != '\r') { // Sets door status and direction based on arrow direction
+						// Sets door status and direction based on arrow direction
+					} else if (temp.charAt(1) == '<') {
 						grid[rowCount][colCount].setDoor(true);
-						if (temp.charAt(1) == '<') {
-							grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
-						} else if (temp.charAt(1) == '^') {
-							grid[rowCount][colCount].setDoorDirection(DoorDirection.UP);
-						} else if (temp.charAt(1) == '>') {
-							grid[rowCount][colCount].setDoorDirection(DoorDirection.RIGHT);
-						} else if (temp.charAt(1) == 'v') {
-							grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
-						}
+						grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
+					} else if (temp.charAt(1) == '^') {
+						grid[rowCount][colCount].setDoor(true);
+						grid[rowCount][colCount].setDoorDirection(DoorDirection.UP);
+					} else if (temp.charAt(1) == '>') {
+						grid[rowCount][colCount].setDoor(true);
+						grid[rowCount][colCount].setDoorDirection(DoorDirection.RIGHT);
+					} else if (temp.charAt(1) == 'v') {
+						grid[rowCount][colCount].setDoor(true);
+						grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
 					}
 					break;
 				case 3: // If string in cell is 3 chars long, it must be a secret passage
@@ -164,10 +171,11 @@ public class Board {
 			in.close(); // Close file
 
 		} catch (FileNotFoundException e){
-			System.out.println("File not found");
+			throw new BadConfigFormatException();
+		} catch (StringIndexOutOfBoundsException e){
+			throw new BadConfigFormatException("EmptyCell");
 		}
 	}
-
 
 	// Getters and setters
 	public int getNumRows() {
@@ -191,8 +199,4 @@ public class Board {
 		return room1;
 	}
 
-
-
 }
-
-

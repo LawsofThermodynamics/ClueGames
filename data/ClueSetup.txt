@@ -12,4 +12,3 @@ Room, Room-I, I
 // Other spaces
 Space, Not Traversable, X
 Space, Walkway, W
-Space, secret passage, (Room1 - Room2)
