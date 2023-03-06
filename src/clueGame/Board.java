@@ -6,14 +6,15 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.lang.Character;
 
 public class Board {
 	// Variable Declaration
 	private BoardCell grid[][];
 	private int numRows;
 	private int numColumns;
-	private String layoutConfigFile = "data//";
-	private String setupConfigFiles = "data//";
+	private String layoutConfigFile;
+	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
 
 	private boolean debugger = false; // True for console debug statements
@@ -32,6 +33,7 @@ public class Board {
 
 	public void initialize() {
 		try {
+			grid = null;
 			loadSetupConfig();
 			loadLayoutConfig();
 		} catch (BadConfigFormatException e) {
@@ -52,8 +54,10 @@ public class Board {
 
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
-		layoutConfigFile += layout;
-		setupConfigFiles += setup;
+
+		
+		layoutConfigFile = "data//" + layout;
+		setupConfigFiles = "data//" + setup;
 	}
 
 	// Loads data from setupConfigFiles
@@ -67,8 +71,16 @@ public class Board {
 
 			while (in.hasNextLine()) {
 				tempStr = in.nextLine();
-				if (true) {
-					System.out.println(tempStr);
+				if (true) {	System.out.println(tempStr ); }
+				if(tempStr.charAt(0) == '/') {
+					if (true) {System.out.println("Found comment, skipping line");}
+					continue;
+				} else {
+					String[] arrFromStr = tempStr.split(", ");	
+					
+					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { 
+						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
+					}
 				}
 			}
 			in.close(); // Close file
@@ -81,6 +93,9 @@ public class Board {
 	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell
 	// information
 	public void loadLayoutConfig() throws BadConfigFormatException {
+		numRows = 0;
+		numColumns = 0;
+		
 		String tempStr = "";
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
@@ -98,8 +113,8 @@ public class Board {
 			throw new BadConfigFormatException();
 		}
 
-		String[] arrOfStr = tempStr.split(",");
-		numColumns = arrOfStr.length;
+		String[] arrFromStr = tempStr.split(",");
+		numColumns = arrFromStr.length;
 		if(debugger) {System.out.println("Rows: " + numRows); }
 		if(debugger) {System.out.println("Columns: " + numColumns);	}		
 
@@ -127,7 +142,7 @@ public class Board {
 			// Reads data from file
 			while(in.hasNext()) {
 				String temp = in.next();
-				
+
 				if (colCount == numColumns) {
 					colCount = 0;
 					rowCount++;
@@ -195,8 +210,7 @@ public class Board {
 	}
 
 	public Room getRoom(char c) {
-		Room room1 = new Room("Test Room"); // For tests to fail
-		return room1;
+		return roomMap.get(c);
 	}
 
 }

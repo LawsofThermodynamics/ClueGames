@@ -8,7 +8,6 @@ Room, Room-F, F
 Room, Room-G, G
 Room, Room-H, H
 Room, Room-I, I
-
 // Other spaces
 Space, Not Traversable, X
 Space, Walkway, W

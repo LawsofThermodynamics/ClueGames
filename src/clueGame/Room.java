@@ -35,5 +35,7 @@ public class Room {
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}
+
+	
 	
 }
