@@ -14,8 +14,8 @@ import clueGame.Room;
 public class FileInitTest{
 	// Constants used to test if the file was loaded correctly
 	public static final int LEGEND_SIZE = 12;
-	public static final int NUM_ROWS = 31;
-	public static final int NUM_COLUMNS = 31;
+	public static final int NUM_ROWS_X = 31;
+	public static final int NUM_COLUMNS_X = 31;
 
 	private static Board board;
 
@@ -39,8 +39,8 @@ public class FileInitTest{
 	@Test
 	public void testBoardDimensions() {
 		// Ensure we have the proper number of rows and columns
-		assertEquals(NUM_ROWS, board.getNumRows());
-		assertEquals(NUM_COLUMNS, board.getNumColumns());
+		assertEquals(NUM_ROWS_X, board.getNumRows());
+		assertEquals(NUM_COLUMNS_X, board.getNumColumns());
 	}
 
 	// Test a doorway in each direction (RIGHT/LEFT/UP/DOWN), plus

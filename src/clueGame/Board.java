@@ -15,7 +15,7 @@ public class Board {
 	private String layoutConfigFile = "data//";
 	private String setupConfigFiles = "data//";
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-
+	
 	private boolean debugger = false; // True for console debug statements
 
 	private static Board theInstance = new Board();
@@ -190,13 +190,8 @@ public class Board {
 		return grid[row][col];
 	}
 
-	public Room getRoom(BoardCell cell) {
-		return null;
-	}
-
 	public Room getRoom(char c) {
-		Room room1 = new Room("Test Room"); // For tests to fail
-		return room1;
+		return roomMap.get(c);
 	}
 
 }

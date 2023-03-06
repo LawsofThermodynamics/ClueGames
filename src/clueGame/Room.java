@@ -6,7 +6,7 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell lableCell;
 	
-	Room(String inName) {
+	public Room(String inName) {
 		name = inName;
 		centerCell = null;
 		lableCell = null;
