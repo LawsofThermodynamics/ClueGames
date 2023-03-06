@@ -16,7 +16,7 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-
+	
 	private boolean debugger = false; // True for console debug statements
 
 	private static Board theInstance = new Board();
@@ -203,10 +203,6 @@ public class Board {
 
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
-	}
-
-	public Room getRoom(BoardCell cell) {
-		return null;
 	}
 
 	public Room getRoom(char c) {
