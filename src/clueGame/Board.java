@@ -4,8 +4,13 @@ package clueGame;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+
+import experiment.TestBoardCell;
+
 import java.lang.Character;
 
 public class Board {
@@ -16,6 +21,7 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
+	private Set<BoardCell> targetCells = new HashSet<BoardCell> ();
 
 	private boolean debugger = false; // True for console debug statements
 
@@ -227,4 +233,16 @@ public class Board {
 		return roomMap.get(c);
 	}
 
+	public Set<BoardCell> getAdjList(int x, int y) {
+		Set<BoardCell> testList = new HashSet<BoardCell>();
+		return testList;
+	}
+	
+	public void calcTargets(BoardCell cell, int steps) {
+		return;
+	}
+	
+	public Set<BoardCell> getTargets() {
+		return targetCells;
+	}
 }
