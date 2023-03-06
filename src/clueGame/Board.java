@@ -16,7 +16,7 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	
+
 	private boolean debugger = false; // True for console debug statements
 
 	private static Board theInstance = new Board();
@@ -55,7 +55,7 @@ public class Board {
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
 
-		
+
 		layoutConfigFile = "data//" + layout;
 		setupConfigFiles = "data//" + setup;
 	}
@@ -71,15 +71,17 @@ public class Board {
 
 			while (in.hasNextLine()) {
 				tempStr = in.nextLine();
-				if (true) {	System.out.println(tempStr ); }
+				if (debugger) {	System.out.println(tempStr ); }
 				if(tempStr.charAt(0) == '/') {
-					if (true) {System.out.println("Found comment, skipping line");}
+					if (debugger) {System.out.println("Found comment, skipping line");}
 					continue;
 				} else {
 					String[] arrFromStr = tempStr.split(", ");	
-					
+
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { 
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
+					} else {
+						throw new BadConfigFormatException("Invalid Format Detected within setupConfigFiles");
 					}
 				}
 			}
@@ -95,7 +97,7 @@ public class Board {
 	public void loadLayoutConfig() throws BadConfigFormatException {
 		numRows = 0;
 		numColumns = 0;
-		
+
 		String tempStr = "";
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
@@ -150,15 +152,22 @@ public class Board {
 
 				if(debugger) {System.out.println(temp); }
 
-				grid[rowCount][colCount].setInitial(temp.charAt(0));
+				if (roomMap.containsKey(temp.charAt(0))){
+					grid[rowCount][colCount].setInitial(temp.charAt(0));
+				}
+				else {
+					throw new BadConfigFormatException("Invalid Room Name Detected in LayoutConfigFile");
+				}
 
 				// Checks data read in to determine how to process data
-				switch (temp.length()){
-				case 2: // If string in cell is 2 chars long, it must be a special cell
+				if (temp.length() > 1){
+					// If string in cell is 2 chars long, it must be a special cell
 					if (temp.charAt(1) == '*') { // Sets cell as center
 						grid[rowCount][colCount].setRoomCenter(true);
+						roomMap.get(temp.charAt(0)).setCenterCell(grid[rowCount][colCount]);
 					} else if (temp.charAt(1) == '#') { // Sets cell as label
 						grid[rowCount][colCount].setRoomLable(true);
+						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
 						// Sets door status and direction based on arrow direction
 					} else if (temp.charAt(1) == '<') {
 						grid[rowCount][colCount].setDoor(true);
@@ -172,14 +181,14 @@ public class Board {
 					} else if (temp.charAt(1) == 'v') {
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
+					} else if (roomMap.containsKey(temp.charAt(1))){
+						grid[rowCount][colCount].setSecretPassage(temp.charAt(1)); // Sets passage location to second char if second char is a room in roomMap
+					} else if (temp.charAt(1) == '\r'){
+						if(debugger) {System.out.println("endLine");}
+					} else {
+						if(debugger) {System.out.println("Invalid Char: " + temp.charAt(1));}
+						throw new BadConfigFormatException("Invalid Character Detected in LayoutConfigFile");
 					}
-					break;
-				case 3: // If string in cell is 3 chars long, it must be a secret passage
-					grid[rowCount][colCount].setSecretPassage(temp.charAt(2)); // Sets passage location to third char
-					break;
-
-				default:
-					break;
 				}
 				colCount++;
 			}
@@ -203,6 +212,10 @@ public class Board {
 
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
+	}
+
+	public Room getRoom(BoardCell cell) {
+		return roomMap.get(cell.getInitial());
 	}
 
 	public Room getRoom(char c) {

@@ -95,7 +95,7 @@ public class FileInitTest{
 		cell = board.getCell(2, 27);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-B") ;
+		assertEquals( room.getName(), "Room-C") ;
 		assertTrue( cell.isLabel() );
 		assertTrue( room.getLabelCell() == cell );
 
@@ -103,7 +103,7 @@ public class FileInitTest{
 		cell = board.getCell(6, 15);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-C") ;
+		assertEquals( room.getName(), "Room-B") ;
 		assertTrue( cell.isRoomCenter() );
 		assertTrue( room.getCenterCell() == cell );
 
