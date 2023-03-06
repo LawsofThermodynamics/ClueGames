@@ -33,7 +33,9 @@ public class Board {
 
 	public void initialize() {
 		try {
-			grid = null;
+			grid = null; // Reset grid for multiple tests
+			
+			// Load data from config files
 			loadSetupConfig();
 			loadLayoutConfig();
 		} catch (BadConfigFormatException e) {
@@ -41,6 +43,7 @@ public class Board {
 			System.out.println(e.getMessage());
 		}
 
+		// Prints grid data to console if debugger true
 		if (debugger) {
 			for (int rowCount = 0; rowCount < grid.length; rowCount++) {
 				for (int colCount = 0; colCount < grid[rowCount].length; colCount++) {
@@ -54,33 +57,32 @@ public class Board {
 
 	// Sets the locations of the layout and setup text files from parameters
 	public void setConfigFiles(String layout, String setup) {
-
-
 		layoutConfigFile = "data//" + layout;
 		setupConfigFiles = "data//" + setup;
 	}
 
-	// Loads data from setupConfigFiles
-	// Note!! currently just prints to console
+	// Loads data from setupConfigFiles and initializes rooms
 	public void loadSetupConfig() throws BadConfigFormatException {
 		try {
-			FileReader reader = new FileReader(setupConfigFiles);// Opens file
+			FileReader reader = new FileReader(setupConfigFiles); // Opens file
 			Scanner in = new Scanner(reader);
 
 			String tempStr = "";
 
+			// Reads in data line by line
 			while (in.hasNextLine()) {
 				tempStr = in.nextLine();
-				if (debugger) {	System.out.println(tempStr ); }
-				if(tempStr.charAt(0) == '/') {
+				if (debugger) {	System.out.println(tempStr ); } // Prints line if debugger
+				if(tempStr.charAt(0) == '/') { // Skips line if it contains comment
 					if (debugger) {System.out.println("Found comment, skipping line");}
 					continue;
 				} else {
-					String[] arrFromStr = tempStr.split(", ");	
-
+					String[] arrFromStr = tempStr.split(", "); // Splits line up for data manipulation	
+					
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { 
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
 					} else {
+						in.close(); // Close file
 						throw new BadConfigFormatException("Invalid Format Detected within setupConfigFiles");
 					}
 				}
@@ -88,17 +90,17 @@ public class Board {
 			in.close(); // Close file
 
 		} catch (FileNotFoundException e) {
-			throw new BadConfigFormatException();
+			throw new BadConfigFormatException("loadSetupConfig Failed");
 		}
 	}
 
-	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell
-	// information
+	// Loads in data from layoutConfigFile.csv, sends data to cells and updates cell information
 	public void loadLayoutConfig() throws BadConfigFormatException {
+		// Reset variables for multiple tests
 		numRows = 0;
 		numColumns = 0;
-
 		String tempStr = "";
+		
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
 			Scanner in = new Scanner(reader);
@@ -168,8 +170,9 @@ public class Board {
 					} else if (temp.charAt(1) == '#') { // Sets cell as label
 						grid[rowCount][colCount].setRoomLable(true);
 						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
-						// Sets door status and direction based on arrow direction
-					} else if (temp.charAt(1) == '<') {
+					} 
+					
+					else if (temp.charAt(1) == '<') {// Sets door status and direction based on arrow direction
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
 					} else if (temp.charAt(1) == '^') {
@@ -181,7 +184,9 @@ public class Board {
 					} else if (temp.charAt(1) == 'v') {
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
-					} else if (roomMap.containsKey(temp.charAt(1))){
+					} 
+					
+					else if (roomMap.containsKey(temp.charAt(1))){
 						grid[rowCount][colCount].setSecretPassage(temp.charAt(1)); // Sets passage location to second char if second char is a room in roomMap
 					} else if (temp.charAt(1) == '\r'){
 						if(debugger) {System.out.println("endLine");}
