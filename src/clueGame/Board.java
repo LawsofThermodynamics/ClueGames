@@ -115,9 +115,13 @@ public class Board {
 		}
 	}
 
-	/* Loads in data from layoutConfigFile.csv, calculates size of grid, then sends data 
-	 * to cells and updates cell information
-	 * -Michael 3/5/2023
+	/* Loads in data from layoutConfigFile.csv, and performs three loops to complete board initiation
+	 * 	 First loop calculates size of array, and initializes size
+	 * 	 Second loop sends data to cells, and updates each cell's data
+	 * 	 Third loop calculates all valid adjacent cells
+	 * 
+	 *   -Sihang, Michael 3/7/2023
+	 *   
 	 * */
 	public void loadLayoutConfig() throws BadConfigFormatException {
 		// Reset variables for multiple tests
@@ -259,7 +263,8 @@ public class Board {
 				}
 				
 				if(currentCell.getSecretPassage() != '0') {
-					roomMap.get(currentCellInitial).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
+					
+					(roomMap.get(currentCellInitial)).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
 				}
 				
 				// If the current cell is a walkway

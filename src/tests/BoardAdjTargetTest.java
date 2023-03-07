@@ -33,10 +33,10 @@ class BoardAdjTargetTest {
 		assertTrue(testList.contains(board.getCell(1, 12)));
 		
 		// Test a cell at wall corner only has 2 adjacency.
-		testList = board.getAdjList(2, 9);
+		testList = board.getAdjList(4, 10);
 		assertEquals(2, testList.size());
-		assertTrue(testList.contains(board.getCell(2, 9)));
-		assertTrue(testList.contains(board.getCell(3, 8)));
+		assertTrue(testList.contains(board.getCell(3, 10)));
+		assertTrue(testList.contains(board.getCell(5, 10)));
 
 	}
 	
