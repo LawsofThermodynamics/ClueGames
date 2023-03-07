@@ -236,10 +236,13 @@ public class Board {
 
 		for (rowCount = 0; rowCount < numRows; rowCount++) {
 			for (colCount = 0; colCount < numColumns; colCount++) {
+				
+				BoardCell currentCell = grid[rowCount][colCount];
+				char currentCellInitial = currentCell.getInitial();
 
 				// If the room is a doorway, get the center cell based on the initial of the cell in the direction the door is from the current cell
-				if(grid[rowCount][colCount].isDoorway()) {
-					DoorDirection roomLocation = grid[rowCount][colCount].getDoorDirection();
+				if(currentCell.isDoorway()) {
+					DoorDirection roomLocation = currentCell.getDoorDirection();
 					BoardCell centerCell = new BoardCell();
 
 					if (roomLocation == DoorDirection.LEFT) {
@@ -251,26 +254,27 @@ public class Board {
 					} else if (roomLocation == DoorDirection.DOWN) {
 						centerCell = roomMap.get(grid[rowCount + 1][colCount].getInitial()).getCenterCell();
 					}
-					grid[rowCount][colCount].addAdj(centerCell);
-					centerCell.addAdj(grid[rowCount][colCount]);
+					currentCell.addAdj(centerCell);
+					centerCell.addAdj(currentCell);
 				}
 				
-				if(grid[rowCount][colCount].getSecretPassage() != '0') {
-					roomMap.get(grid[rowCount][colCount].getInitial()).getCenterCell().addAdj(roomMap.get(grid[rowCount][colCount].getSecretPassage()).getCenterCell());
+				if(currentCell.getSecretPassage() != '0') {
+					roomMap.get(currentCellInitial).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
 				}
-
-				if(grid[rowCount][colCount].getInitial() == 'W') {
+				
+				// If the current cell is a walkway
+				if(currentCellInitial == 'W') {
 					if(rowCount < (numRows - 1) && grid[rowCount + 1][colCount].getInitial() == 'W') {
-						grid[rowCount][colCount].addAdj(grid[rowCount + 1][colCount]);
+						currentCell.addAdj(grid[rowCount + 1][colCount]);
 					}
-					if(rowCount < (numRows + 1) && grid[rowCount - 1][colCount].getInitial() == 'W') {
-						grid[rowCount][colCount].addAdj(grid[rowCount - 1][colCount]);
+					if(rowCount > 0 && grid[rowCount - 1][colCount].getInitial() == 'W') {
+						currentCell.addAdj(grid[rowCount - 1][colCount]);
 					}
 					if(colCount < (numColumns - 1) && grid[rowCount][colCount + 1].getInitial() == 'W') {
-						grid[rowCount][colCount].addAdj(grid[rowCount][colCount + 1]);
+						currentCell.addAdj(grid[rowCount][colCount + 1]);
 					}
-					if(colCount < (numColumns + 1) && grid[rowCount + 1][colCount - 1].getInitial() == 'W') {
-						grid[rowCount][colCount].addAdj(grid[rowCount][colCount - 1]);
+					if(colCount > 0 && grid[rowCount][colCount - 1].getInitial() == 'W') {
+						currentCell.addAdj(grid[rowCount][colCount - 1]);
 					}
 				}
 
