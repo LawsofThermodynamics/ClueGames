@@ -7,8 +7,8 @@ public class BadConfigFormatException extends Exception{
 		super("Bad format detected");
 	}
 
-	public BadConfigFormatException(String error){
-		super("Bad format detected: " + error);
+	public BadConfigFormatException(String e){
+		super("Bad format detected: " + e);
 	}
 
 
