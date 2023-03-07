@@ -20,11 +20,25 @@ public class BoardCell {
 		roomLable = false;
 		roomCenter = false;
 		isDoor = false;
+		secretPassage = '0';
+		adjList = new HashSet<BoardCell>();
+	}
+
+	// Constructor that takes position parameters and initializes cell with an x and y position
+	BoardCell(int x, int y) {
+		row = x;
+		col = y;
+		
+		roomLable = false;
+		roomCenter = false;
+		isDoor = false;
+		secretPassage = '0';
+		adjList = new HashSet<BoardCell>();
 	}
 
 
-	private void addAdj(BoardCell adj) {
-
+	public void addAdj(BoardCell adj) {
+		adjList.add(adj);
 	}
 
 
@@ -81,9 +95,10 @@ public class BoardCell {
 		isOccupied = o;
 	}
 	
+	public Set<BoardCell> getAdjList() {
+		return adjList;
+	}
 	
-	
-
 
 
 }

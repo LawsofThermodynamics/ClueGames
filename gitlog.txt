@@ -1,8 +1,57 @@
+commit 8e492bff8a6591b5996dc9da232397eee9bb13bc
+Merge: 02562d2 7ddc07e
+Author: Michael <mbasey@mines.edu>
+Date:   Mon Mar 6 23:13:04 2023 -0700
+
+    Merge branch 'main' of https://github.com/LawsofThermodynamics/ClueGames
+
+commit 02562d2671ca16b86ba289b0fb730435a4b0914b
+Author: Michael <mbasey@mines.edu>
+Date:   Mon Mar 6 23:12:52 2023 -0700
+
+    Post refactor push. -Michael
+
+commit 7ddc07e11e29fd685b4f2c7f3b4331b097e20033
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 22:57:30 2023 -0700
+
+    Mark on ClueLayout. Add targets tests as required.
+
+commit 0cd787f7109679f4ffe83cff920dcf68f894cb73
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 19:39:56 2023 -0700
+
+    Add targets test of normal walkways and at-door case. Add colored layout.xlsx
+
 commit 2085b28a8e2841459dcc5e509f2fbb0bfab6d1cc
 Author: Michael <mbasey@mines.edu>
 Date:   Mon Mar 6 19:09:02 2023 -0700
 
     Refactoring finished -Michael
+
+commit 7907f85dbd2dde534650910a4ba827983d144d5c
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 02:42:37 2023 -0700
+
+    Complete adjacency tests section. Target tests section WIP. Colorized ClueLayout.
+
+commit c3e7d22442dbf3301e06fc8cdddfa2cb42a46c2c
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 02:08:32 2023 -0700
+
+    Colorize the ClueLayout.
+
+commit 0cdb41efe8ce39102014faa22c7bf199b1f0d2c2
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 00:07:58 2023 -0700
+
+    Create BoardAdjTargetTest test JUnit test.
+
+commit ec5bd556b5a324febe9dd80e92c69bc709b6cd2c
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 6 00:06:08 2023 -0700
+
+    Import AdjTargetTest306, add getAdj/getTargets/calcTargets methods in Board class, add setOccupied method in BoardCell class.
 
 commit 89a42cb477375b8fcf717e9a1825de2cdf831786
 Author: Michael <mbasey@mines.edu>

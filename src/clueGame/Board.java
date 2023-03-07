@@ -14,10 +14,10 @@ import experiment.TestBoardCell;
 import java.lang.Character;
 
 public class Board {
-	
+
 	// True for console debug statements
 	private boolean debugger = false; 
-	
+
 	// Variable Declaration
 	private BoardCell grid[][];
 	private int numRows;
@@ -46,11 +46,11 @@ public class Board {
 		try {
 			// Reset variables for multiple tests
 			grid = null; 
-			
+
 			// Load data from config files
 			loadSetupConfig();
 			loadLayoutConfig();
-			
+
 		} catch (BadConfigFormatException e) {
 			System.out.println(e);
 			System.out.println(e.getMessage());
@@ -77,8 +77,8 @@ public class Board {
 		layoutConfigFile = "data//" + layout;
 		setupConfigFiles = "data//" + setup;
 	}
-	
-	
+
+
 	/* Loads data from setupConfigFiles and initializes rooms
 	 * -Michael 3/5/2023
 	 * */
@@ -86,7 +86,7 @@ public class Board {
 		try {
 			// Stores file information per line 
 			String tempStr = "";
-			
+
 			FileReader reader = new FileReader(setupConfigFiles); // Opens file
 			Scanner in = new Scanner(reader);
 
@@ -99,7 +99,7 @@ public class Board {
 					continue;
 				} else {
 					String[] arrFromStr = tempStr.split(", "); // Splits line up for data manipulation	
-					
+
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
 					} else { // Throws error if word in file is not recognized
@@ -124,7 +124,7 @@ public class Board {
 		numRows = 0;
 		numColumns = 0;
 		String tempStr = "";
-		
+
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
 			Scanner in = new Scanner(reader);
@@ -148,13 +148,14 @@ public class Board {
 
 		grid = new BoardCell[numRows][numColumns];
 
+
 		int rowCount;
 		int colCount;
 
 
 		for (rowCount = 0; rowCount < numRows; rowCount++) {
 			for (colCount = 0; colCount < numColumns; colCount++) {
-				grid[rowCount][colCount] = new BoardCell();
+				grid[rowCount][colCount] = new BoardCell(rowCount, colCount);
 			}
 		}
 
@@ -196,7 +197,7 @@ public class Board {
 						grid[rowCount][colCount].setRoomLable(true);
 						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
 					} 
-					
+
 					else if (temp.charAt(1) == '<') {// Sets door status and direction based on arrow direction
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
@@ -210,7 +211,7 @@ public class Board {
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
 					} 
-					
+
 					else if (roomMap.containsKey(temp.charAt(1))){
 						grid[rowCount][colCount].setSecretPassage(temp.charAt(1)); // Sets passage location to second char if second char is a room in roomMap
 					} else if (temp.charAt(1) == '\r'){
@@ -230,6 +231,53 @@ public class Board {
 		} catch (StringIndexOutOfBoundsException e){
 			throw new BadConfigFormatException("EmptyCell");
 		}
+
+
+
+		for (rowCount = 0; rowCount < numRows; rowCount++) {
+			for (colCount = 0; colCount < numColumns; colCount++) {
+
+				// If the room is a doorway, get the center cell based on the initial of the cell in the direction the door is from the current cell
+				if(grid[rowCount][colCount].isDoorway()) {
+					DoorDirection roomLocation = grid[rowCount][colCount].getDoorDirection();
+					BoardCell centerCell = new BoardCell();
+
+					if (roomLocation == DoorDirection.LEFT) {
+						centerCell = roomMap.get(grid[rowCount][colCount - 1].getInitial()).getCenterCell();
+					} else if (roomLocation == DoorDirection.UP) {
+						centerCell = roomMap.get(grid[rowCount - 1][colCount].getInitial()).getCenterCell();
+					} else if (roomLocation == DoorDirection.RIGHT) {
+						centerCell = roomMap.get(grid[rowCount][colCount + 1].getInitial()).getCenterCell();
+					} else if (roomLocation == DoorDirection.DOWN) {
+						centerCell = roomMap.get(grid[rowCount + 1][colCount].getInitial()).getCenterCell();
+					}
+					grid[rowCount][colCount].addAdj(centerCell);
+					centerCell.addAdj(grid[rowCount][colCount]);
+				}
+				
+				if(grid[rowCount][colCount].getSecretPassage() != '0') {
+					roomMap.get(grid[rowCount][colCount].getInitial()).getCenterCell().addAdj(roomMap.get(grid[rowCount][colCount].getSecretPassage()).getCenterCell());
+				}
+
+				if(grid[rowCount][colCount].getInitial() == 'W') {
+					if(rowCount < (numRows - 1) && grid[rowCount + 1][colCount].getInitial() == 'W') {
+						grid[rowCount][colCount].addAdj(grid[rowCount + 1][colCount]);
+					}
+					if(rowCount < (numRows + 1) && grid[rowCount - 1][colCount].getInitial() == 'W') {
+						grid[rowCount][colCount].addAdj(grid[rowCount - 1][colCount]);
+					}
+					if(colCount < (numColumns - 1) && grid[rowCount][colCount + 1].getInitial() == 'W') {
+						grid[rowCount][colCount].addAdj(grid[rowCount][colCount + 1]);
+					}
+					if(colCount < (numColumns + 1) && grid[rowCount + 1][colCount - 1].getInitial() == 'W') {
+						grid[rowCount][colCount].addAdj(grid[rowCount][colCount - 1]);
+					}
+				}
+
+			}
+		}
+
+
 	}
 
 	// Getters and setters
@@ -244,25 +292,24 @@ public class Board {
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
 	}
-	
+
 	// Returns rooms based on cell initial or cell type
 	public Room getRoom(BoardCell cell) {
 		return roomMap.get(cell.getInitial());
 	}
-	
+
 	public Room getRoom(char c) {
 		return roomMap.get(c);
 	}
 
-	public Set<BoardCell> getAdjList(int x, int y) {
-		Set<BoardCell> testList = new HashSet<BoardCell>();
-		return testList;
+	public Set<BoardCell> getAdjList(int x, int y) {	
+		return grid[x][y].getAdjList();
 	}
-	
+
 	public void calcTargets(BoardCell cell, int steps) {
 		return;
 	}
-	
+
 	public Set<BoardCell> getTargets() {
 		return targetCells;
 	}
