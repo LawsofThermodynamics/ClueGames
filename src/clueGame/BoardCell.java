@@ -14,7 +14,7 @@ public class BoardCell {
 	private boolean isDoor;
 	private boolean isOccupied;
 	private char secretPassage;
-	Set<BoardCell> adjList;
+	private Set<BoardCell> adjList;
 
 	BoardCell() {
 		roomLable = false;
@@ -42,7 +42,7 @@ public class BoardCell {
 	}
 
 
-	// Getters and setters
+	// Getters
 	public boolean isLabel() {
 		return roomLable;
 	}
@@ -55,6 +55,10 @@ public class BoardCell {
 		return isDoor;
 	}
 
+	public boolean getOccupied() {
+		return isOccupied;
+	}
+	
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 	}
@@ -67,6 +71,8 @@ public class BoardCell {
 		return initial;
 	}
 
+	
+	// Setters
 	public void setInitial(char initial) {
 		this.initial = initial;
 	}
@@ -98,7 +104,5 @@ public class BoardCell {
 	public Set<BoardCell> getAdjList() {
 		return adjList;
 	}
-	
-
 
 }

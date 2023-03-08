@@ -25,13 +25,16 @@ public class Board {
 	private String layoutConfigFile;
 	private String setupConfigFiles;
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private Set<BoardCell> targetCells = new HashSet<BoardCell> ();
+	private Set<BoardCell> targetCells;
+	private Set<BoardCell> visitedCells;
 
 	private static Board theInstance = new Board();
 
 	// Constructor is private to ensure only one can be created
 	private Board() {
 		super();
+		targetCells = new HashSet<BoardCell> ();
+		visitedCells = new HashSet<BoardCell> ();
 	}
 
 	// Returns the only Board instance
@@ -262,8 +265,7 @@ public class Board {
 					centerCell.addAdj(currentCell);
 				}
 				
-				if(currentCell.getSecretPassage() != '0') {
-					
+				if(currentCell.getSecretPassage() != '0') {					
 					(roomMap.get(currentCellInitial)).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
 				}
 				
@@ -282,14 +284,11 @@ public class Board {
 						currentCell.addAdj(grid[rowCount][colCount - 1]);
 					}
 				}
-
 			}
 		}
-
-
 	}
 
-	// Getters and setters
+	// Getters
 	public int getNumRows() {
 		return numRows;
 	}
@@ -311,15 +310,42 @@ public class Board {
 		return roomMap.get(c);
 	}
 
+	// Return adjacency list of cell in grid based on coordinates
 	public Set<BoardCell> getAdjList(int x, int y) {	
 		return grid[x][y].getAdjList();
 	}
 
+	// Before each calculation, must clear targetList first.
+	// Then use a nested private recursive method.
 	public void calcTargets(BoardCell cell, int steps) {
+		targetCells.clear();
+		calcRecursive(cell, steps);
+	}
+	
+	// Nested method.
+	private void calcRecursive(BoardCell cell, int steps) {
+		if (steps == 0) {
+			targetCells.add(cell);
+		}
+		else {
+			visitedCells.add(cell);
+			for (BoardCell nextCell : cell.getAdjList()) {
+				// If next cell is unvisited room center, execute as final step.
+				if (!visitedCells.contains(nextCell) && nextCell.isRoomCenter()) {
+					calcRecursive(nextCell, 0);
+				}
+				// If next cell is unvisited and unoccupied normal cell, execute recursive step.
+				else if (!visitedCells.contains(nextCell) && !nextCell.getOccupied()) {
+					calcRecursive(nextCell, steps - 1);					
+				}
+			}
+			visitedCells.remove(cell);
+		}
 		return;
 	}
 
 	public Set<BoardCell> getTargets() {
 		return targetCells;
 	}
+	
 }
