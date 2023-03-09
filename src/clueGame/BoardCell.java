@@ -36,13 +36,21 @@ public class BoardCell {
 		adjList = new HashSet<BoardCell>();
 	}
 
-
+	// Adds a cell into the adjacent list of current cell
 	public void addAdj(BoardCell adj) {
 		adjList.add(adj);
 	}
 
 
 	// Getters
+	public Set<BoardCell> getAdjList() {
+		return adjList;
+	}
+	
+	public DoorDirection getDoorDirection() {
+		return doorDirection;
+	}
+	
 	public boolean isLabel() {
 		return roomLable;
 	}
@@ -51,17 +59,13 @@ public class BoardCell {
 		return roomCenter;
 	}
 
-	public Boolean isDoorway() {
+	public boolean isDoorway() {
 		return isDoor;
 	}
 
 	public boolean getOccupied() {
 		return isOccupied;
-	}
-	
-	public DoorDirection getDoorDirection() {
-		return doorDirection;
-	}
+	}	
 
 	public char getSecretPassage() {
 		return secretPassage;
@@ -70,9 +74,15 @@ public class BoardCell {
 	public char getInitial() {
 		return initial;
 	}
+	
+	
 
 	
 	// Setters
+	public void setDoorDirection(DoorDirection doorDirection) {
+		this.doorDirection = doorDirection;
+	}
+	
 	public void setInitial(char initial) {
 		this.initial = initial;
 	}
@@ -89,20 +99,12 @@ public class BoardCell {
 		this.isDoor = isDoor;
 	}
 
-	public void setDoorDirection(DoorDirection doorDirection) {
-		this.doorDirection = doorDirection;
-	}
-
 	public void setSecretPassage(char secretPassage) {
 		this.secretPassage = secretPassage;
 	}
 
 	public void setOccupied(boolean o) {
 		isOccupied = o;
-	}
-	
-	public Set<BoardCell> getAdjList() {
-		return adjList;
 	}
 
 }

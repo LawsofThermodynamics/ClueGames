@@ -9,12 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import experiment.TestBoardCell;
-
-import java.lang.Character;
-
 public class Board {
-
 	// True for console debug statements
 	private boolean debugger = false; 
 
@@ -68,7 +63,6 @@ public class Board {
 				System.out.println("|");
 			}
 		}
-
 	}
 
 
@@ -239,11 +233,9 @@ public class Board {
 			throw new BadConfigFormatException("EmptyCell");
 		}
 
-
-
 		for (rowCount = 0; rowCount < numRows; rowCount++) {
 			for (colCount = 0; colCount < numColumns; colCount++) {
-				
+
 				BoardCell currentCell = grid[rowCount][colCount];
 				char currentCellInitial = currentCell.getInitial();
 
@@ -264,11 +256,11 @@ public class Board {
 					currentCell.addAdj(centerCell);
 					centerCell.addAdj(currentCell);
 				}
-				
+
 				if(currentCell.getSecretPassage() != '0') {					
 					(roomMap.get(currentCellInitial)).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
 				}
-				
+
 				// If the current cell is a walkway
 				if(currentCellInitial == 'W') {
 					if(rowCount < (numRows - 1) && grid[rowCount + 1][colCount].getInitial() == 'W') {
@@ -288,41 +280,24 @@ public class Board {
 		}
 	}
 
-	// Getters
-	public int getNumRows() {
-		return numRows;
-	}
-
-	public int getNumColumns() {
-		return numColumns;
-	}
-
-	public BoardCell getCell(int row, int col) {
-		return grid[row][col];
-	}
-
-	// Returns rooms based on cell initial or cell type
-	public Room getRoom(BoardCell cell) {
-		return roomMap.get(cell.getInitial());
-	}
-
-	public Room getRoom(char c) {
-		return roomMap.get(c);
-	}
-
-	// Return adjacency list of cell in grid based on coordinates
-	public Set<BoardCell> getAdjList(int x, int y) {	
-		return grid[x][y].getAdjList();
-	}
-
-	// Before each calculation, must clear targetList first.
-	// Then use a nested private recursive method.
+	/* Before each calculation, must clear targetList first.
+	 * Then use a nested private recursive method.
+	 * 
+	 * -Sihang, 3/8/2023
+	 * 
+	 * */
 	public void calcTargets(BoardCell cell, int steps) {
 		targetCells.clear();
 		calcRecursive(cell, steps);
 	}
-	
-	// Nested method.
+
+	/* Nested method.
+	 * Loops through every possible path that the player can move through, then record the end locations that are valid
+	 * spaces that the player can move to into targetCells. Continues to loop through each individual paths until player runs out of steps
+	 * 
+	 * -Sihang, 3/8/2023
+	 * 
+	 * */
 	private void calcRecursive(BoardCell cell, int steps) {
 		if (steps == 0) {
 			targetCells.add(cell);
@@ -330,11 +305,11 @@ public class Board {
 		else {
 			visitedCells.add(cell);
 			for (BoardCell nextCell : cell.getAdjList()) {
-				// If next cell is unvisited room center, execute as final step.
+				// If next cell is an unvisited room center, execute as final step.
 				if (!visitedCells.contains(nextCell) && nextCell.isRoomCenter()) {
 					calcRecursive(nextCell, 0);
 				}
-				// If next cell is unvisited and unoccupied normal cell, execute recursive step.
+				// If next cell is unvisited and is an unoccupied normal cell, execute recursive step.
 				else if (!visitedCells.contains(nextCell) && !nextCell.getOccupied()) {
 					calcRecursive(nextCell, steps - 1);					
 				}
@@ -344,8 +319,37 @@ public class Board {
 		return;
 	}
 
+
+	// Getters
+	// Returns rooms based on cell initial or cell type
+	public Room getRoom(BoardCell cell) {
+		return roomMap.get(cell.getInitial());
+	}
+	
+	public BoardCell getCell(int row, int col) {
+		return grid[row][col];
+	}
+
+	public Room getRoom(char c) {
+		return roomMap.get(c);
+	}
+
+	public int getNumRows() {
+		return numRows;
+	}
+
+	public int getNumColumns() {
+		return numColumns;
+	}
+
+	// Setters
+	// Return adjacency list of specific cell in grid based on coordinates
+	public Set<BoardCell> getAdjList(int x, int y) {	
+		return grid[x][y].getAdjList();
+	}
+
 	public Set<BoardCell> getTargets() {
 		return targetCells;
 	}
-	
+
 }
