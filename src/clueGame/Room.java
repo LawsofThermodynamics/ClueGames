@@ -6,12 +6,14 @@ public class Room {
 	private BoardCell centerCell;
 	private BoardCell lableCell;
 	
+	// Default Constructor
 	public Room(String inName) {
 		name = inName;
 		centerCell = null;
 		lableCell = null;
 	}
 
+	// Getters
 	public String getName() {
 		return name;
 	}
@@ -24,6 +26,7 @@ public class Room {
 		return centerCell;
 	}
 
+	// Setters
 	public void setLableCell(BoardCell lableCell) {
 		this.lableCell = lableCell;
 	}
@@ -35,7 +38,4 @@ public class Room {
 	public void setCenterCell(BoardCell centerCell) {
 		this.centerCell = centerCell;
 	}
-
-	
-	
 }

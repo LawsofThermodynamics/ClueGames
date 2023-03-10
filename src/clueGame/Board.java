@@ -189,17 +189,21 @@ public class Board {
 				}
 
 				// Checks data read in to determine how to process data
+				// If string in cell is 2 chars long, it must be a special cell, else it will be handled like a normal cell
 				if (temp.length() > 1){
-					// If string in cell is 2 chars long, it must be a special cell
-					if (temp.charAt(1) == '*') { // Sets cell as center
+					// Sets cell as center
+					if (temp.charAt(1) == '*') { 
 						grid[rowCount][colCount].setRoomCenter(true);
 						roomMap.get(temp.charAt(0)).setCenterCell(grid[rowCount][colCount]);
-					} else if (temp.charAt(1) == '#') { // Sets cell as label
+					
+					// Sets cell as label
+					} else if (temp.charAt(1) == '#') { 
 						grid[rowCount][colCount].setRoomLable(true);
 						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
 					} 
 
-					else if (temp.charAt(1) == '<') {// Sets door status and direction based on arrow direction
+					// Sets door status and direction based on arrow direction
+					else if (temp.charAt(1) == '<') {
 						grid[rowCount][colCount].setDoor(true);
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.LEFT);
 					} else if (temp.charAt(1) == '^') {
@@ -213,11 +217,12 @@ public class Board {
 						grid[rowCount][colCount].setDoorDirection(DoorDirection.DOWN);
 					} 
 
+					// Sets special room status depending on characters
 					else if (roomMap.containsKey(temp.charAt(1))){
 						grid[rowCount][colCount].setSecretPassage(temp.charAt(1)); // Sets passage location to second char if second char is a room in roomMap
-					} else if (temp.charAt(1) == '\r'){
+					} else if (temp.charAt(1) == '\r'){ // Skips the endline at the end of every csv file line
 						if(debugger) {System.out.println("endLine");}
-					} else {
+					} else { // Throws an error if an invalid character is found 
 						if(debugger) {System.out.println("Invalid Char: " + temp.charAt(1));}
 						in.close(); // Close file
 						throw new BadConfigFormatException("Invalid Character Detected in LayoutConfigFile");
@@ -241,9 +246,11 @@ public class Board {
 
 				// If the room is a doorway, get the center cell based on the initial of the cell in the direction the door is from the current cell
 				if(currentCell.isDoorway()) {
+					// Variables to make the following method more legible
 					DoorDirection roomLocation = currentCell.getDoorDirection();
 					BoardCell centerCell = new BoardCell();
 
+					// Assigns links between cells based on door direction
 					if (roomLocation == DoorDirection.LEFT) {
 						centerCell = roomMap.get(grid[rowCount][colCount - 1].getInitial()).getCenterCell();
 					} else if (roomLocation == DoorDirection.UP) {
@@ -253,15 +260,17 @@ public class Board {
 					} else if (roomLocation == DoorDirection.DOWN) {
 						centerCell = roomMap.get(grid[rowCount + 1][colCount].getInitial()).getCenterCell();
 					}
+					// Links the currently selected cell with the center of the room, and vice versa
 					currentCell.addAdj(centerCell);
 					centerCell.addAdj(currentCell);
 				}
 
+				// If the cell is a secret passage, the char saved in SecretPassage will be changed from the default '0'
 				if(currentCell.getSecretPassage() != '0') {					
 					(roomMap.get(currentCellInitial)).getCenterCell().addAdj(roomMap.get(currentCell.getSecretPassage()).getCenterCell());
 				}
 
-				// If the current cell is a walkway
+				// If the current cell is a walkway check the adjacent cells to see if they are valid walkways
 				if(currentCellInitial == 'W') {
 					if(rowCount < (numRows - 1) && grid[rowCount + 1][colCount].getInitial() == 'W') {
 						currentCell.addAdj(grid[rowCount + 1][colCount]);
@@ -320,12 +329,14 @@ public class Board {
 	}
 
 
+
+
 	// Getters
 	// Returns rooms based on cell initial or cell type
 	public Room getRoom(BoardCell cell) {
 		return roomMap.get(cell.getInitial());
 	}
-	
+
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
 	}
@@ -341,6 +352,9 @@ public class Board {
 	public int getNumColumns() {
 		return numColumns;
 	}
+
+
+
 
 	// Setters
 	// Return adjacency list of specific cell in grid based on coordinates
