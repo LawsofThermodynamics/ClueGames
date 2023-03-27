@@ -23,6 +23,7 @@ public class Board {
 	private int numColumns; // Number of columns that the board is made up of
 	private String layoutConfigFile; // Location of the layout Config File
 	private String setupConfigFiles; // Location of the setup Config File
+	private String fileLocation = "data//";
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
@@ -75,8 +76,8 @@ public class Board {
 	 * -Michael 3/5/2023
 	 * */
 	public void setConfigFiles(String layout, String setup) {
-		layoutConfigFile = "data//" + layout;
-		setupConfigFiles = "data//" + setup;
+		layoutConfigFile = fileLocation + layout;
+		setupConfigFiles = fileLocation + setup;
 	}
 
 
