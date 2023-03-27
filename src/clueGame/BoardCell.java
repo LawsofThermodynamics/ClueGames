@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BoardCell {
-	private int row; // Stores the row number of each cell
-	private int col; // Stores the column number of each cell
+	private int row; // Stores the row number of each cell (Never used within BoardCell class, but are necessary)
+	private int col; // Stores the column number of each cell (Never used within BoardCell class, but are necessary)
 	private char initial; // Stores the letter of each cell
 	private DoorDirection doorDirection; // Stores the direction each door is facing
 	private boolean roomLable; // Boolean storing if the cell is a room label
@@ -33,6 +33,7 @@ public class BoardCell {
 
 	// Constructor that takes position parameters and initializes cell with an x and y position
 	BoardCell(int x, int y) {
+		super();
 		row = x;
 		col = y;
 		
@@ -48,7 +49,7 @@ public class BoardCell {
 		adjList.add(adj);
 	}
 
-
+	
 	// Getters
 	public Set<BoardCell> getAdjList() {
 		return adjList;

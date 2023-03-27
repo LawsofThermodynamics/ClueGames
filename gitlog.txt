@@ -1,3 +1,15 @@
+commit c8d64913b3d3b048b0a3d8bd2613b3e3af447daf
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Mar 27 17:20:55 2023 -0600
+
+    Altered some comments that were inaccurate or needed further clarification, added variables to help with readability and clarity of code, as well as 'future proofing'
+
+commit 12295f15cff3bb8f2f745b1463909842bcceb828
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Mar 27 17:06:32 2023 -0600
+
+    Comments added for variables in declarations
+
 commit 91d9bc5ad77ceec7b2c95e247db949534384d94f
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Thu Mar 9 21:00:39 2023 -0700

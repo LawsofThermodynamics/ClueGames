@@ -2,12 +2,13 @@
 package clueGame;
 
 public class Room {
-	private String name;
-	private BoardCell centerCell;
-	private BoardCell lableCell;
+	private String name; // Stores the name of the room
+	private BoardCell centerCell; // Stores the cell that is the center of the room
+	private BoardCell lableCell; // Stores the cell that will be used to display the name of the cell
 	
 	// Default Constructor
 	public Room(String inName) {
+		super();
 		name = inName;
 		centerCell = null;
 		lableCell = null;
