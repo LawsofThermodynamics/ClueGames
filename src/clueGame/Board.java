@@ -1,4 +1,8 @@
-// Sihang Wang, Michael Basey
+/* Board Class stores the raw data of the clue game within a two dimensional grid of BoardCells. 
+ * Each Board Cell contains an initial for the room, booleans to indicate what kind of room each cell is,
+ * as well as information regarding which cells each cell is adjacent.
+ * Authors: Sihang Wang, Michael Basey
+ * */
 package clueGame;
 
 import java.io.FileNotFoundException;
@@ -14,25 +18,25 @@ public class Board {
 	private boolean debugger = false; 
 
 	// Variable Declaration
-	private BoardCell grid[][];
-	private int numRows;
-	private int numColumns;
-	private String layoutConfigFile;
-	private String setupConfigFiles;
-	private Map<Character, Room> roomMap = new HashMap<Character, Room>();
-	private Set<BoardCell> targetCells;
-	private Set<BoardCell> visitedCells;
+	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
+	private int numRows; // Number of rows that the board is made up of
+	private int numColumns; // Number of columns that the board is made up of
+	private String layoutConfigFile; // Location of the layout Config File
+	private String setupConfigFiles; // Location of the setup Config File
+	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
+	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
+	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
 
-	private static Board theInstance = new Board();
+	private static Board theInstance = new Board(); // The singleton of the Board instance
 
-	// Constructor is private to ensure only one can be created
+	// Default constructor
 	private Board() {
 		super();
 		targetCells = new HashSet<BoardCell> ();
 		visitedCells = new HashSet<BoardCell> ();
 	}
 
-	// Returns the only Board instance
+	// Returns the singleton Board instance
 	public static Board getInstance() {
 		return theInstance;
 	}

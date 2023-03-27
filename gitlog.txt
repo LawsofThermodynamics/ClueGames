@@ -1,3 +1,39 @@
+commit 91d9bc5ad77ceec7b2c95e247db949534384d94f
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Mar 9 21:00:39 2023 -0700
+
+    Final refactoring and commenting finished. -Michael
+
+commit b1074f6eb59cb0ebda4a2a9204df7e2eedd15069
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Wed Mar 8 17:02:32 2023 -0700
+
+    Basic refactoring and commenting started. -Michael
+
+commit fdace9f280533b2bb9c3f510ef03b7678e973eb8
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 8 14:54:41 2023 -0700
+
+    Add nested recursive calTarget method in Board class. Add occupied status getter in BoardCell class. Correct some expected result of some test in BoardAdjTargetTest.
+
+commit 62fa2d20f0024733ca02261edd3e000787fd6dba
+Author: Michael <mbasey@mines.edu>
+Date:   Tue Mar 7 12:04:16 2023 -0700
+
+    All Adjacency tests now pass. -Michael
+
+commit 0482f66f2c7e79a12aa7724b0e456edcbc8a3044
+Author: Michael <mbasey@mines.edu>
+Date:   Tue Mar 7 11:56:49 2023 -0700
+
+    Code for basic adjacencies linking has been refactored and commented, as well as now passing basic walkway and room tests. -Michael
+
+commit cf25f319c7cef8b0005c352d9b9859b98dd5c674
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Mar 7 10:48:21 2023 -0700
+
+    Started implimenting addAdj functionality. -Michael
+
 commit 8e492bff8a6591b5996dc9da232397eee9bb13bc
 Merge: 02562d2 7ddc07e
 Author: Michael <mbasey@mines.edu>

@@ -1,22 +1,29 @@
-// Sihang Wang, Michael Basey
+/* BoardCell is the class responsible for holding the raw data of each individual cell of the board game.
+ * Each cell contains data regarding location, room type, door type, and list of rooms that the cell is adjacent to.
+ * 
+ * Authors: Sihang Wang, Michael Basey 
+ *  
+ * */
 package clueGame;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class BoardCell {
-	private int row;
-	private int col;
-	private char initial;
-	private DoorDirection doorDirection;
-	private boolean roomLable;
-	private boolean roomCenter;
-	private boolean isDoor;
-	private boolean isOccupied;
-	private char secretPassage;
-	private Set<BoardCell> adjList;
+	private int row; // Stores the row number of each cell
+	private int col; // Stores the column number of each cell
+	private char initial; // Stores the letter of each cell
+	private DoorDirection doorDirection; // Stores the direction each door is facing
+	private boolean roomLable; // Boolean storing if the cell is a room label
+	private boolean roomCenter; // Boolean storing if the cell is a room center
+	private boolean isDoor; // Boolean storing if the cell is a door
+	private boolean isOccupied; // Boolean storing if the cell is a occupied by another player
+	private char secretPassage; // Stores the char of the other secret passage this cell connects to
+	private Set<BoardCell> adjList; // Stores the list of cells that the current cell is adjacent to
 
+	// Default constructor
 	BoardCell() {
+		super();
 		roomLable = false;
 		roomCenter = false;
 		isDoor = false;
