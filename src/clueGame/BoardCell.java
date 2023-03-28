@@ -24,11 +24,7 @@ public class BoardCell {
 	// Default constructor
 	BoardCell() {
 		super();
-		roomLable = false;
-		roomCenter = false;
-		isDoor = false;
-		secretPassage = '0';
-		adjList = new HashSet<BoardCell>();
+		initVars();
 	}
 
 	// Constructor that takes position parameters and initializes cell with an x and y position
@@ -36,14 +32,18 @@ public class BoardCell {
 		super();
 		row = x;
 		col = y;
-		
+		initVars();
+	}
+	
+	// Variables initialization method, private only for constructors.
+	private void initVars() {
 		roomLable = false;
 		roomCenter = false;
 		isDoor = false;
 		secretPassage = '0';
 		adjList = new HashSet<BoardCell>();
 	}
-
+	
 	// Adds a cell into the adjacent list of current cell
 	public void addAdj(BoardCell adj) {
 		adjList.add(adj);
