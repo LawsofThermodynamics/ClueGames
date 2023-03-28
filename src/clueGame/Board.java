@@ -106,14 +106,14 @@ public class Board {
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
 					} else { // Throws error if word in file is not recognized
 						in.close(); // Close file
-						throw new BadConfigFormatException("Invalid Format Detected within setupConfigFiles");
+						throw new BadConfigFormatException("setupConfigFiles Failed, Invalid Format Detected");
 					}
 				}
 			}
 			in.close(); // Close file
 
 		} catch (FileNotFoundException e) {
-			throw new BadConfigFormatException("loadSetupConfig Failed");
+			throw new BadConfigFormatException("loadSetupConfig Failed, File Not Loaded Correctly");
 		}
 	}
 
@@ -143,7 +143,7 @@ public class Board {
 			in.close(); // Close file	
 
 		} catch (FileNotFoundException e){
-			System.out.println("Layout Config File Not Loaded Correctly");
+			System.out.println("loadLayoutConfig Failed, File Not Loaded Correctly");
 			throw new BadConfigFormatException();
 		}
 
@@ -190,7 +190,7 @@ public class Board {
 				}
 				else {
 					in.close(); // Close file
-					throw new BadConfigFormatException("Invalid Room Name Detected in LayoutConfigFile");
+					throw new BadConfigFormatException("LayoutConfigFile Failed, Invalid Room Name Detected");
 				}
 
 				// Checks data read in to determine how to process data
@@ -200,8 +200,8 @@ public class Board {
 					if (temp.charAt(1) == '*') { 
 						grid[rowCount][colCount].setRoomCenter(true);
 						roomMap.get(temp.charAt(0)).setCenterCell(grid[rowCount][colCount]);
-					
-					// Sets cell as label
+
+						// Sets cell as label
 					} else if (temp.charAt(1) == '#') { 
 						grid[rowCount][colCount].setRoomLable(true);
 						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
@@ -230,7 +230,7 @@ public class Board {
 					} else { // Throws an error if an invalid character is found 
 						if(debugger) {System.out.println("Invalid Char: " + temp.charAt(1));}
 						in.close(); // Close file
-						throw new BadConfigFormatException("Invalid Character Detected in LayoutConfigFile");
+						throw new BadConfigFormatException("LayoutConfigFile Failed, Invalid Character Detected");
 					}
 				}
 				colCount++;
@@ -238,9 +238,9 @@ public class Board {
 			in.close(); // Close file
 
 		} catch (FileNotFoundException e){
-			throw new BadConfigFormatException("Layout Config File Not Loaded Correctly");
+			throw new BadConfigFormatException("LayoutConfigFile Failed, File Not Loaded Correctly");
 		} catch (StringIndexOutOfBoundsException e){
-			throw new BadConfigFormatException("EmptyCell");
+			throw new BadConfigFormatException("LayoutConfigFile Failed, empty cell detected");
 		}
 
 		for (rowCount = 0; rowCount < numRows; rowCount++) {
