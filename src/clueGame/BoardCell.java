@@ -42,6 +42,7 @@ public class BoardCell {
 		isDoor = false;
 		secretPassage = '0';
 		adjList = new HashSet<BoardCell>();
+		doorDirection = DoorDirection.NONE;		
 	}
 	
 	// Adds a cell into the adjacent list of current cell

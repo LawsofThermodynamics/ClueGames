@@ -14,8 +14,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Board {
-	// True for console debug statements
-	private boolean debugger = false; 
+	// Debugger switch
+	private boolean debugger = false; // True prints debugging messages to console
 
 	// Variable Declaration
 	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
@@ -23,7 +23,7 @@ public class Board {
 	private int numColumns; // Number of columns that the board is made up of
 	private String layoutConfigFile; // Location of the layout Config File
 	private String setupConfigFiles; // Location of the setup Config File
-	private String fileLocation = "data//";
+	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
@@ -72,7 +72,7 @@ public class Board {
 
 
 	/* Sets the locations of the layout and setup text files from parameters
-	 *  Relies on files always being within relative path data//Filename 
+	 *  Relies on files always being within relative path stored within fileLocation//Filename 
 	 * -Michael 3/5/2023
 	 * */
 	public void setConfigFiles(String layout, String setup) {
@@ -81,7 +81,7 @@ public class Board {
 	}
 
 
-	/* Loads data from setupConfigFiles and initializes rooms
+	/* Loads data from setupConfigFiles and initializes rooms with name and initial based on data from file
 	 * -Michael 3/5/2023
 	 * */
 	public void loadSetupConfig() throws BadConfigFormatException {
@@ -126,47 +126,10 @@ public class Board {
 	 *   
 	 * */
 	public void loadLayoutConfig() throws BadConfigFormatException {
-		// Reset variables for multiple tests
-		numRows = 0;
-		numColumns = 0;
-		String tempStr = "";
+		loadLayoutInitialSettup();
 
-		try {
-			FileReader reader = new FileReader(layoutConfigFile);// Opens file
-			Scanner in = new Scanner(reader);
-
-			// Reads data from file
-			while(in.hasNextLine()) {
-				numRows++; // Counts rows
-				tempStr = in.nextLine(); // Stores string for column count
-			}
-			in.close(); // Close file	
-
-		} catch (FileNotFoundException e){
-			System.out.println("loadLayoutConfig Failed, File Not Loaded Correctly");
-			throw new BadConfigFormatException();
-		}
-
-		String[] arrFromStr = tempStr.split(","); // Splits string into columns to determine column count
-		numColumns = arrFromStr.length;
-		if(debugger) {System.out.println("Rows: " + numRows); }
-		if(debugger) {System.out.println("Columns: " + numColumns);	}		
-
-		grid = new BoardCell[numRows][numColumns];
-
-
-		int rowCount;
-		int colCount;
-
-
-		for (rowCount = 0; rowCount < numRows; rowCount++) {
-			for (colCount = 0; colCount < numColumns; colCount++) {
-				grid[rowCount][colCount] = new BoardCell(rowCount, colCount);
-			}
-		}
-
-		rowCount = 0;
-		colCount = 0;
+		int rowCount = 0;
+		int colCount = 0;
 
 		try {
 			FileReader reader = new FileReader(layoutConfigFile);// Opens file
@@ -294,11 +257,56 @@ public class Board {
 		}
 	}
 
-	/* Before each calculation, must clear targetList first.
-	 * Then use a nested private recursive method.
+
+	/* Helper function for loadLayoutConfig
+	 * 	Loads in data from layoutConfigFile.csv, and performs the initial data read to initialize the board
+	 * 	 Reads data line by line counting to detirmin the number of rows, then counts the number of cells in the final row to determine column count
+	 *   -Michael 3/27/2023
+	 * */
+	private void loadLayoutInitialSettup() throws BadConfigFormatException{
+		// Reset variables for multiple tests
+		numRows = 0;
+		numColumns = 0;
+		String tempStr = "";
+
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);// Opens file
+			Scanner in = new Scanner(reader);
+
+			// Reads data from file
+			while(in.hasNextLine()) {
+				numRows++; // Counts rows
+				tempStr = in.nextLine(); // Stores string for column count
+			}
+			in.close(); // Close file	
+
+		} catch (FileNotFoundException e){
+			throw new BadConfigFormatException("loadLayoutConfig Failed, File Not Loaded Correctly");
+		}
+
+		String[] arrFromStr = tempStr.split(","); // Splits string into columns to determine column count
+		numColumns = arrFromStr.length;
+		if(debugger) {System.out.println("Rows: " + numRows); }
+		if(debugger) {System.out.println("Columns: " + numColumns);	}		
+
+		grid = new BoardCell[numRows][numColumns];
+
+
+		int rowCount;
+		int colCount;
+
+
+		for (rowCount = 0; rowCount < numRows; rowCount++) {
+			for (colCount = 0; colCount < numColumns; colCount++) {
+				grid[rowCount][colCount] = new BoardCell(rowCount, colCount);
+			}
+		}		
+	}
+
+	/* Preform before each calculation as targetList must be cleared before each run
+	 *  Then call the private recursive method calcRecursive
 	 * 
 	 * -Sihang, 3/8/2023
-	 * 
 	 * */
 	public void calcTargets(BoardCell cell, int steps) {
 		targetCells.clear();
@@ -306,8 +314,9 @@ public class Board {
 	}
 
 	/* Nested method.
-	 * Loops through every possible path that the player can move through, then record the end locations that are valid
-	 * spaces that the player can move to into targetCells. Continues to loop through each individual paths until player runs out of steps
+	 *  Loops through every possible path that the player can move through, then record the end locations that are valid
+	 *  spaces that the player can end their movement phase to into targetCells.
+	 *  Continues to loop through each individual paths until player runs out of steps
 	 * 
 	 * -Sihang, 3/8/2023
 	 * 

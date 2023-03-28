@@ -1,3 +1,9 @@
+commit caa06a74d80c7318344a1e601ff8ca3db499054c
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Mar 27 17:39:49 2023 -0600
+
+    Added helper function for loadLayoutConfig as our original was far to long and difficult to read. - Michael
+
 commit 6c69ad8cc5515a09d70ce4cfd500c88ca3ea223a
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Mar 27 17:38:46 2023 -0600
