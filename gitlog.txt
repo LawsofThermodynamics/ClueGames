@@ -1,3 +1,33 @@
+commit d64026ec9d011d15c5c49d1ffb2a48fa97263e18
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Mar 28 10:29:07 2023 -0600
+
+    Rooms are now updated to reflect the original clue game's room names -Michael
+
+commit d680cb3e341767b9ae85e02d85d95d19a4da4084
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Mar 28 10:20:21 2023 -0600
+
+    BoardCell doorway now initialized to NONE, and code updated to utalize the NONE enum value -Michael
+
+commit d459411207efb347807ecf1abf1693f2596b700b
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Mar 28 10:04:55 2023 -0600
+
+    Error messages thrown by BadConfigFormatException clarified and standerdized. -Michael
+
+commit 2f63214aa7ac03cdeb1716a221d7f24580c95eff
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Tue Mar 28 00:50:30 2023 -0600
+
+    Extract variables initialization section in BoardCell constructors to initVars() method due to DRY principle.Added header block for DoorDirection class.
+
+commit 7706b1bd43af2d3581eb39740f6d178c0b4c5fc6
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Mar 27 22:30:42 2023 -0600
+
+    Added header block of room class. Modified getOccupied() to isOccupied, same to other boolean return methods.
+
 commit caa06a74d80c7318344a1e601ff8ca3db499054c
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Mar 27 17:39:49 2023 -0600
