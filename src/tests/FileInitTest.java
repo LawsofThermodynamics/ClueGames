@@ -30,10 +30,10 @@ public class FileInitTest{
 	public void testRoomLabels() {
 		// To ensure data is correctly loaded, test retrieving a few rooms
 		// from the hash, including the first and last in the file and a few others
-		assertEquals("Room-A", board.getRoom('A').getName());
-		assertEquals("Room-B", board.getRoom('B').getName());
-		assertEquals("Room-C", board.getRoom('C').getName());
-		assertEquals("Room-I", board.getRoom('I').getName());
+		assertEquals("Hall", board.getRoom('A').getName());
+		assertEquals("Lounge", board.getRoom('B').getName());
+		assertEquals("Kitchen", board.getRoom('C').getName());
+		assertEquals("Billiard Room", board.getRoom('I').getName());
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class FileInitTest{
 		BoardCell cell = board.getCell( 5, 1);
 		Room room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-A") ;
+		assertEquals( room.getName(), "Hall") ;
 		assertFalse( cell.isLabel() );
 		assertFalse( cell.isRoomCenter() ) ;
 		assertFalse( cell.isDoorway()) ;
@@ -95,7 +95,7 @@ public class FileInitTest{
 		cell = board.getCell(2, 27);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-C") ;
+		assertEquals( room.getName(), "Kitchen") ;
 		assertTrue( cell.isLabel() );
 		assertTrue( room.getLabelCell() == cell );
 
@@ -103,7 +103,7 @@ public class FileInitTest{
 		cell = board.getCell(6, 15);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-B") ;
+		assertEquals( room.getName(), "Lounge") ;
 		assertTrue( cell.isRoomCenter() );
 		assertTrue( room.getCenterCell() == cell );
 
@@ -111,7 +111,7 @@ public class FileInitTest{
 		cell = board.getCell(30, 30);
 		room = board.getRoom( cell ) ;
 		assertTrue( room != null );
-		assertEquals( room.getName(), "Room-E") ;
+		assertEquals( room.getName(), "Conservatory") ;
 		assertTrue( cell.getSecretPassage() == 'A' );
 
 		// walkway test
