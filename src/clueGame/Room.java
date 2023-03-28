@@ -1,4 +1,7 @@
-// Sihang Wang, Michael Basey
+/* Room class store the name, center cell and label cell of the room.
+ * All the variables have getter and setter for interaction.
+ * Authors: Michael Basey, Sihang Wang
+ */
 package clueGame;
 
 public class Room {

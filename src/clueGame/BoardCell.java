@@ -71,7 +71,7 @@ public class BoardCell {
 		return isDoor;
 	}
 
-	public boolean getOccupied() {
+	public boolean isOccupied() {
 		return isOccupied;
 	}	
 
@@ -82,8 +82,6 @@ public class BoardCell {
 	public char getInitial() {
 		return initial;
 	}
-	
-	
 
 	
 	// Setters

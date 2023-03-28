@@ -324,7 +324,7 @@ public class Board {
 					calcRecursive(nextCell, 0);
 				}
 				// If next cell is unvisited and is an unoccupied normal cell, execute recursive step.
-				else if (!visitedCells.contains(nextCell) && !nextCell.getOccupied()) {
+				else if (!visitedCells.contains(nextCell) && !nextCell.isOccupied()) {
 					calcRecursive(nextCell, steps - 1);					
 				}
 			}
