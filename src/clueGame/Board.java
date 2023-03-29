@@ -5,6 +5,7 @@
  * */
 package clueGame;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class Board {
 	private String setupConfigFiles; // Location of the setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
+	private Map<Character, Player> playerMap = new HashMap<Character, Player>();
+	private Map<Character, String> weaponMap = new HashMap<Character, String>();
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
 
@@ -106,10 +109,10 @@ public class Board {
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
 					}
 					else if (arrFromStr[0].equals("Player")) {
-						//TODO
+						playerMap.put(arrFromStr[3].charAt(0), new ComputerPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));
 					}
 					else if (arrFromStr[0].equals("Weapon")) {
-						//TODO
+						weaponMap.put(arrFromStr[2].charAt(0), arrFromStr[1]);
 					}
 					else { // Throws error if word in file is not recognized
 						in.close(); // Close file
