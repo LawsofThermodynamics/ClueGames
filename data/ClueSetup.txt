@@ -11,13 +11,14 @@ Room, Billiard Room, I
 // Other spaces
 Space, Not Traversable, X
 Space, Walkway, W
+// Human
+Human, Human, RED, 0
 // Players
-Player, Player-1, RED, 1
+Player, Player-1, PINK, 1
 Player, Player-2, WHITE, 2
 Player, Player-3, BLACK, 3
 Player, Player-4, GREEN, 4
 Player, Player-5, BLUE, 5
-Player, Player-6, YELLOW, 6
 // Weapons
 Weapon, Weapon-1, -
 Weapon, Weapon-2, -

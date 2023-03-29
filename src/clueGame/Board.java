@@ -108,6 +108,9 @@ public class Board {
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
 					}
+					else if (arrFromStr[0].equals("Human")) {
+						playerMap.put(arrFromStr[3].charAt(0), new HumanPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));
+					}
 					else if (arrFromStr[0].equals("Player")) {
 						playerMap.put(arrFromStr[3].charAt(0), new ComputerPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));
 					}
