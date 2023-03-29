@@ -13,12 +13,10 @@ public abstract class Player {
 	private ArrayList<Card> cardList;
 	
 	// Default constructor
-	public Player(String name, Color color, int row, int col) {
+	public Player(String name, Color color) {
 		super();
 		this.name = name;
 		this.color = color;
-		this.row = row;
-		this.col = col;
 		cardList = new ArrayList<Card> ();
 	}
 	
