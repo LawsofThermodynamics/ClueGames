@@ -11,3 +11,17 @@ Room, Billiard Room, I
 // Other spaces
 Space, Not Traversable, X
 Space, Walkway, W
+// Players
+Player, Player-1, P1
+Player, Player-2, P2
+Player, Player-3, P3
+Player, Player-4, P4
+Player, Player-5, P5
+Player, Player-6, P6
+// Weapons
+Weapon, Weapon-1, W1
+Weapon, Weapon-2, W2
+Weapon, Weapon-3, W3
+Weapon, Weapon-4, W4
+Weapon, Weapon-5, W5
+Weapon, Weapon-6, W6

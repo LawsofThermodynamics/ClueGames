@@ -104,7 +104,14 @@ public class Board {
 
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
-					} else { // Throws error if word in file is not recognized
+					}
+					else if (arrFromStr[0].equals("Player")) {
+						//TODO
+					}
+					else if (arrFromStr[0].equals("Weapon")) {
+						//TODO
+					}
+					else { // Throws error if word in file is not recognized
 						in.close(); // Close file
 						throw new BadConfigFormatException("setupConfigFiles Failed, Invalid Format Detected");
 					}
