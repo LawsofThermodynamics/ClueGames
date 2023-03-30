@@ -1,9 +1,10 @@
+package clueGame;
 /* Board Class stores the raw data of the clue game within a two dimensional grid of BoardCells. 
  * Each Board Cell contains an initial for the room, booleans to indicate what kind of room each cell is,
  * as well as information regarding which cells each cell is adjacent.
  * Authors: Sihang Wang, Michael Basey
  * */
-package clueGame;
+
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
@@ -30,6 +31,7 @@ public class Board {
 	private Map<Character, String> weaponMap = new HashMap<Character, String>();
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
+	
 
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 
@@ -107,9 +109,6 @@ public class Board {
 
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
-					}
-					else if (arrFromStr[0].equals("Human")) {
-						playerMap.put(arrFromStr[3].charAt(0), new HumanPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));
 					}
 					else if (arrFromStr[0].equals("Player")) {
 						playerMap.put(arrFromStr[3].charAt(0), new ComputerPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));

@@ -11,18 +11,17 @@ Room, Billiard Room, I
 // Other spaces
 Space, Not Traversable, X
 Space, Walkway, W
-// Human
-Human, Human, RED, 0
 // Players
-Player, Player-1, PINK, 1
-Player, Player-2, WHITE, 2
-Player, Player-3, BLACK, 3
-Player, Player-4, GREEN, 4
-Player, Player-5, BLUE, 5
+Player, Miss Scarlett, RED, 2, 12
+Player, Colonel Mustard, YELLOW, 2, 18
+Player, Mrs. White, WHITE, 28, 12
+Player, Mr. Green, GREEN, 28, 18
+Player, Mrs. Peacock, BLUE, 12, 2
+Player, Professor Plum, MAGENTA, 18, 2
 // Weapons
-Weapon, Weapon-1, -
-Weapon, Weapon-2, -
-Weapon, Weapon-3, -
-Weapon, Weapon-4, -
-Weapon, Weapon-5, -
-Weapon, Weapon-6, -
+Weapon, Revolver, G
+Weapon, Dagger, D
+Weapon, Lead Pipe, P
+Weapon, Rope, R
+Weapon, Candlestick, C
+Weapon, Wrench, W

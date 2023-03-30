@@ -11,17 +11,24 @@ public abstract class Player {
 	private Color color;
 	private int row, col;
 	private ArrayList<Card> cardList;
-	
+
 	// Default constructor
+	public Player() {
+		super();
+	}
+
+	// Parametric constructor
 	public Player(String name, Color color) {
 		super();
 		this.name = name;
 		this.color = color;
 		cardList = new ArrayList<Card> ();
 	}
-	
+
 	// Hand cards updating method with a card argument.
 	public void updateHand(Card card) {
-		
+
 	}
+
+	
 }
