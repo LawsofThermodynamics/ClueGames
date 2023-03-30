@@ -9,6 +9,7 @@ package clueGame;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -27,12 +28,14 @@ public class Board {
 	private String setupConfigFiles; // Location of the setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
-	private Map<Character, Player> playerMap = new HashMap<Character, Player>();
-	private Map<Character, String> weaponMap = new HashMap<Character, String>();
+	private Map<Character, Player> playerMap = new HashMap<Character, Player>(); // Leaving in for storage of the list of players for logic later
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
 	
+	private ArrayList<Card> cardList = new ArrayList<Card>(); // Create an ArrayList of cards for dealing to players
 
+	private Solution solution;
+	
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 
 	// Default constructor
@@ -93,7 +96,12 @@ public class Board {
 		try {
 			// Stores file information per line 
 			String tempStr = "";
-
+			
+			// Stores the data read in by the function from the file for card definition
+			ArrayList<Card> roomList = new ArrayList<Card>();
+			ArrayList<Card> personList = new ArrayList<Card>();
+			ArrayList<Card> weaponList = new ArrayList<Card>();
+			
 			FileReader reader = new FileReader(setupConfigFiles); // Opens file
 			Scanner in = new Scanner(reader);
 
@@ -109,12 +117,13 @@ public class Board {
 
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
+						roomList.add(new Card(arrFromStr[1], CardType.ROOM));
 					}
 					else if (arrFromStr[0].equals("Player")) {
-						playerMap.put(arrFromStr[3].charAt(0), new ComputerPlayer(arrFromStr[1], Color.getColor(arrFromStr[2])));
+						personList.add(new Card(arrFromStr[1], CardType.PERSON));
 					}
 					else if (arrFromStr[0].equals("Weapon")) {
-						weaponMap.put(arrFromStr[2].charAt(0), arrFromStr[1]);
+						weaponList.add(new Card(arrFromStr[1], CardType.WEAPON));
 					}
 					else { // Throws error if word in file is not recognized
 						in.close(); // Close file
@@ -123,11 +132,28 @@ public class Board {
 				}
 			}
 			in.close(); // Close file
+			cardList = manipulateCards(roomList, personList, weaponList);
 
 		} catch (FileNotFoundException e) {
 			throw new BadConfigFormatException("loadSetupConfig Failed, File Not Loaded Correctly");
 		}
 	}
+	
+	private ArrayList<Card> manipulateCards(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
+		ArrayList<Card> finalCardList = new ArrayList<Card>();
+		
+		solution = new Solution();		
+		
+		
+		finalCardList.addAll(roomList);
+		finalCardList.addAll(personList);
+		finalCardList.addAll(weaponList);
+		return finalCardList;
+	}
+	
+	
+	
+	
 
 	/* Loads in data from layoutConfigFile.csv, and performs three loops to complete board initiation
 	 * 	 First loop calculates size of array, and initializes size
