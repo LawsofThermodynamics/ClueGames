@@ -1,11 +1,13 @@
-/*
- * 
- */
+/* Card class defines the objects that players can be dealt or can be shown throughout the game
+ * 	Card includes a name and its card type ie. Room, player or weapon
+ * 	
+ * Authors: Sihang Wang, Michael Basey
+ * */
 package clueGame;
 
 public class Card {
-	private String cardName;
-	private CardType type;
+	private String cardName; // Stores the name of card that is being referenced
+	private CardType type; // Stores the type of card that is being referenced
 	
 	// Default Constructor
 	public Card(){
@@ -19,6 +21,7 @@ public class Card {
 		this.type = type ;
 	}
 	
+	// WIP Checks to see if card passed in matches the current card
 	public boolean equals(Card target) {
 		return false;
 	}

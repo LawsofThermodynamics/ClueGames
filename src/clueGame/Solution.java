@@ -1,9 +1,14 @@
+/* Solution class stores the set of cards the players are trying to guess during play 
+ * 	Is dealt from the full list of cards before any are dealt to players 
+ * 	
+ * Authors: Sihang Wang, Michael Basey
+ * */
 package clueGame;
 
 public class Solution {
-	private Card room;
-	private Card person;
-	private Card weapon;
+	private Card room; // Stores the room card players must deduce from playing
+	private Card person; // Stores the person card players must deduce from playing
+	private Card weapon; // Stores the weapon card players must deduce from playing
 
 	// Default constructor
 	public Solution() {

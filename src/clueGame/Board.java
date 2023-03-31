@@ -1,10 +1,9 @@
-package clueGame;
 /* Board Class stores the raw data of the clue game within a two dimensional grid of BoardCells. 
  * Each Board Cell contains an initial for the room, booleans to indicate what kind of room each cell is,
  * as well as information regarding which cells each cell is adjacent.
  * Authors: Sihang Wang, Michael Basey
  * */
-
+package clueGame;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
@@ -21,24 +20,23 @@ public class Board {
 	private boolean debugger = false; // True prints debugging messages to console
 
 	// Variable Declaration
-	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
 	private int numRows; // Number of rows that the board is made up of
 	private int numColumns; // Number of columns that the board is made up of
 	private String layoutConfigFile; // Location of the layout Config File
 	private String setupConfigFiles; // Location of the setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
-	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
+	private ArrayList<Card> cardList = new ArrayList<Card>(); // Stores the list of cards for dealing to players
+	private ArrayList<Player> playerList = new ArrayList<Player>(); // Stores the list of players
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
-
-	private ArrayList<Card> cardList = new ArrayList<Card>(); // Create an ArrayList of cards for dealing to players
-	private Solution solution; // Stores the correct set of cards that the players must choose
-	private ArrayList<Player> playerList = new ArrayList<Player>();
+	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
-
-
+	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
+	private Solution solution; // Stores the correct set of cards that the players must choose
 
 	private static Board theInstance = new Board(); // The singleton of the Board instance
+
+
 
 	// Default constructor
 	private Board() {
@@ -47,23 +45,33 @@ public class Board {
 		visitedCells = new HashSet<BoardCell> ();
 	}
 
+
+
 	// Returns the singleton Board instance
 	public static Board getInstance() {
 		return theInstance;
 	}
 
-	/* Function called to pull data from files, and initialize the game board 
-	 * -Michael 3/5/2023
+
+
+	/* Function called to initialize the clue game
+	 * 	Initializes: Board, players and cards  
+	 * 
+	 * -Sihang Wang, Michael Basey 3/5/2023
 	 * */
 	public void initialize() {
 		try {
 			// Reset variables for multiple tests
 			grid = null; 
+			playerList = new ArrayList<Player>();
+			roomMap = new HashMap<Character, Room>();
+			
 
 			// Load data from config files
 			loadSetupConfig();
 			loadLayoutConfig();
 
+			// Deals cards to player from cardList
 			dealToPlayers();
 
 		} catch (BadConfigFormatException e) {
@@ -83,9 +91,10 @@ public class Board {
 	}
 
 
+
 	/* Sets the locations of the layout and setup text files from parameters
 	 *  Relies on files always being within relative path stored within fileLocation//Filename 
-	 * -Michael 3/5/2023
+	 * -Sihang Wang, Michael Basey 3/5/2023
 	 * */
 	public void setConfigFiles(String layout, String setup) {
 		layoutConfigFile = fileLocation + layout;
@@ -93,8 +102,10 @@ public class Board {
 	}
 
 
-	/* Loads data from setupConfigFiles and initializes rooms with name and initial based on data from file
-	 * -Michael 3/5/2023
+
+	/* Loads data from setupConfigFiles
+	 * 	Initializes: rooms with name and initials, Players with colors and positions, and all cards
+	 * -Sihang Wang, Michael Basey 3/5/2023
 	 * */
 	public void loadSetupConfig() throws BadConfigFormatException {
 		try {
@@ -109,7 +120,7 @@ public class Board {
 			FileReader reader = new FileReader(setupConfigFiles); // Opens file
 			Scanner in = new Scanner(reader);
 
-			defineColorMap();
+			defineColorMap(); // Calls function to initiate color map for translation between String to Color class for players
 
 			// Reads in data line by line
 			while (in.hasNextLine()) {
@@ -123,20 +134,21 @@ public class Board {
 
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
-						if(arrFromStr[0].equals("Room")) {
-							roomList.add(new Card(arrFromStr[1], CardType.ROOM));
+
+						if(arrFromStr[0].equals("Room")) { // If room is not a blank space, add it as a room card
+							roomList.add(new Card(arrFromStr[1], CardType.ROOM)); // Adds room cards to roomList
 						}
 					}
 					else if (arrFromStr[0].equals("Player")) {
-						Color playerColor = Color.CYAN;
+						personList.add(new Card(arrFromStr[1], CardType.PERSON)); // Adds person card to personList 
 
-						personList.add(new Card(arrFromStr[1], CardType.PERSON));
+						Color playerColor = Color.CYAN; // Default color for player if color in file is invalid or unspecified
 
-						if(colorMap.containsKey(arrFromStr[2])) {
+						if(colorMap.containsKey(arrFromStr[2])) { // Overrides color if one is given
 							playerColor = colorMap.get(arrFromStr[2]);
 						}
 
-						if(playerList.size() == 0) {
+						if(playerList.size() == 0) { // Initializes the first player as a human, and the remaining players as computers
 							playerList.add(new HumanPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
 						} else {
 							playerList.add(new ComputerPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
@@ -144,7 +156,7 @@ public class Board {
 
 					}
 					else if (arrFromStr[0].equals("Weapon")) {
-						weaponList.add(new Card(arrFromStr[1], CardType.WEAPON));
+						weaponList.add(new Card(arrFromStr[1], CardType.WEAPON)); // Adds weapon card to weaponList 
 					}
 					else { // Throws error if word in file is not recognized
 						in.close(); // Close file
@@ -153,19 +165,21 @@ public class Board {
 				}
 			}
 			in.close(); // Close file
-			cardList = manipulateCards(roomList, personList, weaponList);
+			cardList = solutionAndMerge(roomList, personList, weaponList);
 
 		} catch (FileNotFoundException e) {
 			throw new BadConfigFormatException("loadSetupConfig Failed, File Not Loaded Correctly");
 		}
 	}
 
+
+
 	/* Takes the three lists of each different card type, picks one card of each type for the solution
-	 * 	 and manipulates the data into one array for dealing	 
+	 * 	 and merges the data into one array for dealing	 
 	 *  
 	 *   -Sihang, Michael 3/30/2023
 	 * */
-	private ArrayList<Card> manipulateCards(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
+	private ArrayList<Card> solutionAndMerge(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
 		// Picks the random numbers within the bounds of each card list to deal the solution 
 		int roomCard = (int)(Math.random()*(roomList.size()));  
 		int personCard = (int)(Math.random()*(personList.size()));  
@@ -189,7 +203,9 @@ public class Board {
 		return finalCardList;
 	}
 
-	/* Initializes the color hash map for assigning player color from strin input
+
+
+	/* Initializes the color hash map for assigning player color from string input
 	 * 
 	 * -Sihang, Michael 3/30/2023
 	 */
@@ -200,8 +216,8 @@ public class Board {
 		colorMap.put("GREEN", Color.GREEN);
 		colorMap.put("BLUE", Color.BLUE);
 		colorMap.put("MAGENTA", Color.MAGENTA);
-
 	}
+
 
 
 	/* Deals cards evenly to players within playerList from cardList
@@ -218,7 +234,6 @@ public class Board {
 			numPlayers++;
 		}
 	}
-
 
 
 
@@ -363,6 +378,7 @@ public class Board {
 	}
 
 
+
 	/* Helper function for loadLayoutConfig
 	 * 	Loads in data from layoutConfigFile.csv, and performs the initial data read to initialize the board
 	 * 	 Reads data line by line counting to detirmin the number of rows, then counts the number of cells in the final row to determine column count
@@ -408,6 +424,8 @@ public class Board {
 		}		
 	}
 
+
+
 	/* Preform before each calculation as targetList must be cleared before each run
 	 *  Then call the private recursive method calcRecursive
 	 * 
@@ -417,6 +435,8 @@ public class Board {
 		targetCells.clear();
 		calcRecursive(cell, steps);
 	}
+
+
 
 	/* Nested method.
 	 *  Loops through every possible path that the player can move through, then record the end locations that are valid
@@ -449,13 +469,12 @@ public class Board {
 
 
 
-
 	// Getters
 	// Returns rooms based on cell initial or cell type
 	public Room getRoom(BoardCell cell) {
 		return roomMap.get(cell.getInitial());
 	}
-
+	// Returns cell based on cell position
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
 	}
@@ -480,12 +499,6 @@ public class Board {
 		return solution;
 	}
 
-	// Setters
-	// Return adjacency list of specific cell in grid based on coordinates
-	public Set<BoardCell> getAdjList(int x, int y) {	
-		return grid[x][y].getAdjList();
-	}
-
 	public Set<BoardCell> getTargets() {
 		return targetCells;
 	}
@@ -493,5 +506,12 @@ public class Board {
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
+
+	// Return adjacency list of specific cell in grid based on coordinates
+	public Set<BoardCell> getAdjList(int x, int y) {	
+		return grid[x][y].getAdjList();
+	}
+
+
 
 }
