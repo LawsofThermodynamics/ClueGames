@@ -64,6 +64,8 @@ public class Board {
 			loadSetupConfig();
 			loadLayoutConfig();
 
+			dealToPlayers();
+
 		} catch (BadConfigFormatException e) {
 			System.out.println(e);
 			System.out.println(e.getMessage());
@@ -133,13 +135,13 @@ public class Board {
 						if(colorMap.containsKey(arrFromStr[2])) {
 							playerColor = colorMap.get(arrFromStr[2]);
 						}
-						
+
 						if(playerList.size() == 0) {
 							playerList.add(new HumanPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
 						} else {
 							playerList.add(new ComputerPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
 						}
-						
+
 					}
 					else if (arrFromStr[0].equals("Weapon")) {
 						weaponList.add(new Card(arrFromStr[1], CardType.WEAPON));
@@ -163,17 +165,6 @@ public class Board {
 	 *  
 	 *   -Sihang, Michael 3/30/2023
 	 * */
-
-	private void defineColorMap() {
-		colorMap.put("RED", Color.RED);
-		colorMap.put("YELLOW", Color.YELLOW);
-		colorMap.put("WHITE", Color.WHITE);
-		colorMap.put("GREEN", Color.GREEN);
-		colorMap.put("BLUE", Color.BLUE);
-		colorMap.put("MAGENTA", Color.MAGENTA);
-
-	}
-
 	private ArrayList<Card> manipulateCards(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
 		// Picks the random numbers within the bounds of each card list to deal the solution 
 		int roomCard = (int)(Math.random()*(roomList.size()));  
@@ -198,6 +189,35 @@ public class Board {
 		return finalCardList;
 	}
 
+	/* Initializes the color hash map for assigning player color from strin input
+	 * 
+	 * -Sihang, Michael 3/30/2023
+	 */
+	private void defineColorMap() {
+		colorMap.put("RED", Color.RED);
+		colorMap.put("YELLOW", Color.YELLOW);
+		colorMap.put("WHITE", Color.WHITE);
+		colorMap.put("GREEN", Color.GREEN);
+		colorMap.put("BLUE", Color.BLUE);
+		colorMap.put("MAGENTA", Color.MAGENTA);
+
+	}
+
+
+	/* Deals cards evenly to players within playerList from cardList
+	 * 
+	 * -Sihang, Michael 3/30/2023
+	 */
+	private void dealToPlayers() {
+		int numPlayers = 0;
+		while(cardList.size() > 0) {
+			int randCard = (int)(Math.random()*(cardList.size()));
+			playerList.get(numPlayers % 6).deltCard(cardList.get(randCard));
+			cardList.remove(randCard);
+
+			numPlayers++;
+		}
+	}
 
 
 
@@ -468,6 +488,10 @@ public class Board {
 
 	public Set<BoardCell> getTargets() {
 		return targetCells;
+	}
+
+	public ArrayList<Player> getPlayerList() {
+		return playerList;
 	}
 
 }
