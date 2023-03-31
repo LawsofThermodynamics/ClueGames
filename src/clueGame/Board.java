@@ -28,14 +28,16 @@ public class Board {
 	private String setupConfigFiles; // Location of the setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
-	private Map<Character, Player> playerMap = new HashMap<Character, Player>(); // Leaving in for storage of the list of players for logic later
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
-	
-	private ArrayList<Card> cardList = new ArrayList<Card>(); // Create an ArrayList of cards for dealing to players
 
-	private Solution solution;
-	
+	private ArrayList<Card> cardList = new ArrayList<Card>(); // Create an ArrayList of cards for dealing to players
+	private Solution solution; // Stores the correct set of cards that the players must choose
+	private ArrayList<Player> playerList = new ArrayList<Player>();
+	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
+
+
+
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 
 	// Default constructor
@@ -96,14 +98,16 @@ public class Board {
 		try {
 			// Stores file information per line 
 			String tempStr = "";
-			
+
 			// Stores the data read in by the function from the file for card definition
 			ArrayList<Card> roomList = new ArrayList<Card>();
 			ArrayList<Card> personList = new ArrayList<Card>();
 			ArrayList<Card> weaponList = new ArrayList<Card>();
-			
+
 			FileReader reader = new FileReader(setupConfigFiles); // Opens file
 			Scanner in = new Scanner(reader);
+
+			defineColorMap();
 
 			// Reads in data line by line
 			while (in.hasNextLine()) {
@@ -117,10 +121,25 @@ public class Board {
 
 					if(arrFromStr[0].equals("Room") || arrFromStr[0].equals("Space")) { // Adds room to roomMap if setup is configured with string room or space
 						roomMap.put(arrFromStr[2].charAt(0), new Room(arrFromStr[1])); 
-						roomList.add(new Card(arrFromStr[1], CardType.ROOM));
+						if(arrFromStr[0].equals("Room")) {
+							roomList.add(new Card(arrFromStr[1], CardType.ROOM));
+						}
 					}
 					else if (arrFromStr[0].equals("Player")) {
+						Color playerColor = Color.CYAN;
+
 						personList.add(new Card(arrFromStr[1], CardType.PERSON));
+
+						if(colorMap.containsKey(arrFromStr[2])) {
+							playerColor = colorMap.get(arrFromStr[2]);
+						}
+						
+						if(playerList.size() == 0) {
+							playerList.add(new HumanPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
+						} else {
+							playerList.add(new ComputerPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
+						}
+						
 					}
 					else if (arrFromStr[0].equals("Weapon")) {
 						weaponList.add(new Card(arrFromStr[1], CardType.WEAPON));
@@ -138,22 +157,50 @@ public class Board {
 			throw new BadConfigFormatException("loadSetupConfig Failed, File Not Loaded Correctly");
 		}
 	}
-	
+
+	/* Takes the three lists of each different card type, picks one card of each type for the solution
+	 * 	 and manipulates the data into one array for dealing	 
+	 *  
+	 *   -Sihang, Michael 3/30/2023
+	 * */
+
+	private void defineColorMap() {
+		colorMap.put("RED", Color.RED);
+		colorMap.put("YELLOW", Color.YELLOW);
+		colorMap.put("WHITE", Color.WHITE);
+		colorMap.put("GREEN", Color.GREEN);
+		colorMap.put("BLUE", Color.BLUE);
+		colorMap.put("MAGENTA", Color.MAGENTA);
+
+	}
+
 	private ArrayList<Card> manipulateCards(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
+		// Picks the random numbers within the bounds of each card list to deal the solution 
+		int roomCard = (int)(Math.random()*(roomList.size()));  
+		int personCard = (int)(Math.random()*(personList.size()));  
+		int weaponCard = (int)(Math.random()*(weaponList.size()));  		
+
+		// Initializes the solution using the random card selection
+		solution = new Solution(roomList.get(roomCard), personList.get(personCard), weaponList.get(weaponCard));		
+		if (debugger) {System.out.println(solution);} // Prints card if debugger is true
+
+		// Removes the solution cards from the deck to prevent the players from getting the cards within the solution
+		roomList.remove(roomCard);
+		personList.remove(personCard);
+		weaponList.remove(weaponCard);
+
+		// Merges lists for dealing player hands
 		ArrayList<Card> finalCardList = new ArrayList<Card>();
-		
-		solution = new Solution();		
-		
-		
 		finalCardList.addAll(roomList);
 		finalCardList.addAll(personList);
 		finalCardList.addAll(weaponList);
+
 		return finalCardList;
 	}
-	
-	
-	
-	
+
+
+
+
 
 	/* Loads in data from layoutConfigFile.csv, and performs three loops to complete board initiation
 	 * 	 First loop calculates size of array, and initializes size
@@ -405,8 +452,13 @@ public class Board {
 		return numColumns;
 	}
 
+	public ArrayList<Card> getCardList() {
+		return cardList;
+	}
 
-
+	public Solution getSolution() {
+		return solution;
+	}
 
 	// Setters
 	// Return adjacency list of specific cell in grid based on coordinates

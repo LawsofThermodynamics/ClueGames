@@ -7,9 +7,16 @@ import java.awt.Color;
 
 public class ComputerPlayer extends Player {
 
-	public ComputerPlayer(String name, Color color) {
-		super(name, color);
-		// TODO Auto-generated constructor stub
+	// Default constructor
+	public ComputerPlayer() {
+		super();
+		
+	}
+	
+	// Parametric constructor
+	public ComputerPlayer(String name, Color color, int row, int col) {
+		super(name, color, row, col);
+		
 	}
 
 }

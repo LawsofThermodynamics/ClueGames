@@ -18,17 +18,18 @@ public abstract class Player {
 	}
 
 	// Parametric constructor
-	public Player(String name, Color color) {
+	public Player(String name, Color color, int row, int col) {
 		super();
 		this.name = name;
 		this.color = color;
 		cardList = new ArrayList<Card> ();
+		this.row = row;
+		this.col = col;
 	}
 
 	// Hand cards updating method with a card argument.
 	public void updateHand(Card card) {
-
+		this.cardList.add(card);
 	}
-
 	
 }

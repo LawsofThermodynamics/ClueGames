@@ -17,10 +17,16 @@ public class Card {
 		super();
 		this.cardName = cardName;
 		this.type = type ;
-		
 	}
 	
 	public boolean equals(Card target) {
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Card [cardName=" + cardName + ", type=" + type + "]";
+	}
+	
+	
 }
