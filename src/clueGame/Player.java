@@ -41,6 +41,31 @@ public abstract class Player {
 		this.dealtList.add(card);
 	}
 
+	/* Check every cards of player if match to cards in suggestion, if matched, add to matchList.
+	 * Return null if no match, else a random card in matchList.
+	 * 
+	 * Michael, Sihang 4/3/2023
+	 */
+	public Card disproveSuggestion(Solution suggestion) {
+		ArrayList<Card> matchList = new ArrayList<Card>();
+		for (Card item:dealtList) { //TODO: the check method may need modification, check string or check card itself.
+			if (item.toString() == suggestion.getRoom().toString()) {
+				matchList.add(item);
+			}
+			if (item.toString() == suggestion.getWeapon().toString()) {
+				matchList.add(item);
+			}
+			if (item.toString() == suggestion.getPerson().toString()) {
+				matchList.add(item);
+			}
+		}
+		if (matchList.size() == 0) {
+			return null;
+		}
+		else {
+			return matchList.get((int)(Math.random()*(matchList.size())));
+		}
+	}
 
 	// Getters
 	public String getName() {

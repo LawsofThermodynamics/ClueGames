@@ -466,8 +466,39 @@ public class Board {
 		}
 		return;
 	}
+	
+	/*
+	 * 
+	 */
+	//TODO: compare card or compare string info of card?
+	public boolean checkAccusation(Solution accusation) {
+		if (accusation.getRoom() != solution.getRoom()) {
+			System.out.println("Wrong room!");
+			return false;
+		}
+		if (accusation.getPerson() != solution.getPerson()) {
+			System.out.println("Wrong person!");
+			return false;
+		}
+		if (accusation.getWeapon() != solution.getWeapon()) {
+			System.out.println("Wrong weapon!");
+			return false;
+		}
+		return true;
+	}
 
-
+	/* Loop player list, return first non-null result, if all players cannot disprove, return null.
+	 * 
+	 * Michael, Sihang 4/3/2023
+	 */
+	public Card handleSuggestion(Solution suggestion) {
+		for (Player player : playerList) {
+			if (player.disproveSuggestion(suggestion) != null) {
+				return player.disproveSuggestion(suggestion);
+			}
+		}
+		return null;
+	}
 
 	// Getters
 	// Returns rooms based on cell initial or cell type
