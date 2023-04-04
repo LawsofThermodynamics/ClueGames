@@ -3,7 +3,6 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,10 @@ import org.junit.jupiter.api.Test;
 import clueGame.Board;
 import clueGame.Card;
 import clueGame.CardType;
-import clueGame.ComputerPlayer;
 import clueGame.HumanPlayer;
-import clueGame.Player;
 import clueGame.Solution;
 
-class AccusationTests {
+class GameSolutionTest {
 	private static Board board;
 	
 	@BeforeAll
@@ -25,6 +22,7 @@ class AccusationTests {
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Set both config file names
 		board.initialize(); // Load both config files
 	}
+	Card result;
 	Card hall = new Card("hall", CardType.ROOM);
 	Card lounge = new Card("lounge", CardType.ROOM);
 	Card kitchen = new Card("kitchen", CardType.ROOM);
@@ -40,10 +38,13 @@ class AccusationTests {
 	
 	@Test
 	void accusationTest() {
+		// Correct solution.
 		Solution sol = board.getSolution();
+		// Solutions with wrong weapon/person/room.
 		Solution solW = new Solution(sol.getRoom(), sol.getPerson(), rope);
 		Solution solP = new Solution(sol.getRoom(), Jim, sol.getWeapon());
 		Solution solR = new Solution(hall, sol.getPerson(), sol.getWeapon());
+		
 		assertTrue(sol.equals(board.getSolution()));
 		assertFalse(sol.equals(solR));
 		assertFalse(sol.equals(solP));
@@ -61,9 +62,8 @@ class AccusationTests {
 		Solution accusation2 = new Solution(hall, Kate, wrench); // Case that player has 1 matching card
 		Solution accusation3 = new Solution(hall, Jim, lead); // Case that player has 3 matching card
 		
-		Card result;
 		result = player.disproveSuggestion(accusation1);
-		assertTrue(result==null);
+		assertTrue(result == null);
 		
 		result = player.disproveSuggestion(accusation2);
 		assertTrue(result == hall);
@@ -94,20 +94,28 @@ class AccusationTests {
 	
 	@Test
 	void handleSuggestions() {
-		HumanPlayer pJim = new HumanPlayer("Jim", Color.WHITE, 0, 0);
-		pJim.deltCard(hall);
-		pJim.deltCard(Jim);
-		pJim.deltCard(lead);
-		ComputerPlayer pKate = new ComputerPlayer("Kate", Color.WHITE, 0, 0);
-		pKate.deltCard(lounge);
-		pKate.deltCard(Kate);
-		pKate.deltCard(rope);
-		ComputerPlayer pTom = new ComputerPlayer("Tom", Color.WHITE, 0, 0);
-		pTom.deltCard(kitchen);
-		pTom.deltCard(Tom);
-		pTom.deltCard(wrench);
-		ArrayList<Player> tmpList = new ArrayList<Player>();
 		
+		Solution s1 = new Solution(lounge, Kate, rope);
+		Solution s2 = new Solution(board.getPlayerList().get(0).getDealtCards().get(0), Jim, rope);
+		Solution s3 = new Solution(board.getPlayerList().get(3).getDealtCards().get(0), Jim, rope);
+		Solution s4 = new Solution(board.getPlayerList().get(1).getDealtCards().get(0),
+								   board.getPlayerList().get(3).getDealtCards().get(0), rope);
+		
+		// Query that no player can disprove, return null.
+		result = board.handleSuggestion(board.getPlayerList().get(0), s1);
+		assertTrue(result == null);
+		
+		// Query that only suggester can disprove, return null.
+		result = board.handleSuggestion(board.getPlayerList().get(0), s2);
+		assertTrue(result == null);
+		
+		// Query that player3 can disprove, result != null.
+		result = board.handleSuggestion(board.getPlayerList().get(0), s3);
+		assertFalse(result == null);
+		
+		// Query that player1 and player3 can disprove, the result is in player1's card list.
+		result = board.handleSuggestion(board.getPlayerList().get(0), s4);
+		assertTrue(board.getPlayerList().get(1).getDealtCards().contains(result));
 	}
 
 }
