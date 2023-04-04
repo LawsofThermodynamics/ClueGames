@@ -61,8 +61,6 @@ class GameSetupTests {
 		
 		// Tests to insure the players have been dealt the same amount of cards 
 		for(int players = 0; players < playerList.size(); players++) {
-			System.out.println(playerList.get(0).getDealtCards().size());
-			System.out.println(playerList.get(players).getDealtCards().size());
 			assertTrue(playerList.get(0).getDealtCards().size() == playerList.get(players).getDealtCards().size());
 		}
 	}

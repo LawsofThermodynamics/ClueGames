@@ -41,6 +41,11 @@ public abstract class Player {
 		this.dealtList.add(card);
 	}
 
+	// Update cards seen by player
+	public void seenCard(ArrayList<Card> cards) {
+		this.dealtList.addAll(cards);
+	}
+
 	/* Check every cards of player if match to cards in suggestion, if matched, add to matchList.
 	 * Return null if no match, else a random card in matchList.
 	 * 
@@ -68,8 +73,17 @@ public abstract class Player {
 	}
 
 	// Getters
+
 	public String getName() {
 		return name;
+	}
+
+	public ArrayList<Card> getDealtList() {
+		return dealtList;
+	}
+
+	public ArrayList<Card> getSeenList() {
+		return seenList;
 	}
 
 	public Color getColor() {
@@ -91,6 +105,4 @@ public abstract class Player {
 	public int getCol() {
 		return col;
 	}
-
-
 }

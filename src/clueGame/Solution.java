@@ -23,6 +23,12 @@ public class Solution {
 		this.weapon = weapon;
 	}
 
+	public boolean equals(Solution target) {
+		if(this.room.equals(target.room) && this.person.equals(target.person) && this.weapon.equals(target.weapon)) {
+			return true;
+		}
+		return false;
+	}
 	
 	// Getters (setters excluded as cards should never be overwritten once picked)
 	public Card getRoom() {
@@ -41,4 +47,6 @@ public class Solution {
 	public String toString() {
 		return "Solution \nroom=" + room + "\nperson=" + person + "\nweapon=" + weapon;
 	}
+	
+	
 }

@@ -26,6 +26,9 @@ public class Board {
 	private String setupConfigFiles; // Location of the setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private ArrayList<Card> cardList = new ArrayList<Card>(); // Stores the list of cards for dealing to players
+	private static ArrayList<Card> allRoom = new ArrayList<Card>(); // Stores the list of cards for dealing to players
+	private static ArrayList<Card> allPerson = new ArrayList<Card>(); // Stores the list of cards for dealing to players
+	private static ArrayList<Card> allWeapon = new ArrayList<Card>(); // Stores the list of cards for dealing to players
 	private ArrayList<Player> playerList = new ArrayList<Player>(); // Stores the list of players
 	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
@@ -63,6 +66,11 @@ public class Board {
 		try {
 			// Reset variables for multiple tests
 			grid = null; 
+			
+			allRoom = new ArrayList<Card>();
+			allPerson = new ArrayList<Card>();
+			allWeapon = new ArrayList<Card>();
+			
 			playerList = new ArrayList<Player>();
 			roomMap = new HashMap<Character, Room>();
 			
@@ -180,6 +188,11 @@ public class Board {
 	 *   -Sihang, Michael 3/30/2023
 	 * */
 	private ArrayList<Card> solutionAndMerge(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
+		allRoom.addAll(roomList);
+		allPerson.addAll(personList);
+		allWeapon.addAll(weaponList);
+		System.out.println(allWeapon.size());
+		
 		// Picks the random numbers within the bounds of each card list to deal the solution 
 		int roomCard = (int)(Math.random()*(roomList.size()));  
 		int personCard = (int)(Math.random()*(personList.size()));  
@@ -542,6 +555,22 @@ public class Board {
 	public Set<BoardCell> getAdjList(int x, int y) {	
 		return grid[x][y].getAdjList();
 	}
+	
+	
+
+	public static ArrayList<Card> getAllRoom() {
+		return allRoom;
+	}
+
+	public static ArrayList<Card> getAllPerson() {
+		return allPerson;
+	}
+
+	public static ArrayList<Card> getAllWeapon() {
+		return allWeapon;
+	}
+	
+	
 
 
 

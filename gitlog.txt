@@ -1,3 +1,75 @@
+commit 1b5cce1c1ad2d96d1b691aecc79100ba3a0b8969
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Mar 30 19:33:30 2023 -0600
+
+    All tests now pass, all code has been refactored and commented. -Michael
+
+commit 67a92caba002bd4077e46eb992e43be17147e4b3
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Mar 30 18:54:21 2023 -0600
+
+    Added tests and functionality for dealing cards to players. -Michael
+
+commit 7d59171d90a07e373d9d3ac977fc98441de667b7
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Mar 30 18:06:43 2023 -0600
+
+    Finished data read in from ClueSetup.txt and began tests within GameSetupTests -Michael
+
+commit 564212af4083346229e47622d4b44900638afd34
+Author: Michael Basey (STUDENT) <mbasey@mines.edu>
+Date:   Thu Mar 30 10:46:42 2023 -0600
+
+    Added start to card manipulation functions. Michael
+
+commit 00d1cb31559faea91d903b4a7a3bc74aec911531
+Author: Michael Basey (STUDENT) <mbasey@mines.edu>
+Date:   Thu Mar 30 10:30:55 2023 -0600
+
+    Updated player and weapon names in clueSetup.txt. Added constructors for card and solution.java. -Michael
+
+commit bb4b2a1581a875ee543bca890488f00363e1fd61
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 29 16:08:33 2023 -0600
+
+    Set human player alone in loadSetupConfig(), but still store in playerMap. Modified data in ClurSetup.txt
+
+commit 01f6d79197ad413074fcb2abfcac304e24341215
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 29 15:47:58 2023 -0600
+
+    Added playerMap<char, CompPlayer> and weaponMap<char, String> in Board class and fill corresponing section in loadSetupConfig(). Modified data format in ClueSetup.txt
+
+commit 166839a995190bf9df218dbd463392db51d7e69e
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 29 15:44:00 2023 -0600
+
+    Added constructor for CompPlayer and HumanPlayer, took row&col out from constructor arguments of Player class.
+
+commit 743ce0fb558f5a6b34bd57761b9853ca95de5256
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 29 15:09:08 2023 -0600
+
+    Added constructor, added a Card list as variable of Player.
+
+commit 830c1cb7abb90a0a7f4a0516551242ba90a5aaa9
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Wed Mar 29 14:50:23 2023 -0600
+
+    Created new test class GameSetupTests. Added players & weapons in ClueSetup.txt. Modified loadSetupConfig() in Board.java
+
+commit 1d8eabf154661262d663ad8cc30cba84251aebca
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Tue Mar 28 11:00:07 2023 -0600
+
+    Created abstract class Player and child class HumanPlayer/ComputerPlayer.
+
+commit 3faac6e7d2a7b1e270b18a0ef893c2c30e0077f3
+Author: Michael Basey <mbasey@mines.edu>
+Date:   Tue Mar 28 10:35:01 2023 -0600
+
+    Solution, Card, and cardType claases and enum now created. -Michael
+
 commit d64026ec9d011d15c5c49d1ffb2a48fa97263e18
 Author: Michael Basey <mbasey@mines.edu>
 Date:   Tue Mar 28 10:29:07 2023 -0600

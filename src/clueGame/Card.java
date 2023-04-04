@@ -21,9 +21,16 @@ public class Card {
 		this.type = type ;
 	}
 	
-	// WIP Checks to see if card passed in matches the current card
 	public boolean equals(Card target) {
+		if(this.cardName.equals(target.cardName) && this.type.equals(target.type)) {
+			return true;
+		}
 		return false;
+	}
+	
+
+	public CardType getType() {
+		return type;
 	}
 
 	@Override
