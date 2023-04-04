@@ -49,13 +49,13 @@ public abstract class Player {
 	public Card disproveSuggestion(Solution suggestion) {
 		ArrayList<Card> matchList = new ArrayList<Card>();
 		for (Card item:dealtList) { //TODO: the check method may need modification, check string or check card itself.
-			if (item.toString() == suggestion.getRoom().toString()) {
+			if (item.toString().equals(suggestion.getRoom().toString())) {
 				matchList.add(item);
 			}
-			if (item.toString() == suggestion.getWeapon().toString()) {
+			if (item.toString().equals(suggestion.getWeapon().toString())) {
 				matchList.add(item);
 			}
-			if (item.toString() == suggestion.getPerson().toString()) {
+			if (item.toString().equals(suggestion.getPerson().toString())) {
 				matchList.add(item);
 			}
 		}
