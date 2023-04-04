@@ -49,8 +49,15 @@ public class BoardCell {
 	public void addAdj(BoardCell adj) {
 		adjList.add(adj);
 	}
+	
+	
 
 	
+	@Override
+	public String toString() {
+		return "BoardCell [row=" + row + ", col=" + col + ", initial=" + initial + "]";
+	}
+
 	// Getters
 	public Set<BoardCell> getAdjList() {
 		return adjList;
@@ -83,8 +90,15 @@ public class BoardCell {
 	public char getInitial() {
 		return initial;
 	}
+		
+	public int getRow() {
+		return row;
+	}
 
-	
+	public int getCol() {
+		return col;
+	}
+
 	// Setters
 	public void setDoorDirection(DoorDirection doorDirection) {
 		this.doorDirection = doorDirection;

@@ -556,8 +556,6 @@ public class Board {
 		return grid[x][y].getAdjList();
 	}
 	
-	
-
 	public static ArrayList<Card> getAllRoom() {
 		return allRoom;
 	}

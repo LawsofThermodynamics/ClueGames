@@ -38,12 +38,12 @@ public abstract class Player {
 
 	// Update cards seen by player
 	public void seenCard(Card card) {
-		this.dealtList.add(card);
+		this.seenList.add(card);
 	}
 
 	// Update cards seen by player
 	public void seenCard(ArrayList<Card> cards) {
-		this.dealtList.addAll(cards);
+		this.seenList.addAll(cards);
 	}
 
 	/* Check every cards of player if match to cards in suggestion, if matched, add to matchList.

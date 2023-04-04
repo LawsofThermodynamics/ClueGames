@@ -31,25 +31,23 @@ public class ComputerPlayer extends Player {
 		temp.addAll(this.getDealtList());
 		temp.addAll(this.getSeenList());
 
-		
-
 		ArrayList<Card> unseenWep = new ArrayList<Card>();
 		ArrayList<Card> unseenPer = new ArrayList<Card>();
 
-		System.out.println(temp);
-		System.out.println(Board.getAllWeapon());
+		//System.out.println(temp);
+		//System.out.println(Board.getAllWeapon());
 
 		for(Card card : Board.getAllWeapon()) {
 			if (!temp.contains(card)) {
 				unseenWep.add(card);
-				System.out.println("added unseen wep");
+				//System.out.println("added unseen wep");
 			} 
 		}
 
 		for(Card card : Board.getAllPerson()) {
 			if (!temp.contains(card)) {
 				unseenPer.add(card);
-				System.out.println("added unseen per");
+				//System.out.println("added unseen per");
 			} 
 
 		}
@@ -62,7 +60,52 @@ public class ComputerPlayer extends Player {
 		return guess;
 	}
 
-	public BoardCell selectTarget() {
-		return null;
+
+
+	public BoardCell selectTarget(int steps) {
+		ArrayList<BoardCell> possibleTargets = new ArrayList<BoardCell>();
+		ArrayList<BoardCell> targets = new ArrayList<BoardCell>();
+		targets.addAll(Board.getInstance().getTargets());
+		ArrayList<Card> cardList = new ArrayList<Card>();
+		cardList.addAll(getDealtList());
+		cardList.addAll(getSeenList());
+				
+		Board.getInstance().calcTargets(Board.getInstance().getCell(getRow(), getCol()), steps);
+		for(BoardCell possibleRoom: Board.getInstance().getTargets()) {
+			if(possibleRoom.isRoomCenter()) {
+				Card newCard = new Card(Board.getInstance().getRoom(possibleRoom.getInitial()).getName(), CardType.ROOM);
+				//System.out.println("Testing " + newCard);
+				//System.out.println(getSeenList());
+				
+				if(cardList.size() == 0) {
+					//System.out.println("size 0");
+					return possibleRoom;
+				}
+				boolean found = false;
+				
+				for(Card seenCards: cardList) {
+					if(newCard.equals(seenCards)) {
+						 found = true;
+						 break;
+					}
+				}
+				if(found) {
+					//System.out.println("Already known");
+					possibleTargets.add(possibleRoom);
+					continue;
+				} else {
+					//System.out.println("not known");
+					return possibleRoom;
+				}
+				
+			}
+		}
+
+		if (possibleTargets.size() > 0) {
+			return possibleTargets.get((int)(Math.random()*(possibleTargets.size())));
+		} else {
+			return targets.get((int)(Math.random()*(possibleTargets.size())));
+		}
+
 	}
 }

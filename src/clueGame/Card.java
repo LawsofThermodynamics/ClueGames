@@ -22,7 +22,7 @@ public class Card {
 	}
 	
 	public boolean equals(Card target) {
-		if(this.cardName.equals(target.cardName) && this.type.equals(target.type)) {
+		if(this.cardName.equals(target.cardName)) {
 			return true;
 		}
 		return false;
@@ -37,6 +37,7 @@ public class Card {
 	public String toString() {
 		return "Card [cardName=" + cardName + ", type=" + type + "]";
 	}
+	
 	
 	
 }
