@@ -504,9 +504,9 @@ public class Board {
 	 * 
 	 * Michael, Sihang 4/3/2023
 	 */
-	public Card handleSuggestion(Player suggestor, Solution suggestion) {
+	public Card handleSuggestion(Player suggester, Solution suggestion) {
 		for (Player player : playerList) {
-			if ((player.disproveSuggestion(suggestion) != null) && !(player.getName().equals(suggestor.getName()))) {
+			if ((player.disproveSuggestion(suggestion) != null) && !(player.getName().equals(suggester.getName()))) {
 				return player.disproveSuggestion(suggestion);
 			}
 		}
