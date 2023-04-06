@@ -21,80 +21,94 @@ public class ComputerPlayer extends Player {
 
 	}
 
-	// Create suggestion for the computer player
+	/* Create suggestion for the computer player by finding a list of weapon and player cards the computer has not seen yet
+	 * and picking one from each at random to add to the suggested solution, in addition to the current room the player is occupying
+	 * 
+	 * Michael, Sihang 4/3/2023
+	 */
 	public Solution createSuggestion(){
-		Room currentRoom = Board.getInstance().getRoom(Board.getInstance().getCell(getRow(),getCol()).getInitial());
-
-		Card tempRoomCard = new Card(currentRoom.getName(), CardType.ROOM);
-
+		// Variable initialization
+		ArrayList<Card> unseenWep = new ArrayList<Card>();
+		ArrayList<Card> unseenPer = new ArrayList<Card>();
+		
 		ArrayList<Card> temp = new ArrayList<Card>();
 		temp.addAll(this.getDealtList());
 		temp.addAll(this.getSeenList());
 
-		ArrayList<Card> unseenWep = new ArrayList<Card>();
-		ArrayList<Card> unseenPer = new ArrayList<Card>();
+		Room currentRoom = Board.getInstance().getRoom(Board.getInstance().getCell(getRow(),getCol()).getInitial());
 
-		//System.out.println(temp);
-		//System.out.println(Board.getAllWeapon());
+		Card tempRoomCard = new Card(currentRoom.getName(), CardType.ROOM);
 
+
+		// If the card is already known by the computer, do not use
 		for(Card card : Board.getAllWeapon()) {
 			if (!temp.contains(card)) {
 				unseenWep.add(card);
-				//System.out.println("added unseen wep");
 			} 
 		}
-
+		
+		// If the card is already known by the computer, do not use
 		for(Card card : Board.getAllPerson()) {
 			if (!temp.contains(card)) {
 				unseenPer.add(card);
-				//System.out.println("added unseen per");
 			} 
 
 		}
 
+		// Picks a card at random from the valid cards for the computer player
 		int tempWeponCard = (int)(Math.random()*(unseenWep.size()));  
 		int tempPersonCard = (int)(Math.random()*(unseenPer.size()));  
 
+		// Picks a possible solution to suggest for the computer player
 		Solution guess = new Solution(tempRoomCard, unseenPer.get(tempPersonCard), unseenWep.get(tempWeponCard));
 
 		return guess;
 	}
 
 
-
+	/* Selects a room for a computer player to move to by picking a room at random from a list of rooms it has yet to eliminate as a possibility for the solution
+	 * If no new rooms can be visited, it then selects a room to move to at random
+	 * If no rooms are in range, it picks a random walkway to move to
+	 * 
+	 * Michael, Sihang 4/3/2023
+	 */
 	public BoardCell selectTarget(int steps) {
+		// Variable initialization
 		ArrayList<BoardCell> possibleTargets = new ArrayList<BoardCell>();
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>();
-		targets.addAll(Board.getInstance().getTargets());
 		ArrayList<Card> cardList = new ArrayList<Card>();
+		
+		targets.addAll(Board.getInstance().getTargets());
+		
 		cardList.addAll(getDealtList());
 		cardList.addAll(getSeenList());
-				
+		
+		// Calculates all valid moves the player can make
 		Board.getInstance().calcTargets(Board.getInstance().getCell(getRow(), getCol()), steps);
+		
+		// Checks each possible room it can move to, if it has not visited the room yet, move to the room
 		for(BoardCell possibleRoom: Board.getInstance().getTargets()) {
 			if(possibleRoom.isRoomCenter()) {
 				Card newCard = new Card(Board.getInstance().getRoom(possibleRoom.getInitial()).getName(), CardType.ROOM);
-				//System.out.println("Testing " + newCard);
-				//System.out.println(getSeenList());
 				
 				if(cardList.size() == 0) {
-					//System.out.println("size 0");
 					return possibleRoom;
 				}
 				boolean found = false;
 				
+				// Checks all rooms for a unique room it has not seen yet
 				for(Card seenCards: cardList) {
 					if(newCard.equals(seenCards)) {
 						 found = true;
 						 break;
 					}
 				}
+				
+				// Skips current room if room is already known, else, visit the room
 				if(found) {
-					//System.out.println("Already known");
 					possibleTargets.add(possibleRoom);
 					continue;
 				} else {
-					//System.out.println("not known");
 					return possibleRoom;
 				}
 				

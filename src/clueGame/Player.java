@@ -105,4 +105,12 @@ public abstract class Player {
 	public int getCol() {
 		return col;
 	}
+
+	@Override
+	public String toString() {
+		return "Player [name=" + name + ", color=" + color + ", row=" + row + ", col=" + col + ", dealtList="
+				+ dealtList + ", seenList=" + seenList + "]";
+	}
+	
+	
 }

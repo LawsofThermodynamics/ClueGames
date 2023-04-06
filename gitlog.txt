@@ -1,3 +1,40 @@
+commit 3ecb0fd8eed220758f7cb0e1384727ee23bb6ae6
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 3 23:57:05 2023 -0600
+
+    Added select target, and tests. -Michael
+
+commit 4f6f4eaeaf743de241232a6c20bd5e2896426485
+Merge: 32d6229 bcef7d4
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 3 21:38:58 2023 -0600
+
+    Merge branch 'main' of https://github.com/LawsofThermodynamics/ClueGames
+
+commit 32d62294c2f6ac9a11420943962b9077623c8193
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 3 21:38:19 2023 -0600
+
+    Computer player create suggestion method added, and tests pass. -Michael
+
+commit bcef7d40228608bdc5534bd1b0ce5795c6b30689
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Apr 3 20:40:35 2023 -0600
+
+    Completed all tests in GameSolutionTest.
+
+commit f25624e6c8007ff3156e2f72320858b1145ab575
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Apr 3 19:44:23 2023 -0600
+
+    Modified disproveSuggestion() method in Player. Completed first 2 tests in GameSolutionTest, the 3rd test ongoing.
+
+commit b5fd0d088119c3b2f4a2775ccdb1ac15a0c5a8ee
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Mon Apr 3 12:20:07 2023 -0600
+
+    Added new test AccusationTest. Added checkAccusation() and handleSuggestion() method in Board, added disproveSuggestion() method in Player.
+
 commit 1b5cce1c1ad2d96d1b691aecc79100ba3a0b8969
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Thu Mar 30 19:33:30 2023 -0600

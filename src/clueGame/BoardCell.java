@@ -22,13 +22,13 @@ public class BoardCell {
 	private Set<BoardCell> adjList; // Stores the list of cells that the current cell is adjacent to
 
 	// Default constructor
-	BoardCell() {
+	public BoardCell() {
 		super();
 		initVars();
 	}
 
 	// Constructor that takes position parameters and initializes cell with an x and y position
-	BoardCell(int x, int y) {
+	public BoardCell(int x, int y) {
 		super();
 		row = x;
 		col = y;

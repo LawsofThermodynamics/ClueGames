@@ -56,7 +56,6 @@ public class Board {
 	}
 
 
-
 	/* Function called to initialize the clue game
 	 * 	Initializes: Board, players and cards  
 	 * 
@@ -73,6 +72,9 @@ public class Board {
 			
 			playerList = new ArrayList<Player>();
 			roomMap = new HashMap<Character, Room>();
+			
+			targetCells = new HashSet<BoardCell>();
+			visitedCells = new HashSet<BoardCell>();
 			
 
 			// Load data from config files
@@ -188,10 +190,13 @@ public class Board {
 	 *   -Sihang, Michael 3/30/2023
 	 * */
 	private ArrayList<Card> solutionAndMerge(ArrayList<Card> roomList, ArrayList<Card> personList, ArrayList<Card> weaponList) {
+		allRoom = new ArrayList<Card>();
+		allPerson = new ArrayList<Card>();
+		allWeapon = new ArrayList<Card>();
+		
 		allRoom.addAll(roomList);
 		allPerson.addAll(personList);
 		allWeapon.addAll(weaponList);
-		System.out.println(allWeapon.size());
 		
 		// Picks the random numbers within the bounds of each card list to deal the solution 
 		int roomCard = (int)(Math.random()*(roomList.size()));  
@@ -445,10 +450,10 @@ public class Board {
 	 * -Sihang, 3/8/2023
 	 * */
 	public void calcTargets(BoardCell cell, int steps) {
-		targetCells.clear();
+		targetCells = new HashSet<BoardCell> ();
+		visitedCells = new HashSet<BoardCell> ();
 		calcRecursive(cell, steps);
 	}
-
 
 
 	/* Nested method.
@@ -480,10 +485,6 @@ public class Board {
 		return;
 	}
 	
-	/*
-	 * 
-	 */
-	//TODO: compare card or compare string info of card?
 	public boolean checkAccusation(Solution accusation) {
 		if (accusation.getRoom() != solution.getRoom()) {
 			System.out.println("Wrong room!");
@@ -566,6 +567,10 @@ public class Board {
 
 	public static ArrayList<Card> getAllWeapon() {
 		return allWeapon;
+	}
+
+	public Map<Character, Room> getRoomMap() {
+		return roomMap;
 	}
 	
 	

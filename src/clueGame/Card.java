@@ -21,6 +21,8 @@ public class Card {
 		this.type = type ;
 	}
 	
+	
+	// Used for equality testing of two cards
 	public boolean equals(Card target) {
 		if(this.cardName.equals(target.cardName)) {
 			return true;
@@ -28,7 +30,7 @@ public class Card {
 		return false;
 	}
 	
-
+	// Getters
 	public CardType getType() {
 		return type;
 	}

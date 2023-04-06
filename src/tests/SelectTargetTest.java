@@ -14,14 +14,12 @@ import clueGame.BoardCell;
 import clueGame.Card;
 import clueGame.CardType;
 import clueGame.ComputerPlayer;
-import clueGame.Player;
-import clueGame.Room;
-import clueGame.Solution;
+
 
 
 class SelectTargetTest {
 	private static Board board;
-	
+
 	@BeforeAll
 	public static void setup() {
 		board = Board.getInstance();
@@ -29,36 +27,102 @@ class SelectTargetTest {
 		board.initialize(); // Load both config files
 	}
 
+	
+	// Tests access to 2 rooms, and one secret passage
 	@Test
-	void createSuggestionTest() {
+	void SelectTargetTest() {
 		// Initialization for test
-		
 		ComputerPlayer testPlayer = new ComputerPlayer("Jimmy", Color.RED, 3, 3);
+		ArrayList<String> visitedList = new ArrayList<String>();
+		BoardCell testLoc = new BoardCell();
+		Card newCard;
 		
-		BoardCell testLoc = testPlayer.selectTarget(8);
+		// Player visits 10 rooms
+		for(int roomsToVisit = 0; roomsToVisit < 10; roomsToVisit++) {
+			// Find the first room the player should visit
+			testLoc = testPlayer.selectTarget(8);
+
+			// Add the room to the player's seen list
+			newCard = new Card(board.getRoomMap().get(testLoc.getInitial()).getName(), CardType.ROOM);
+			testPlayer.seenCard(newCard);
+
+			// Add room to test list if it is unique
+			if(!visitedList.contains(board.getRoomMap().get(testLoc.getInitial()).getName())) {
+				visitedList.add(board.getRoomMap().get(testLoc.getInitial()).getName());
+			}
+
+		}
+		// Tests to see if the player has visited all 3 possible rooms
+		assertTrue(visitedList.size() == 3);
+		assertTrue(visitedList.contains("Conservatory"));
+		assertTrue(visitedList.contains("Lounge"));
+		assertTrue(visitedList.contains("Dining room"));
+	}
+
+
+	
+	// Tests access to 5 rooms at once
+	@Test
+	void SelectTargetTest2() {
+		// Initialization for test
+		ComputerPlayer testPlayer = new ComputerPlayer("Jimmy", Color.RED, 15, 6);
+		ArrayList<String> visitedList = new ArrayList<String>();
+		BoardCell testLoc = new BoardCell();
+		Card newCard;
 		
-		assertTrue(testLoc.getCol() == 15);
-		assertTrue(testLoc.getRow() == 6);
+		// Player visits 10 rooms
+		for(int roomsToVisit = 0; roomsToVisit < 10; roomsToVisit++) {
+			// Find the first room the player should visit
+			testLoc = testPlayer.selectTarget(8);
+
+			// Add the room to the player's seen list
+			newCard = new Card(board.getRoomMap().get(testLoc.getInitial()).getName(), CardType.ROOM);
+			testPlayer.seenCard(newCard);
+
+			// Add room to test list if it is unique
+			if(!visitedList.contains(board.getRoomMap().get(testLoc.getInitial()).getName())) {
+				visitedList.add(board.getRoomMap().get(testLoc.getInitial()).getName());
+			}
+		}
 		
-		Card newCard = new Card("Conservatory", CardType.ROOM);
-		testPlayer.seenCard(newCard);
-		
-		testLoc = testPlayer.selectTarget(8);System.out.println("test" + testLoc.getCol());
-		assertTrue(testLoc.getCol() == 15);
-		assertTrue(testLoc.getRow() == 6);
-		
-		newCard = new Card("Lounge", CardType.ROOM);
-		testPlayer.seenCard(newCard);
-		
-		testLoc = testPlayer.selectTarget(8);
-		assertTrue(testLoc.getCol() == 6);
-		assertTrue(testLoc.getRow() == 15);
-		
+		// Tests to see if the player has visited all 3 possible rooms
+		assertTrue(visitedList.size() == 5);
+		assertTrue(visitedList.contains("Billiard Room"));
+		assertTrue(visitedList.contains("Library"));
+		assertTrue(visitedList.contains("Hall"));
+		assertTrue(visitedList.contains("Study"));
+		assertTrue(visitedList.contains("Lounge"));
 	}
 	
-
 	
 	
+	// Tests no room access
+	@Test
+	void SelectTargetTest3() {
+		// Initialization for test
+		ComputerPlayer testPlayer = new ComputerPlayer("Jimmy", Color.RED, 10, 1);
+		ArrayList<String> visitedList = new ArrayList<String>();
+		BoardCell testLoc = new BoardCell();
+		Card newCard;
+		
+		// Player visits 10 rooms
+		for(int roomsToVisit = 0; roomsToVisit < 10; roomsToVisit++) {
+			// Find the first room the player should visit
+			testLoc = testPlayer.selectTarget(2);
 
+			// Add the room to the player's seen list
+			newCard = new Card(board.getRoomMap().get(testLoc.getInitial()).getName(), CardType.ROOM);
+			testPlayer.seenCard(newCard);
+
+			// Add room to test list if it is unique
+			if(!visitedList.contains(board.getRoomMap().get(testLoc.getInitial()).getName()) && !board.getRoomMap().get(testLoc.getInitial()).getName().equals("Walkway")) {
+				visitedList.add(board.getRoomMap().get(testLoc.getInitial()).getName());
+			}
+		}
+				
+		// Tests to see if the player has visited all 3 possible rooms
+		assertTrue(visitedList.size() == 0);
+		
+	}
 }
 

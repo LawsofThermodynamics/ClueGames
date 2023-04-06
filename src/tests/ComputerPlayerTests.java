@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import clueGame.Board;
@@ -20,8 +21,8 @@ import clueGame.Solution;
 class ComputerPlayerTests {
 	private static Board board;
 	
-	@BeforeAll
-	public static void setup() {
+	@BeforeEach
+	public void setup() {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Set both config file names
 		board.initialize(); // Load both config files
@@ -45,8 +46,6 @@ class ComputerPlayerTests {
 		fullWeapon.addAll(Board.getAllWeapon());
 		
 		
-		System.out.println("JoshWasHere" + Board.getAllWeapon());
-		
 		int roomCard = (int)(Math.random()*(fullRoom.size()));  
 		int personCard = (int)(Math.random()*(fullPerson.size()));  
 		int weaponCard = (int)(Math.random()*(fullWeapon.size()));
@@ -65,12 +64,8 @@ class ComputerPlayerTests {
 		testPlayer.seenCard(fullPerson);
 		testPlayer.seenCard(fullWeapon);
 		
-		System.out.println("JoshWasHere" + Board.getAllWeapon());
 		
 		Solution guessSolution = testPlayer.createSuggestion();
-		
-		System.out.println(guessSolution);
-		System.out.println(Solution);
 		
 		assertTrue(guessSolution.equals(Solution));
 	}
