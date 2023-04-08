@@ -17,7 +17,7 @@ public abstract class Player {
 
 	// Default constructor
 	public Player() {
-		super();
+
 	}
 
 	// Parametric constructor
@@ -34,6 +34,11 @@ public abstract class Player {
 	// Adds cards that was dealt to player
 	public void deltCard(Card card) {
 		this.dealtList.add(card);
+	}
+
+	// Update cards seen by player
+	public void deltCard(ArrayList<Card> cards) {
+		this.dealtList.addAll(cards);
 	}
 
 	// Update cards seen by player
@@ -111,6 +116,6 @@ public abstract class Player {
 		return "Player [name=" + name + ", color=" + color + ", row=" + row + ", col=" + col + ", dealtList="
 				+ dealtList + ", seenList=" + seenList + "]";
 	}
-	
-	
+
+
 }

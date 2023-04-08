@@ -1,3 +1,28 @@
+commit 664ed1a411614dae0357b540ab9295c3099fa99d
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Thu Apr 6 23:04:23 2023 -0600
+
+    Completed bottom part of game control panel.
+
+commit 8c08bc6a7c1a64af6e93b2b9b41b7114d02668dd
+Merge: b90ecd2 7032735
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Apr 6 17:24:22 2023 -0600
+
+    Merge branch 'main' of https://github.com/LawsofThermodynamics/ClueGames
+
+commit b90ecd2b784d658c177cb41c2d0367561f023bc6
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Thu Apr 6 17:22:48 2023 -0600
+
+    Computer player's selectTarget bug now fixed, and commenting and refactoring compleated. -Michael
+
+commit 703273555a7383b500bfa9fc3fd740eb806c0578
+Author: Sihang Wang <sihangwang@mines.edu>
+Date:   Tue Apr 4 11:03:01 2023 -0600
+
+    Added GameControlPanel class and TestControlPanel class.
+
 commit 3ecb0fd8eed220758f7cb0e1384727ee23bb6ae6
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Apr 3 23:57:05 2023 -0600
