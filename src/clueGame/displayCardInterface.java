@@ -20,54 +20,65 @@ import javax.swing.border.TitledBorder;
 
 public class displayCardInterface extends JPanel {
 
+	// Variable declaration
 	private String[] infoPanelNames = {"People", "Rooms", "Weapons"};
-
 	private CardType[] cardTypes = {CardType.PERSON, CardType.ROOM, CardType.WEAPON};
 
-	private static HumanPlayer testPerson = new HumanPlayer("testPerson", Color.RED, 0, 0);	
+	private static HumanPlayer testPerson = new HumanPlayer("testPerson", Color.RED, 0, 0);	// Test player, REMOVE LATER
 
 
+	/* Creates outer panel, and initiates the three sub-panel creations
+	 *  Sets the inner panel to contain the 3 different panels for cards
+	 *  Calls helper function to initiate the inner sub-sub-panels
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	public displayCardInterface() {		
-		setLayout(new GridLayout(1, 0));
+		setLayout(new GridLayout(1, 0)); // Sets outer size to 1 large panel
 
 		JPanel outerPanel = new JPanel();
-		outerPanel.setLayout(new GridLayout(infoPanelNames.length, 0));
+		outerPanel.setLayout(new GridLayout(infoPanelNames.length, 0)); 
 		outerPanel.setBorder(new TitledBorder (new EtchedBorder(), "Known Cards"));
 
+		// Loops through the inner sub-panel creation ["People", "Rooms", "Weapons"]
 		for(int panes = 0; panes < infoPanelNames.length; panes++) {
 			JPanel innerPanel = cardDisplayWindow(infoPanelNames[panes], cardTypes[panes]);
 			outerPanel.add(innerPanel, BorderLayout.AFTER_LINE_ENDS);
 		}
 
 		add(outerPanel, BorderLayout.AFTER_LINE_ENDS);
-
 	}
 
 
 
 
-
+	/* Creates inner card panels
+	 *  Sets the inner panel's data to the cards of the player
+	 *  currently, player is passed in manually as we do not have anything to call this main function
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	private JPanel cardDisplayWindow(String string, CardType type) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(4, 0));
 		panel.setBorder(new TitledBorder (new EtchedBorder(), string));
 
 
-		// The panel shows current player in vertical structure
+		// Initiates jPanel and labels for in hand card list 
 		JLabel inHandText = new JLabel("In Hand:");
 
 		JPanel inHand = new JPanel();
 		inHand = assignCardsDealt(inHand, type);
 
 
-
+		// Initiates jPanel and labels for seen card list 
 		JLabel seenText = new JLabel("Seen:");
 
 		JPanel seen = new JPanel();
 		seen = assignCardsSeen(seen, type);
 
 
-
+		// Adds all panels and structures to upper sub-panel
 		panel.add(inHandText, BorderLayout.AFTER_LINE_ENDS);
 		panel.add(inHand, BorderLayout.AFTER_LINE_ENDS);
 
@@ -79,11 +90,17 @@ public class displayCardInterface extends JPanel {
 	}
 
 
+	/* Loads cards from player and into a jpanel for displaying to gui
+	 *  Loads provided type of cards to proviced panel
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	private JPanel assignCardsDealt(JPanel panel, CardType type) {
 		panel.setLayout(new GridLayout(2, 0));
 
 		int addedCards = 0;
 
+		// Loops through player's cards for matching type to add to panel
 		for(int i = 0; i < testPerson.getDealtCards().size(); i++)
 		{
 			if(testPerson.getDealtCards().get(i).getType() == type) {
@@ -97,7 +114,7 @@ public class displayCardInterface extends JPanel {
 				addedCards++;
 			}
 		}
-
+		// Adds special none panel if no cards were found that matched criteria
 		if(addedCards == 0) {
 			JPanel cardPanel = new JPanel();
 			cardPanel.setLayout(new GridLayout(1, 0));
@@ -116,7 +133,8 @@ public class displayCardInterface extends JPanel {
 		panel.setLayout(new GridLayout(2, 0));
 
 		int addedCards = 0;
-
+		
+		// Loops through player's cards for matching type to add to panel
 		for(int i = 0; i < testPerson.getSeenCards().size(); i++)
 		{
 			if(testPerson.getSeenCards().get(i).getType() == type) {
@@ -131,7 +149,7 @@ public class displayCardInterface extends JPanel {
 			}
 		}
 
-
+		// Adds special none panel if no cards were found that matched criteria
 		if(addedCards == 0) {
 			JPanel cardPanel = new JPanel();
 			cardPanel.setLayout(new GridLayout(1, 0));
@@ -141,12 +159,14 @@ public class displayCardInterface extends JPanel {
 			cardPanel.add(newCard);
 			panel.add(cardPanel);
 		}
-
-
+		
 		return panel;
 	}
 
-
+	/* Loads cards into test player
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	private static void configurePlayer() {
 		Card testCard = new Card();
 		ArrayList<Card> cardList = new ArrayList<Card>();
@@ -191,7 +211,10 @@ public class displayCardInterface extends JPanel {
 	}
 
 
-
+	/* Updates the current panel when called
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	private static void updatePanels(JFrame frame, displayCardInterface panel){
 		panel.removeAll();
 		panel = new displayCardInterface();  // create the panel
@@ -200,8 +223,10 @@ public class displayCardInterface extends JPanel {
 
 
 
-
-
+	/* Loads player's card interface
+	 *  
+	 * Author: Michael, Sihang 4/7/2023
+	 */
 	public static void main(String[] args) {
 		displayCardInterface panel = new displayCardInterface();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
