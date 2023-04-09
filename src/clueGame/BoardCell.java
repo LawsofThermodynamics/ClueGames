@@ -6,13 +6,19 @@
  * */
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.Set;
+import java.awt.*;
+import javax.swing.*;
 
-public class BoardCell {
+
+public class BoardCell extends JPanel{
 	private int row; // Stores the row number of each cell (Never used within BoardCell class, but are necessary)
 	private int col; // Stores the column number of each cell (Never used within BoardCell class, but are necessary)
 	private char initial; // Stores the letter of each cell
+	private Color color;
 	private DoorDirection doorDirection; // Stores the direction each door is facing
 	private boolean roomLable; // Boolean storing if the cell is a room label
 	private boolean roomCenter; // Boolean storing if the cell is a room center
@@ -20,7 +26,7 @@ public class BoardCell {
 	private boolean isOccupied; // Boolean storing if the cell is a occupied by another player
 	private char secretPassage; // Stores the char of the other secret passage this cell connects to
 	private Set<BoardCell> adjList; // Stores the list of cells that the current cell is adjacent to
-
+	
 	// Default constructor
 	public BoardCell() {
 		super();
@@ -42,7 +48,7 @@ public class BoardCell {
 		isDoor = false;
 		secretPassage = '0';
 		adjList = new HashSet<BoardCell>();
-		doorDirection = DoorDirection.NONE;		
+		doorDirection = DoorDirection.NONE;	
 	}
 	
 	// Adds a cell into the adjacent list of current cell
@@ -50,6 +56,37 @@ public class BoardCell {
 		adjList.add(adj);
 	}
 	
+	
+	public void draw (Graphics g, int height, int width ) {
+		if(color == Color.LIGHT_GRAY)
+		{
+			g.setColor(Color.LIGHT_GRAY);
+		} else {
+			g.setColor(Color.BLACK);
+		}
+		
+        g.fillRect((col * width), (row * height), width, height);
+        g.setColor(color);
+        g.fillRect((col * width) + 1, (row * height) + 1, (width - 2), (height - 2));
+    }
+	
+	public void drawDoor (Graphics g, int height, int width ) {
+		if(isDoor == true) {
+        	if (doorDirection == DoorDirection.LEFT) {
+        		g.setColor(Color.BLUE);
+                g.fillRect((col * width) - (int)(width * .2), (row * height), (int)(width * .2), (height));
+			} else if (doorDirection == DoorDirection.UP) {
+				g.setColor(Color.BLUE);
+                g.fillRect((col * width), (row * height) - (int)(height * .2), (width), (int)(height * .2));
+			} else if (doorDirection == DoorDirection.RIGHT) {
+				g.setColor(Color.BLUE);
+                g.fillRect(((col + 1) * width), (row * height), (int)(width * .2), (height));
+			} else if (doorDirection == DoorDirection.DOWN) {
+				g.setColor(Color.BLUE);
+                g.fillRect((col * width), ((row + 1) * height), (width), (int)(height * .2));
+			} 
+        }
+    }
 	
 
 	
@@ -126,6 +163,11 @@ public class BoardCell {
 
 	public void setOccupied(boolean o) {
 		isOccupied = o;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+		
 	}
 
 }

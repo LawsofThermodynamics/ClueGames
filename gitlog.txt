@@ -1,3 +1,15 @@
+commit 2c7a938067be4474759f3111d6b9ba20dfde71a2
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Fri Apr 7 23:30:17 2023 -0600
+
+    Added comments and refactored. -Michael
+
+commit 76b0f01e03667e69a533eeb901a6071e09c50d18
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Fri Apr 7 23:19:08 2023 -0600
+
+    Card interface now loads all cards for player, and updates when updatePanels is called. -Michael
+
 commit 664ed1a411614dae0357b540ab9295c3099fa99d
 Author: Sihang Wang <sihangwang@mines.edu>
 Date:   Thu Apr 6 23:04:23 2023 -0600

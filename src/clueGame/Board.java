@@ -5,7 +5,9 @@
  * */
 package clueGame;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -15,7 +17,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Board {
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Board extends JPanel{
 	// Debugger switch
 	private boolean debugger = false; // True prints debugging messages to console
 
@@ -65,17 +70,17 @@ public class Board {
 		try {
 			// Reset variables for multiple tests
 			grid = null; 
-			
+
 			allRoom = new ArrayList<Card>();
 			allPerson = new ArrayList<Card>();
 			allWeapon = new ArrayList<Card>();
-			
+
 			playerList = new ArrayList<Player>();
 			roomMap = new HashMap<Character, Room>();
-			
+
 			targetCells = new HashSet<BoardCell>();
 			visitedCells = new HashSet<BoardCell>();
-			
+
 
 			// Load data from config files
 			loadSetupConfig();
@@ -193,11 +198,11 @@ public class Board {
 		allRoom = new ArrayList<Card>();
 		allPerson = new ArrayList<Card>();
 		allWeapon = new ArrayList<Card>();
-		
+
 		allRoom.addAll(roomList);
 		allPerson.addAll(personList);
 		allWeapon.addAll(weaponList);
-		
+
 		// Picks the random numbers within the bounds of each card list to deal the solution 
 		int roomCard = (int)(Math.random()*(roomList.size()));  
 		int personCard = (int)(Math.random()*(personList.size()));  
@@ -288,6 +293,15 @@ public class Board {
 
 				if (roomMap.containsKey(temp.charAt(0))){
 					grid[rowCount][colCount].setInitial(temp.charAt(0));
+
+					if(temp.charAt(0) == 'W') {
+						grid[rowCount][colCount].setColor(Color.YELLOW);
+					} else if(temp.charAt(0) == 'X') {
+						grid[rowCount][colCount].setColor(Color.BLACK);
+					} else {
+						grid[rowCount][colCount].setColor(Color.LIGHT_GRAY);
+					}
+
 				}
 				else {
 					in.close(); // Close file
@@ -484,7 +498,7 @@ public class Board {
 		}
 		return;
 	}
-	
+
 	public boolean checkAccusation(Solution accusation) {
 		if (accusation.getRoom() != solution.getRoom()) {
 			System.out.println("Wrong room!");
@@ -513,6 +527,30 @@ public class Board {
 		}
 		return null;
 	}
+
+	
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		int rectLength = getHeight() / numRows;
+		int rectWidth = getWidth()/ numColumns;
+
+		for (int drawRowNum =0; drawRowNum < numRows; drawRowNum++) {
+			for (int drawColNum =0; drawColNum < numColumns; drawColNum++) {
+				grid [drawRowNum][drawColNum].draw(g, rectLength, rectWidth);
+			}
+		}
+		
+		for (int drawRowNum =0; drawRowNum < numRows; drawRowNum++) {
+			for (int drawColNum =0; drawColNum < numColumns; drawColNum++) {
+				grid [drawRowNum][drawColNum].drawDoor(g, rectLength, rectWidth);
+			}
+		}
+		
+	}
+
 
 	// Getters
 	// Returns rooms based on cell initial or cell type
@@ -556,7 +594,7 @@ public class Board {
 	public Set<BoardCell> getAdjList(int x, int y) {	
 		return grid[x][y].getAdjList();
 	}
-	
+
 	public static ArrayList<Card> getAllRoom() {
 		return allRoom;
 	}
@@ -572,8 +610,11 @@ public class Board {
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
-	
-	
+
+
+
+
+
 
 
 
