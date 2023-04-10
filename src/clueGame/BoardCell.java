@@ -57,8 +57,9 @@ public class BoardCell extends JPanel{
 		adjList.add(adj);
 	}
 	
-	
+	// Draw a basic board cell.
 	public void draw (Graphics g, int size) {
+		
 		if(color == Color.LIGHT_GRAY)
 		{
 			g.setColor(Color.LIGHT_GRAY);
@@ -71,20 +72,31 @@ public class BoardCell extends JPanel{
         g.fillRect((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
     }
 	
+	// If the board cell is doorway or room, draw again for different color or specific figure.
 	public void drawOverlay (Graphics g, int size) {
+		
+		// If doorway, add a blue line at the border in the direction of the cell.
 		if(isDoor == true) {
 			g.setColor(Color.BLUE);
-        	if (doorDirection == DoorDirection.LEFT) {
-                g.fillRect((col * size) - (int)(size * .2), (row * size), (int)(size * .2), (size));
-			} else if (doorDirection == DoorDirection.UP) {
-                g.fillRect((col * size), (row * size) - (int)(size * .2), (size), (int)(size * .2));
-			} else if (doorDirection == DoorDirection.RIGHT) {
-                g.fillRect(((col + 1) * size), (row * size), (int)(size * .2), (size));
-			} else if (doorDirection == DoorDirection.DOWN) {
-                g.fillRect((col * size), ((row + 1) * size), (size), (int)(size * .2));
+			switch (doorDirection) {
+			case LEFT:
+				g.fillRect((col * size) - (int)(size * .2), (row * size), (int)(size * .2), (size));
+				break;
+			case UP:
+				g.fillRect((col * size), (row * size) - (int)(size * .2), (size), (int)(size * .2));
+				break;
+			case RIGHT:
+				g.fillRect(((col + 1) * size), (row * size), (int)(size * .2), (size));
+				break;
+			case DOWN:
+				g.fillRect((col * size), ((row + 1) * size), (size), (int)(size * .2));
+				break;
+			default:
+				break;
 			}
         }
 		
+		// If the cell is room label cell, print out room name.
 		if (roomLable) {	
 			g.setColor(Color.BLACK);
 			Font newFont = new Font("Bold", Font.BOLD, (int) (size / 1.5));
@@ -94,7 +106,6 @@ public class BoardCell extends JPanel{
 			g.drawString(room, (int) ((col * size) - (metrics.stringWidth(room) / 2) + (size / 2)), ((row) * size));
 		}
     }
-	
 
 	
 	@Override
@@ -173,13 +184,11 @@ public class BoardCell extends JPanel{
 	}
 
 	public void setColor(Color color) {
-		this.color = color;
-		
+		this.color = color;		
 	}
 
 	public void setRoom(String room) {
 		this.room = room;
 	}
 	
-
 }
