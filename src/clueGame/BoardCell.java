@@ -18,6 +18,7 @@ public class BoardCell extends JPanel{
 	private int row; // Stores the row number of each cell (Never used within BoardCell class, but are necessary)
 	private int col; // Stores the column number of each cell (Never used within BoardCell class, but are necessary)
 	private char initial; // Stores the letter of each cell
+	private String room;
 	private Color color;
 	private DoorDirection doorDirection; // Stores the direction each door is facing
 	private boolean roomLable; // Boolean storing if the cell is a room label
@@ -57,7 +58,7 @@ public class BoardCell extends JPanel{
 	}
 	
 	
-	public void draw (Graphics g, int height, int width ) {
+	public void draw (Graphics g, int size) {
 		if(color == Color.LIGHT_GRAY)
 		{
 			g.setColor(Color.LIGHT_GRAY);
@@ -65,27 +66,33 @@ public class BoardCell extends JPanel{
 			g.setColor(Color.BLACK);
 		}
 		
-        g.fillRect((col * width), (row * height), width, height);
+        g.fillRect((col * size), (row * size), size, size);
         g.setColor(color);
-        g.fillRect((col * width) + 1, (row * height) + 1, (width - 2), (height - 2));
+        g.fillRect((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
     }
 	
-	public void drawDoor (Graphics g, int height, int width ) {
+	public void drawOverlay (Graphics g, int size) {
 		if(isDoor == true) {
+			g.setColor(Color.BLUE);
         	if (doorDirection == DoorDirection.LEFT) {
-        		g.setColor(Color.BLUE);
-                g.fillRect((col * width) - (int)(width * .2), (row * height), (int)(width * .2), (height));
+                g.fillRect((col * size) - (int)(size * .2), (row * size), (int)(size * .2), (size));
 			} else if (doorDirection == DoorDirection.UP) {
-				g.setColor(Color.BLUE);
-                g.fillRect((col * width), (row * height) - (int)(height * .2), (width), (int)(height * .2));
+                g.fillRect((col * size), (row * size) - (int)(size * .2), (size), (int)(size * .2));
 			} else if (doorDirection == DoorDirection.RIGHT) {
-				g.setColor(Color.BLUE);
-                g.fillRect(((col + 1) * width), (row * height), (int)(width * .2), (height));
+                g.fillRect(((col + 1) * size), (row * size), (int)(size * .2), (size));
 			} else if (doorDirection == DoorDirection.DOWN) {
-				g.setColor(Color.BLUE);
-                g.fillRect((col * width), ((row + 1) * height), (width), (int)(height * .2));
-			} 
+                g.fillRect((col * size), ((row + 1) * size), (size), (int)(size * .2));
+			}
         }
+		
+		if (roomLable) {	
+			g.setColor(Color.BLACK);
+			Font newFont = new Font("Bold", Font.BOLD, (int) (size / 1.5));
+			FontMetrics metrics = g.getFontMetrics(newFont);
+			
+			g.setFont(newFont); 		    
+			g.drawString(room, (int) ((col * size) - (metrics.stringWidth(room) / 2) + (size / 2)), ((row) * size));
+		}
     }
 	
 
@@ -169,5 +176,10 @@ public class BoardCell extends JPanel{
 		this.color = color;
 		
 	}
+
+	public void setRoom(String room) {
+		this.room = room;
+	}
+	
 
 }

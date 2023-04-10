@@ -140,7 +140,7 @@ public class Board extends JPanel{
 			// Reads in data line by line
 			while (in.hasNextLine()) {
 				tempStr = in.nextLine();
-				if (debugger) {	System.out.println(tempStr ); } // Prints line if debugger
+				if (debugger) {	System.out.println(tempStr); } // Prints line if debugger
 				if(tempStr.charAt(0) == '/') { // Skips line if it contains comment
 					if (debugger) {System.out.println("Found comment, skipping line");}
 					continue;
@@ -162,6 +162,7 @@ public class Board extends JPanel{
 						if(colorMap.containsKey(arrFromStr[2])) { // Overrides color if one is given
 							playerColor = colorMap.get(arrFromStr[2]);
 						}
+								
 
 						if(playerList.size() == 0) { // Initializes the first player as a human, and the remaining players as computers
 							playerList.add(new HumanPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
@@ -293,6 +294,8 @@ public class Board extends JPanel{
 
 				if (roomMap.containsKey(temp.charAt(0))){
 					grid[rowCount][colCount].setInitial(temp.charAt(0));
+					
+					grid[rowCount][colCount].setRoom(roomMap.get(temp.charAt(0)).getName());
 
 					if(temp.charAt(0) == 'W') {
 						grid[rowCount][colCount].setColor(Color.YELLOW);
@@ -536,17 +539,29 @@ public class Board extends JPanel{
 
 		int rectLength = getHeight() / numRows;
 		int rectWidth = getWidth()/ numColumns;
+		
+		int size = 0;
+		
+		if (rectLength < rectWidth) {
+			size = rectLength;
+		} else {
+			size = rectWidth;
+		}
 
-		for (int drawRowNum =0; drawRowNum < numRows; drawRowNum++) {
-			for (int drawColNum =0; drawColNum < numColumns; drawColNum++) {
-				grid [drawRowNum][drawColNum].draw(g, rectLength, rectWidth);
+		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
+				grid [drawRowNum][drawColNum].draw(g, size);
 			}
 		}
 		
-		for (int drawRowNum =0; drawRowNum < numRows; drawRowNum++) {
-			for (int drawColNum =0; drawColNum < numColumns; drawColNum++) {
-				grid [drawRowNum][drawColNum].drawDoor(g, rectLength, rectWidth);
+		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
+				grid [drawRowNum][drawColNum].drawOverlay(g, size);
 			}
+		}
+		
+		for (int players = 0; players < playerList.size(); players++) {
+			playerList.get(players).draw(g, size);
 		}
 		
 	}

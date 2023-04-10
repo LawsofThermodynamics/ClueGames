@@ -20,14 +20,15 @@ public class ClueGame extends JFrame{
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Set both config file names
 		board.initialize(); // Load both config files	
 		
-		setSize(1000, 1000);  // Sets size of the frame
+		setSize(750, 750);  // Sets size of the frame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Stops program on window close
 	}
 	
 	
 	public static void main(String[] args) {
 		ClueGame gameBoard = new ClueGame();
-				
+		
+		gameBoard.setTitle("Off brand clue");
 		gameBoard.add(board);
 		gameBoard.setVisible(true); // Makes window visible
 
