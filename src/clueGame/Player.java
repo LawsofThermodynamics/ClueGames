@@ -78,7 +78,7 @@ public abstract class Player {
 		}
 	}
 	
-	
+	// Draw player with specific color in oval shape with black edge.
 	public void draw (Graphics g, int size) {
 		g.setColor(Color.BLACK);
         g.fillOval((col * size), (row * size), size, size);
@@ -88,7 +88,6 @@ public abstract class Player {
 	
 
 	// Getters
-
 	public String getName() {
 		return name;
 	}

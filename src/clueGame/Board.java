@@ -502,6 +502,10 @@ public class Board extends JPanel{
 		return;
 	}
 
+	/* Check if accusation is true, return false if anything not match, and give feedback.
+	 * 
+	 * Sihang 4/3/2023
+	 */
 	public boolean checkAccusation(Solution accusation) {
 		if (accusation.getRoom() != solution.getRoom()) {
 			System.out.println("Wrong room!");
@@ -532,7 +536,10 @@ public class Board extends JPanel{
 	}
 
 	
-	
+	/* Draw the board and players
+	 * 
+	 * Author: Michael 4/10/2023
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -548,18 +555,21 @@ public class Board extends JPanel{
 			size = rectWidth;
 		}
 
+		// Iterate every board cell, draw basic cells.
 		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
 			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
 				grid [drawRowNum][drawColNum].draw(g, size);
 			}
 		}
 		
+		// Iterate every board cell, draw overlays like doorway and room name.
 		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
 			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
 				grid [drawRowNum][drawColNum].drawOverlay(g, size);
 			}
 		}
 		
+		// Draw players.
 		for (int players = 0; players < playerList.size(); players++) {
 			playerList.get(players).draw(g, size);
 		}
