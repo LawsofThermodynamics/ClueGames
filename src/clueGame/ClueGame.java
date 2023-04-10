@@ -19,17 +19,24 @@ public class ClueGame extends JFrame{
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Set both config file names
 		board.initialize(); // Load both config files	
+		setTitle("Off brand clue");
+		setSize(750, 750);
 		
-		setSize(750, 750);  // Sets size of the frame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Stops program on window close
 	}
 	
 	
 	public static void main(String[] args) {
 		ClueGame gameBoard = new ClueGame();
+		displayCardInterface cardPanel = new displayCardInterface();
+		GameControlPanel controlPanel = new GameControlPanel();
 		
-		gameBoard.setTitle("Off brand clue");
-		gameBoard.add(board);
+	
+
+		gameBoard.add(board, BorderLayout.CENTER);
+		gameBoard.add(cardPanel, BorderLayout.EAST);
+		gameBoard.add(controlPanel, BorderLayout.SOUTH);
+		
 		gameBoard.setVisible(true); // Makes window visible
 
 	}

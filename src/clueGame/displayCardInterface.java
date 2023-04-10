@@ -33,7 +33,8 @@ public class displayCardInterface extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	private displayCardInterface() {		
+	public displayCardInterface() {	
+		setSize(250, 750);
 		setLayout(new GridLayout(1, 0)); // Sets outer size to 1 large panel
 
 		JPanel outerPanel = new JPanel();
