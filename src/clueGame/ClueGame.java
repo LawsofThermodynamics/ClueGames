@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -41,7 +42,12 @@ public class ClueGame extends JFrame{
 		displayCardInterface cardPanel = new displayCardInterface();
 		GameControlPanel controlPanel = new GameControlPanel();
 
-		// Place sub-panels in main panel.
+		// Splash screen.
+		String text = "You are Miss Scarlett\nCan you find solution\nbefore computer players?";
+		String title = "Welcome to Clue";
+		JOptionPane.showMessageDialog(gameBoard, text, title, JOptionPane.INFORMATION_MESSAGE);
+		
+		// Place sub-panels
 		gameBoard.add(board, BorderLayout.CENTER);
 		gameBoard.add(cardPanel, BorderLayout.EAST);
 		gameBoard.add(controlPanel, BorderLayout.SOUTH);

@@ -21,7 +21,7 @@ import javax.swing.border.TitledBorder;
 public class displayCardInterface extends JPanel {
 
 	// Variable declaration
-	private String[] infoPanelNames = {"People", "Rooms", "Weapons"};
+	private String[] infoPanelNames = {"People", "Rooms length", "Weapons"};
 	private CardType[] cardTypes = {CardType.PERSON, CardType.ROOM, CardType.WEAPON};
 
 	private static HumanPlayer testPerson = new HumanPlayer("testPerson", Color.RED, 0, 0);	// Test player, REMOVE LATER
@@ -240,7 +240,7 @@ public class displayCardInterface extends JPanel {
 
 		configurePlayer();
 
-		updatePanels(frame, panel);
+		//updatePanels(frame, panel);
 
 	}
 }
