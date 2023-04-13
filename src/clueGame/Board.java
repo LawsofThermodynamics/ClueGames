@@ -53,8 +53,6 @@ public class Board extends JPanel{
 		visitedCells = new HashSet<BoardCell> ();
 	}
 
-
-
 	// Returns the singleton Board instance
 	public static Board getInstance() {
 		return theInstance;
@@ -574,6 +572,10 @@ public class Board extends JPanel{
 			playerList.get(players).draw(g, size);
 		}
 		
+	}
+	
+	public void nextFlow() {
+		System.out.println("NEXT");
 	}
 
 

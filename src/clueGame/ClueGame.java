@@ -19,6 +19,8 @@ import javax.swing.border.TitledBorder;
 public class ClueGame extends JFrame{
 
 	private static Board board;
+	private static GameControlPanel ctrlPanel;
+	private static CardInfoPanel cardPanel;
 	
 	/* In constructor, initialize whole game board and read in game setting files.
 	 * 
@@ -31,7 +33,17 @@ public class ClueGame extends JFrame{
 		setTitle("Off brand clue");
 		setSize(750, 750);
 		
+		ctrlPanel = GameControlPanel.getCtrlPanel();
+		cardPanel = CardInfoPanel.getCardPanel();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Stops program on window close
+	}
+	
+	// Splash screen at the beginning.
+	public void splash() {
+		String title = "Welcome to CLUE";
+		String text = "You are Miss Scarlett\nCan you find solution\nbefore computer players?";
+		JOptionPane.showMessageDialog(this, text, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	
@@ -39,18 +51,12 @@ public class ClueGame extends JFrame{
 		
 		// Initialize sub-panels
 		ClueGame gameBoard = new ClueGame();
-		displayCardInterface cardPanel = new displayCardInterface();
-		GameControlPanel controlPanel = new GameControlPanel();
-
-		// Splash screen.
-		String text = "You are Miss Scarlett\nCan you find solution\nbefore computer players?";
-		String title = "Welcome to Clue";
-		JOptionPane.showMessageDialog(gameBoard, text, title, JOptionPane.INFORMATION_MESSAGE);
+		gameBoard.splash();
 		
 		// Place sub-panels
 		gameBoard.add(board, BorderLayout.CENTER);
 		gameBoard.add(cardPanel, BorderLayout.EAST);
-		gameBoard.add(controlPanel, BorderLayout.SOUTH);
+		gameBoard.add(ctrlPanel, BorderLayout.SOUTH);
 		
 		gameBoard.setVisible(true); // Makes window visible
 

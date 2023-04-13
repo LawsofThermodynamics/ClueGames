@@ -18,14 +18,14 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-public class displayCardInterface extends JPanel {
+public class CardInfoPanel extends JPanel {
 
 	// Variable declaration
 	private String[] infoPanelNames = {"People", "Rooms length", "Weapons"};
 	private CardType[] cardTypes = {CardType.PERSON, CardType.ROOM, CardType.WEAPON};
 
 	private static HumanPlayer testPerson = new HumanPlayer("testPerson", Color.RED, 0, 0);	// Test player, REMOVE LATER
-
+	private static CardInfoPanel cardPanel = new CardInfoPanel(); // The singleton of card panel
 
 	/* Creates outer panel, and initiates the three sub-panel creations
 	 *  Sets the inner panel to contain the 3 different panels for cards
@@ -33,7 +33,8 @@ public class displayCardInterface extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	public displayCardInterface() {	
+	private CardInfoPanel() {	
+		super();
 		setSize(250, 750);
 		setLayout(new GridLayout(1, 0)); // Sets outer size to 1 large panel
 
@@ -50,7 +51,10 @@ public class displayCardInterface extends JPanel {
 		add(outerPanel, BorderLayout.AFTER_LINE_ENDS);
 	}
 
-
+	// Return the singleton of card panel instance
+	public static CardInfoPanel getCardPanel() {
+		return cardPanel;
+	}
 
 
 	/* Creates inner card panels
@@ -216,9 +220,9 @@ public class displayCardInterface extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	private static void updatePanels(JFrame frame, displayCardInterface panel){
+	private static void updatePanels(JFrame frame, CardInfoPanel panel){
 		panel.removeAll();
-		panel = new displayCardInterface();  // create the panel
+		panel = new CardInfoPanel();  // create the panel
 		frame.add(panel);
 	}
 
@@ -228,6 +232,7 @@ public class displayCardInterface extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
+	/*
 	public static void main(String[] args) {
 		displayCardInterface panel = new displayCardInterface();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
@@ -242,5 +247,5 @@ public class displayCardInterface extends JPanel {
 
 		//updatePanels(frame, panel);
 
-	}
+	}*/
 }

@@ -7,6 +7,8 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,14 +21,27 @@ import javax.swing.border.TitledBorder;
 public class GameControlPanel extends JPanel {
 	
 	private JTextField name, rollVal, guess, guessResult;
+	private NextListener nextListener = new NextListener();
+	
+	private static Board board = Board.getInstance();
 
-	public GameControlPanel() {
+	// The singleton of GameControlPanel instance
+	private static GameControlPanel ctrlPanel = new GameControlPanel();
+	
+	private GameControlPanel() {
+		super();
 		setSize(250, 1000);
 		setLayout(new GridLayout(2, 0));
 		JPanel p1 = buttonPanel();
 		add(p1, BorderLayout.NORTH);
 		JPanel p2 = infoPanel();
 		add(p2, BorderLayout.SOUTH);
+		
+	}
+	
+	// Return the singletong of GameControlPanel instance
+	public static GameControlPanel getCtrlPanel() {
+		return ctrlPanel;
 	}
 	
 	/* Create the first row of panel, include current player, rolled value
@@ -54,8 +69,10 @@ public class GameControlPanel extends JPanel {
 		rollPanel.add(roll, BorderLayout.WEST);
 		rollPanel.add(rollVal, BorderLayout.EAST);
 				
+		// Create two buttons and add mouse listeners.
 		JButton makeAccu = new JButton("Make Accusation");
 		JButton next = new JButton("NEXT!");
+		next.addMouseListener(nextListener);
 		
 		buttonP.add(turnPanel);
 		buttonP.add(rollPanel);
@@ -102,6 +119,31 @@ public class GameControlPanel extends JPanel {
 	
 	public void setGuessResult(String str) {
 		guessResult.setText(str);
+	}
+	
+	private class NextListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			board.nextFlow();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+		
 	}
 	
 	
