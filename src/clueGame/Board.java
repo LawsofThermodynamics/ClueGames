@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Board extends JPanel{
@@ -41,9 +43,12 @@ public class Board extends JPanel{
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
 	private Solution solution; // Stores the correct set of cards that the players must choose
-
+	private Random rand = new Random(); // Random generator
+	private int diceVal; // Stores the dice value
+	private int currPlayer; // Stores the index of current player in playerList
+	private boolean currTurnDone = false;
+	
 	private static Board theInstance = new Board(); // The singleton of the Board instance
-
 
 
 	// Default constructor
@@ -86,6 +91,11 @@ public class Board extends JPanel{
 
 			// Deals cards to player from cardList
 			dealToPlayers();
+			
+			// Roll dice for first time
+			rollDice();
+			// Initialize the player info and dice value
+			GameControlPanel.getCtrlPanel().setTurn(playerList.get(0), diceVal);
 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e);
@@ -241,7 +251,6 @@ public class Board extends JPanel{
 	}
 
 
-
 	/* Deals cards evenly to players within playerList from cardList
 	 * 
 	 * -Sihang, Michael 3/30/2023
@@ -256,7 +265,6 @@ public class Board extends JPanel{
 			numPlayers++;
 		}
 	}
-
 
 
 	/* Loads in data from layoutConfigFile.csv, and performs three loops to complete board initiation
@@ -574,8 +582,53 @@ public class Board extends JPanel{
 		
 	}
 	
+	/* Method called by GameControlPanel, execute NEXT flow
+	 * 
+	 * Sihang, Michael 4/12/2023
+	 */
 	public void nextFlow() {
-		System.out.println("NEXT");
+		
+		// First check if current turn finished.
+		if (!currTurnDone) {
+			splashScreen("Please finish current turn fisrt.");
+		}
+		
+		// Update player index, make sure it in range [0, 5]
+		currPlayer = (currPlayer + 1) % 6;
+		rollDice();
+		// Update GameControlPanel with new player index and dice value.
+		GameControlPanel.getCtrlPanel().setTurn(playerList.get(currPlayer), diceVal);
+		
+		// Calculate possible moving targets.
+		calcTargets(this.getCell(playerList.get(currPlayer)), diceVal);
+		
+		// Human player
+		if (currPlayer == 0) {
+			displayTargets();
+		}
+		
+		// Computer player
+		else {
+			//TODO: Do accusation? Do move. Make suggestion?
+		}
+		
+		// end.
+	}
+	
+	// Method that splash screen with string parameter.
+	public void splashScreen(String str) {
+		JFrame tmpF = new JFrame();
+		JOptionPane.showMessageDialog(tmpF, str);
+		tmpF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	// Assign dice value with integer [1, 6].
+	public void rollDice() {
+		diceVal = rand.nextInt(6) + 1;
+	}
+	
+	// Highlight the target cells.
+	private void displayTargets() {
 	}
 
 
@@ -587,6 +640,10 @@ public class Board extends JPanel{
 	// Returns cell based on cell position
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];
+	}
+	// Returns cell based on player
+	public BoardCell getCell(Player player) {
+		return grid[player.getRow()][player.getCol()];
 	}
 
 	public Room getRoom(char c) {
@@ -637,11 +694,6 @@ public class Board extends JPanel{
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
-
-
-
-
-
 
 
 

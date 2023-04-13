@@ -23,7 +23,6 @@ public class GameControlPanel extends JPanel {
 	private JTextField name, rollVal, guess, guessResult;
 	private NextListener nextListener = new NextListener();
 	
-	private static Board board = Board.getInstance();
 
 	// The singleton of GameControlPanel instance
 	private static GameControlPanel ctrlPanel = new GameControlPanel();
@@ -125,7 +124,7 @@ public class GameControlPanel extends JPanel {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			board.nextFlow();
+			Board.getInstance().nextFlow();
 		}
 
 		@Override
