@@ -5,16 +5,9 @@
 package clueGame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 
 public class ClueGame extends JFrame{
 
@@ -39,7 +32,10 @@ public class ClueGame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Stops program on window close
 	}
 	
-	// Splash screen at the beginning.
+	/* Display opening splash screen
+	 * 
+	 * Author: Sihang Wang 4/12/2023
+	 */
 	public void splash() {
 		String title = "Welcome to CLUE";
 		String text = "You are Miss Scarlett\nCan you find solution\nbefore computer players?";
@@ -49,16 +45,16 @@ public class ClueGame extends JFrame{
 	
 	public static void main(String[] args) {
 		
-		// Initialize sub-panels
-		ClueGame gameBoard = new ClueGame();
-		gameBoard.splash();
+		// Initialize game frame
+		ClueGame gameFrame = new ClueGame();
 		
-		// Place sub-panels
-		gameBoard.add(board, BorderLayout.CENTER);
-		gameBoard.add(cardPanel, BorderLayout.EAST);
-		gameBoard.add(ctrlPanel, BorderLayout.SOUTH);
+		// Place board and sub-panels
+		gameFrame.add(board, BorderLayout.CENTER);
+		gameFrame.add(cardPanel, BorderLayout.EAST);
+		gameFrame.add(ctrlPanel, BorderLayout.SOUTH);
 		
-		gameBoard.setVisible(true); // Makes window visible
+		gameFrame.setVisible(true); // Makes window visible
+		gameFrame.splash(); // Display splash screen
 
 	}
 }
