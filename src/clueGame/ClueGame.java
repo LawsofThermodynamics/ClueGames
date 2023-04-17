@@ -55,6 +55,8 @@ public class ClueGame extends JFrame{
 		
 		gameFrame.setVisible(true); // Makes window visible
 		gameFrame.splash(); // Display splash screen
+		
+		board.playerTurn();
 
 	}
 }

@@ -4,18 +4,43 @@
  */
 package clueGame;
 
+import java.util.ArrayList;
+
 public class Room {
+	private int occupants;
 	private String name; // Stores the name of the room
 	private BoardCell centerCell; // Stores the cell that is the center of the room
 	private BoardCell lableCell; // Stores the cell that will be used to display the name of the cell
-	
+	private ArrayList<BoardCell> roomCells = new ArrayList<BoardCell>();
+
 	// Default Constructor
 	public Room(String inName) {
 		super();
 		name = inName;
 		centerCell = null;
 		lableCell = null;
+		occupants = 0;
 	}
+
+	public ArrayList<BoardCell> getRoomCells() {
+		return roomCells;
+	}
+
+	public void addCell (BoardCell cell){
+
+		roomCells.add(cell);
+
+	}
+
+	public void enter() {
+		occupants++;
+	}
+	
+	public void leave() {
+		occupants--;
+	}
+	
+	
 
 	// Getters
 	public String getName() {
@@ -28,6 +53,10 @@ public class Room {
 
 	public BoardCell getCenterCell() {
 		return centerCell;
+	}
+
+	public int getOccupants() {
+		return occupants;
 	}
 
 	// Setters

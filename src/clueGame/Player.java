@@ -31,6 +31,15 @@ public abstract class Player {
 		this.row = row;
 		this.col = col;
 	}
+	
+	public BoardCell selectTarget(int steps) {
+		return null;
+	}
+	
+	public void move(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
 
 	// Adds cards that was dealt to player
 	public void deltCard(Card card) {
@@ -79,11 +88,11 @@ public abstract class Player {
 	}
 	
 	// Draw player with specific color in oval shape with black edge.
-	public void draw (Graphics g, int size) {
+	public void draw (Graphics g, int size, int stacks) {
 		g.setColor(Color.BLACK);
-        g.fillOval((col * size), (row * size), size, size);
+        g.fillOval((col * size) + (int)(stacks * size / 2), (row * size), size, size);
         g.setColor(color);
-        g.fillOval((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
+        g.fillOval((col * size) + 1 + (int)(stacks * size / 2), (row * size) + 1, (size - 2), (size - 2));
     }
 	
 

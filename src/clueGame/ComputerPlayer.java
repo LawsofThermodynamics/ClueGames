@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class ComputerPlayer extends Player {
+	
+	private static Board board;
 
 	// Default constructor
 	public ComputerPlayer() {
@@ -30,7 +32,7 @@ public class ComputerPlayer extends Player {
 		// Variable initialization
 		ArrayList<Card> unseenWep = new ArrayList<Card>();
 		ArrayList<Card> unseenPer = new ArrayList<Card>();
-		
+
 		ArrayList<Card> temp = new ArrayList<Card>();
 		temp.addAll(this.getDealtList());
 		temp.addAll(this.getSeenList());
@@ -46,7 +48,7 @@ public class ComputerPlayer extends Player {
 				unseenWep.add(card);
 			} 
 		}
-		
+
 		// If the card is already known by the computer, do not use
 		for(Card card : Board.getAllPerson()) {
 			if (!temp.contains(card)) {
@@ -72,54 +74,66 @@ public class ComputerPlayer extends Player {
 	 * 
 	 * Michael, Sihang 4/3/2023
 	 */
+	@Override
 	public BoardCell selectTarget(int steps) {
+		board = Board.getInstance();
+		
 		// Variable initialization
-		ArrayList<BoardCell> possibleTargets = new ArrayList<BoardCell>();
+		ArrayList<BoardCell> randTargets = new ArrayList<BoardCell>();
 		ArrayList<BoardCell> targets = new ArrayList<BoardCell>();
+
 		ArrayList<Card> cardList = new ArrayList<Card>();
-		
-		targets.addAll(Board.getInstance().getTargets());
-		
+
 		cardList.addAll(getDealtList());
 		cardList.addAll(getSeenList());
-		
-		// Calculates all valid moves the player can make
-		Board.getInstance().calcTargets(Board.getInstance().getCell(getRow(), getCol()), steps);
-		
-		// Checks each possible room it can move to, if it has not visited the room yet, move to the room
-		for(BoardCell possibleRoom: Board.getInstance().getTargets()) {
-			if(possibleRoom.isRoomCenter()) {
-				Card newCard = new Card(Board.getInstance().getRoom(possibleRoom.getInitial()).getName(), CardType.ROOM);
-				
-				if(cardList.size() == 0) {
-					return possibleRoom;
-				}
-				boolean found = false;
-				
-				// Checks all rooms for a unique room it has not seen yet
-				for(Card seenCards: cardList) {
-					if(newCard.equals(seenCards)) {
-						 found = true;
-						 break;
-					}
-				}
-				
-				// Skips current room if room is already known, else, visit the room
-				if(found) {
-					possibleTargets.add(possibleRoom);
-					continue;
-				} else {
-					return possibleRoom;
-				}
-				
+
+		ArrayList<Card> roomCards = new ArrayList<Card>();
+
+		for(Card testCard: cardList) {
+			if(testCard.getType() == CardType.ROOM) {
+				roomCards.add(testCard);
 			}
 		}
 
-		if (possibleTargets.size() > 0) {
-			return possibleTargets.get((int)(Math.random()*(possibleTargets.size())));
-		} else {
-			return targets.get((int)(Math.random()*(possibleTargets.size())));
+		// Calculates all valid moves the player can make
+		Board.getInstance().calcTargets(Board.getInstance().getCell(getRow(), getCol()), steps);
+
+		targets = Board.getInstance().getTargets();
+
+
+		// Checks each possible room it can move to, if it has not visited the room yet, move to the room
+		for(BoardCell possibleTarget: targets) {
+			
+			if(possibleTarget.isRoomCenter()) {	
+				boolean found = false;
+
+				if(cardList.size() == 0) {
+					return possibleTarget;
+				}
+
+				// Checks all rooms for a unique room it has not seen yet
+				for(Card seenCards: cardList) {
+					if(seenCards.getName().equals(board.getRoom(possibleTarget.getInitial()).getName())) {
+						found = true;
+						break;
+					}
+				}
+
+				// Skips current room if room is already known, else, visit the room
+				if(found) {
+					randTargets.add(possibleTarget);
+				} else {
+					return possibleTarget;
+				}
+			}
 		}
+		
+		if (!randTargets.isEmpty()) {
+			return randTargets.get((int)(Math.random()*(randTargets.size())));
+		} else {
+			return targets.get((int)(Math.random()*(targets.size())));
+		}
+		
 
 	}
 }

@@ -120,7 +120,7 @@ public class GameControlPanel extends JPanel {
 		guessResult.setText(str);
 	}
 	
-	private class NextListener implements MouseListener {
+	public class NextListener implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {

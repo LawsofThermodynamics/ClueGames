@@ -8,6 +8,8 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import clueGame.GameControlPanel.NextListener;
 
 public class Board extends JPanel{
 	// Debugger switch
@@ -37,7 +41,7 @@ public class Board extends JPanel{
 	private static ArrayList<Card> allPerson = new ArrayList<Card>(); // Stores the list of cards for dealing to players
 	private static ArrayList<Card> allWeapon = new ArrayList<Card>(); // Stores the list of cards for dealing to players
 	private ArrayList<Player> playerList = new ArrayList<Player>(); // Stores the list of players
-	private Set<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
+	private ArrayList<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
 	private Map<Character, Room> roomMap = new HashMap<Character, Room>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
@@ -47,14 +51,15 @@ public class Board extends JPanel{
 	private int diceVal; // Stores the dice value
 	private int currPlayer; // Stores the index of current player in playerList
 	private boolean currTurnDone = false;
-	
+	private PlayerMove playerMove = new PlayerMove();
+
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 
 
 	// Default constructor
 	private Board() {
 		super();
-		targetCells = new HashSet<BoardCell> ();
+		targetCells = new ArrayList<BoardCell> ();
 		visitedCells = new HashSet<BoardCell> ();
 	}
 
@@ -81,7 +86,7 @@ public class Board extends JPanel{
 			playerList = new ArrayList<Player>();
 			roomMap = new HashMap<Character, Room>();
 
-			targetCells = new HashSet<BoardCell>();
+			targetCells = new ArrayList<BoardCell>();
 			visitedCells = new HashSet<BoardCell>();
 
 
@@ -91,14 +96,7 @@ public class Board extends JPanel{
 
 			// Deals cards to player from cardList
 			dealToPlayers();
-			
-			// Roll dice for first time
-			rollDice();
-			// Initialize the player info and dice value
-			GameControlPanel.getCtrlPanel().setTurn(playerList.get(0), diceVal);
-			// Calculate target for first turn and highlight.
-			calcTargets(this.getCell(playerList.get(currPlayer)), diceVal);
-			repaint();
+
 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e);
@@ -173,7 +171,7 @@ public class Board extends JPanel{
 						if(colorMap.containsKey(arrFromStr[2])) { // Overrides color if one is given
 							playerColor = colorMap.get(arrFromStr[2]);
 						}
-								
+
 
 						if(playerList.size() == 0) { // Initializes the first player as a human, and the remaining players as computers
 							playerList.add(new HumanPlayer(arrFromStr[1], playerColor, Integer.parseInt(arrFromStr[3]), Integer.parseInt(arrFromStr[4])));
@@ -303,16 +301,12 @@ public class Board extends JPanel{
 
 				if (roomMap.containsKey(temp.charAt(0))){
 					grid[rowCount][colCount].setInitial(temp.charAt(0));
-					
-					grid[rowCount][colCount].setRoom(roomMap.get(temp.charAt(0)).getName());
 
-					if(temp.charAt(0) == 'W') {
-						grid[rowCount][colCount].setColor(Color.YELLOW);
-					} else if(temp.charAt(0) == 'X') {
-						grid[rowCount][colCount].setColor(Color.BLACK);
-					} else {
-						grid[rowCount][colCount].setColor(Color.LIGHT_GRAY);
-					}
+					grid[rowCount][colCount].setRoom(roomMap.get(temp.charAt(0)).getName());
+					roomMap.get(temp.charAt(0)).addCell(grid[rowCount][colCount]);
+					
+
+					
 
 				}
 				else {
@@ -332,8 +326,7 @@ public class Board extends JPanel{
 					} else if (temp.charAt(1) == '#') { 
 						grid[rowCount][colCount].setRoomLable(true);
 						roomMap.get(temp.charAt(0)).setLableCell(grid[rowCount][colCount]);
-					} 
-
+					}
 					// Sets door status and direction based on arrow direction
 					else if (temp.charAt(1) == '<') {
 						grid[rowCount][colCount].setDoor(true);
@@ -359,6 +352,7 @@ public class Board extends JPanel{
 						in.close(); // Close file
 						throw new BadConfigFormatException("LayoutConfigFile Failed, Invalid Character Detected");
 					}
+					
 				}
 				colCount++;
 			}
@@ -492,6 +486,9 @@ public class Board extends JPanel{
 	 * */
 	private void calcRecursive(BoardCell cell, int steps) {
 		if (steps == 0) {
+			if(targetCells.contains(cell)) {
+				return;
+			}
 			cell.setTarget(true); // Set the flag variable isTarget of cell.
 			targetCells.add(cell);
 		}
@@ -545,20 +542,20 @@ public class Board extends JPanel{
 		return null;
 	}
 
-	
+
 	/* Draw the board and players
 	 * 
-	 * Author: Michael 4/10/2023
+	 * Author: Sihang, Michael 4/10/2023
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		int rectLength = getHeight() / numRows;
-		int rectWidth = getWidth()/ numColumns;
-		
+		int rectWidth = getWidth() / numColumns;
+
 		int size = 0;
-		
+
 		if (rectLength < rectWidth) {
 			size = rectLength;
 		} else {
@@ -568,72 +565,160 @@ public class Board extends JPanel{
 		// Iterate every board cell, draw basic cells.
 		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
 			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
-				grid [drawRowNum][drawColNum].draw(g, size);
+				BoardCell currCell = grid [drawRowNum][drawColNum];
+
+				if(currCell.getInitial() == 'W') {
+					currCell.draw(g, size, Color.YELLOW);
+				} else if(currCell.getInitial() == 'X') {
+					currCell.draw(g, size, Color.BLACK);
+				} else {
+					currCell.draw(g, size, Color.LIGHT_GRAY);
+				}
+			}
+		}
+
+		for (int targetCounter = 0; targetCounter < targetCells.size(); targetCounter++) {
+			targetCells.get(targetCounter).draw(g, size, Color.CYAN);
+			if(targetCells.get(targetCounter).isRoomCenter()) { 
+				for (int targetRoomCounter = 0; targetRoomCounter < roomMap.get(targetCells.get(targetCounter).getInitial()).getRoomCells().size(); targetRoomCounter++) {
+					roomMap.get(targetCells.get(targetCounter).getInitial()).getRoomCells().get(targetRoomCounter).draw(g, size, Color.CYAN);
+				}
 			}
 		}
 		
 		// Iterate every board cell, draw overlays like doorway and room name.
-		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
-			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
-				grid [drawRowNum][drawColNum].drawOverlay(g, size);
-			}
-		}
+				for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+					for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
+						grid [drawRowNum][drawColNum].drawOverlay(g, size);
+					}
+				}
 		
 		// Draw players.
+		ArrayList<BoardCell> playerLocation = new ArrayList <BoardCell>();
 		for (int players = 0; players < playerList.size(); players++) {
-			playerList.get(players).draw(g, size);
+			playerLocation.add(grid[playerList.get(players).getRow()][playerList.get(players).getCol()]);
+			int offset = 0;
+			for (int i = 0; i < players; i++) {
+				if(playerLocation.get(i).equals(playerLocation.get(players))) {
+					offset++;
+				}
+			}
+			playerList.get(players).draw(g, size, offset);
+			
+			
 		}
+
 		
+
 	}
-	
+
+	/* Method called by GameControlPanel, execute NEXT flow
+	 * 
+	 * Sihang, Michael 4/12/2023
+	 */
+	public void playerTurn() {	
+		// New turn.
+		currTurnDone = false;		
+
+		rollDice();
+		
+		diceVal = 6;
+		
+		calcTargets(this.getCell(playerList.get(currPlayer % 6)), diceVal); // Calculate possible moving targets.
+
+		GameControlPanel.getCtrlPanel().setTurn(playerList.get(currPlayer % 6), diceVal); // Update GameControlPanel with new player index and dice value.
+
+
+		// Human player
+		if ((currPlayer % 6) == 0) {
+			addMouseListener(playerMove);
+		}
+
+		// Computer player
+		else {
+			removeMouseListener(playerMove);
+			BoardCell cellToMove = playerList.get(currPlayer % 6).selectTarget(diceVal);
+			playerList.get(currPlayer % 6).move(cellToMove.getRow(), cellToMove.getCol());
+			targetCells.clear();
+			currTurnDone = true;
+		}		
+		repaint();
+	}
+
+
 	/* Method called by GameControlPanel, execute NEXT flow
 	 * 
 	 * Sihang, Michael 4/12/2023
 	 */
 	public void nextFlow() {
-		
 		// First check if current turn finished.
-		if (!currTurnDone) {
+		if (currTurnDone) {
+			currPlayer++;
+			playerTurn();
+		} else {
 			splashScreen("Please finish current turn fisrt.");
-			return;
 		}
-		
-		// New turn.
-		currTurnDone = false;
-		
-		// Update player index, make sure it in range [0, 5]
-		currPlayer = (currPlayer + 1) % 6;
-		rollDice();
-		// Update GameControlPanel with new player index and dice value.
-		GameControlPanel.getCtrlPanel().setTurn(playerList.get(currPlayer), diceVal);
-		
-		// Calculate possible moving targets.
-		calcTargets(this.getCell(playerList.get(currPlayer)), diceVal);
-		
-		// Human player
-		if (currPlayer == 0) {
-			repaint();
-
-			/*  TODO:Do move, after player's move, need to set isTarget of target cells to false
-			 *  and repaint(), and set currTurnDone to true.
-			 */
-		}
-		// Computer player
-		else {
-			//TODO: Do accusation? Do move. Make suggestion?
-			currTurnDone = true; // After computer move, set back to true for next turn.
-		}
-		
-		// end.
 	}
-	
+
+	private class PlayerMove implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int currentCellX = (int) (e.getX() / (getHeight() / numRows));
+			int currentCellY = (int) (e.getY() / (getHeight() / numRows));
+			
+			if(currentCellY > numRows || currentCellX > numRows) {
+				splashScreen("Invalid location, out of bounds.");
+				return;
+			}
+			
+			
+
+			if (targetCells.contains(grid[currentCellY][currentCellX])) {
+				playerList.get(currPlayer % 6).move(currentCellY, currentCellX);
+
+				targetCells.clear();
+
+				currTurnDone = true;
+
+				repaint();
+				return;
+				
+			} else {
+				for (int targetCounter = 0; targetCounter < targetCells.size(); targetCounter++) {
+					if(targetCells.get(targetCounter).isRoomCenter()) {
+						if(roomMap.get(targetCells.get(targetCounter).getInitial()).getRoomCells().contains(grid[currentCellY][currentCellX])) {
+							playerList.get(currPlayer % 6).move(targetCells.get(targetCounter).getRow(), targetCells.get(targetCounter).getCol());
+
+							
+							targetCells.clear();
+
+							currTurnDone = true;
+
+							repaint();
+							return;
+						}
+					}
+				}
+			}
+			splashScreen("Invalid location, cannot move there with a roll of " + diceVal);
+		}
+
+		@Override public void mousePressed(MouseEvent e) {}
+		@Override public void mouseReleased(MouseEvent e) {}
+		@Override public void mouseEntered(MouseEvent e) {}
+		@Override public void mouseExited(MouseEvent e) {}
+
+	}
+
+
 	// Method that splash screen with string parameter.
 	public void splashScreen(String str) {
 		JFrame tmpF = new JFrame();
 		JOptionPane.showMessageDialog(tmpF, str);
 		tmpF.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	// Assign dice value with integer [1, 6].
 	public void rollDice() {
 		diceVal = rand.nextInt(6) + 1;
@@ -674,7 +759,7 @@ public class Board extends JPanel{
 		return solution;
 	}
 
-	public Set<BoardCell> getTargets() {
+	public ArrayList<BoardCell> getTargets() {
 		return targetCells;
 	}
 
@@ -702,7 +787,5 @@ public class Board extends JPanel{
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
 	}
-
-
 
 }

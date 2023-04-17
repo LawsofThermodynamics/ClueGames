@@ -60,17 +60,19 @@ public class BoardCell extends JPanel{
 	}
 	
 	// Draw a basic board cell.
-	public void draw (Graphics g, int size) {
+	public void draw (Graphics g, int size, Color drawColor) {
 		
-		if(color == Color.LIGHT_GRAY)
+		if(drawColor == Color.LIGHT_GRAY)
 		{
 			g.setColor(Color.LIGHT_GRAY);
+		} else if (drawColor == Color.CYAN && initial != 'W' && initial != 'X')	{
+			g.setColor(Color.CYAN);
 		} else {
 			g.setColor(Color.BLACK);
 		}
 		
         g.fillRect((col * size), (row * size), size, size);
-        g.setColor(color);
+        g.setColor(drawColor);
         g.fillRect((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
     }
 	
@@ -106,11 +108,6 @@ public class BoardCell extends JPanel{
 			
 			g.setFont(newFont); 		    
 			g.drawString(room, (int) ((col * size) - (metrics.stringWidth(room) / 2) + (size / 2)), ((row) * size));
-		}
-		
-		if (isTarget) {
-			g.setColor(Color.CYAN);
-			g.fillRect((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
 		}
     }
 

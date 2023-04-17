@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -117,7 +118,7 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsInDiningRoom() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(12, 20), 1);
-		Set<BoardCell> targets= board.getTargets();
+		ArrayList<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCell(8, 17)));
 		assertTrue(targets.contains(board.getCell(12, 15)));	
@@ -145,7 +146,7 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsInKitchen() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(20, 19), 1);
-		Set<BoardCell> targets= board.getTargets();
+		ArrayList<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCell(17, 18)));
 		assertTrue(targets.contains(board.getCell(2, 2)));	
@@ -175,7 +176,7 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsAtDoor() {
 		// test a roll of 1, at door
 		board.calcTargets(board.getCell(8, 17), 1);
-		Set<BoardCell> targets= board.getTargets();
+		ArrayList<BoardCell> targets= board.getTargets();
 		assertEquals(4, targets.size());
 		assertTrue(targets.contains(board.getCell(12, 20)));
 		assertTrue(targets.contains(board.getCell(7, 17)));	
@@ -206,7 +207,7 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsInWalkway1() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(11, 2), 1);
-		Set<BoardCell> targets= board.getTargets();
+		ArrayList<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCell(11, 1)));
 		assertTrue(targets.contains(board.getCell(11, 3)));	
@@ -232,7 +233,7 @@ public class BoardAdjTargetTest306 {
 	public void testTargetsInWalkway2() {
 		// test a roll of 1
 		board.calcTargets(board.getCell(13, 7), 1);
-		Set<BoardCell> targets= board.getTargets();
+		ArrayList<BoardCell> targets= board.getTargets();
 		assertEquals(4, targets.size());
 		assertTrue(targets.contains(board.getCell(13, 6)));
 		assertTrue(targets.contains(board.getCell(12, 7)));	
@@ -261,7 +262,7 @@ public class BoardAdjTargetTest306 {
 		board.getCell(15, 7).setOccupied(true);
 		board.calcTargets(board.getCell(13, 7), 4);
 		board.getCell(15, 7).setOccupied(false);
-		Set<BoardCell> targets = board.getTargets();
+		ArrayList<BoardCell> targets = board.getTargets();
 		assertEquals(13, targets.size());
 		assertTrue(targets.contains(board.getCell(14, 2)));
 		assertTrue(targets.contains(board.getCell(15, 9)));
