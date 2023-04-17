@@ -25,6 +25,7 @@ public class BoardCell extends JPanel{
 	private boolean roomCenter; // Boolean storing if the cell is a room center
 	private boolean isDoor; // Boolean storing if the cell is a door
 	private boolean isOccupied; // Boolean storing if the cell is a occupied by another player
+	private boolean isTarget; // Boolean storing if the cell is target for next move.
 	private char secretPassage; // Stores the char of the other secret passage this cell connects to
 	private Set<BoardCell> adjList; // Stores the list of cells that the current cell is adjacent to
 	
@@ -47,6 +48,7 @@ public class BoardCell extends JPanel{
 		roomLable = false;
 		roomCenter = false;
 		isDoor = false;
+		isTarget = false;
 		secretPassage = '0';
 		adjList = new HashSet<BoardCell>();
 		doorDirection = DoorDirection.NONE;	
@@ -105,6 +107,11 @@ public class BoardCell extends JPanel{
 			g.setFont(newFont); 		    
 			g.drawString(room, (int) ((col * size) - (metrics.stringWidth(room) / 2) + (size / 2)), ((row) * size));
 		}
+		
+		if (isTarget) {
+			g.setColor(Color.CYAN);
+			g.fillRect((col * size) + 1, (row * size) + 1, (size - 2), (size - 2));
+		}
     }
 
 	
@@ -137,6 +144,10 @@ public class BoardCell extends JPanel{
 	public boolean isOccupied() {
 		return isOccupied;
 	}	
+	
+	public boolean isTarget() {
+		return isTarget;
+	}
 
 	public char getSecretPassage() {
 		return secretPassage;
@@ -181,6 +192,10 @@ public class BoardCell extends JPanel{
 
 	public void setOccupied(boolean o) {
 		isOccupied = o;
+	}
+	
+	public void setTarget(boolean t) {
+		isTarget = t;
 	}
 
 	public void setColor(Color color) {

@@ -96,6 +96,9 @@ public class Board extends JPanel{
 			rollDice();
 			// Initialize the player info and dice value
 			GameControlPanel.getCtrlPanel().setTurn(playerList.get(0), diceVal);
+			// Calculate target for first turn and highlight.
+			calcTargets(this.getCell(playerList.get(currPlayer)), diceVal);
+			repaint();
 
 		} catch (BadConfigFormatException e) {
 			System.out.println(e);
@@ -473,8 +476,8 @@ public class Board extends JPanel{
 	 * -Sihang, 3/8/2023
 	 * */
 	public void calcTargets(BoardCell cell, int steps) {
-		targetCells = new HashSet<BoardCell> ();
-		visitedCells = new HashSet<BoardCell> ();
+		targetCells.clear();
+		visitedCells.clear();
 		calcRecursive(cell, steps);
 	}
 
@@ -489,6 +492,7 @@ public class Board extends JPanel{
 	 * */
 	private void calcRecursive(BoardCell cell, int steps) {
 		if (steps == 0) {
+			cell.setTarget(true); // Set the flag variable isTarget of cell.
 			targetCells.add(cell);
 		}
 		else {
@@ -591,7 +595,11 @@ public class Board extends JPanel{
 		// First check if current turn finished.
 		if (!currTurnDone) {
 			splashScreen("Please finish current turn fisrt.");
+			return;
 		}
+		
+		// New turn.
+		currTurnDone = false;
 		
 		// Update player index, make sure it in range [0, 5]
 		currPlayer = (currPlayer + 1) % 6;
@@ -604,12 +612,16 @@ public class Board extends JPanel{
 		
 		// Human player
 		if (currPlayer == 0) {
-			displayTargets();
+			repaint();
+
+			/*  TODO:Do move, after player's move, need to set isTarget of target cells to false
+			 *  and repaint(), and set currTurnDone to true.
+			 */
 		}
-		
 		// Computer player
 		else {
 			//TODO: Do accusation? Do move. Make suggestion?
+			currTurnDone = true; // After computer move, set back to true for next turn.
 		}
 		
 		// end.
@@ -625,10 +637,6 @@ public class Board extends JPanel{
 	// Assign dice value with integer [1, 6].
 	public void rollDice() {
 		diceVal = rand.nextInt(6) + 1;
-	}
-	
-	// Highlight the target cells.
-	private void displayTargets() {
 	}
 
 
