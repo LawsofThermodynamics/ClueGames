@@ -21,7 +21,9 @@ import javax.swing.border.TitledBorder;
 public class CardInfoPanel extends JPanel {
 
 	// Variable declaration
-	private String[] infoPanelNames = {"People", "Rooms length", "Weapons"};
+	private static Board board;
+
+	private String[] infoPanelNames = {"People", "Rooms", "Weapons"};
 	private CardType[] cardTypes = {CardType.PERSON, CardType.ROOM, CardType.WEAPON};
 
 	private static HumanPlayer testPerson = new HumanPlayer("testPerson", Color.RED, 0, 0);	// Test player, REMOVE LATER
@@ -35,7 +37,17 @@ public class CardInfoPanel extends JPanel {
 	 */
 	private CardInfoPanel() {	
 		super();
-		setSize(250, 750);
+		board = Board.getInstance();
+		populateBoard();
+	}
+
+	// Return the singleton of card panel instance
+	public static CardInfoPanel getCardPanel() {
+		return cardPanel;
+	}
+	
+	
+	public void populateBoard() {
 		setLayout(new GridLayout(1, 0)); // Sets outer size to 1 large panel
 
 		JPanel outerPanel = new JPanel();
@@ -49,11 +61,6 @@ public class CardInfoPanel extends JPanel {
 		}
 
 		add(outerPanel, BorderLayout.AFTER_LINE_ENDS);
-	}
-
-	// Return the singleton of card panel instance
-	public static CardInfoPanel getCardPanel() {
-		return cardPanel;
 	}
 
 
@@ -106,14 +113,14 @@ public class CardInfoPanel extends JPanel {
 		int addedCards = 0;
 
 		// Loops through player's cards for matching type to add to panel
-		for(int i = 0; i < testPerson.getDealtCards().size(); i++)
+		for(int i = 0; i < board.getPlayerList().get(0).getDealtCards().size(); i++)
 		{
-			if(testPerson.getDealtCards().get(i).getType() == type) {
+			if(board.getPlayerList().get(0).getDealtCards().get(i).getType() == type) {
 				JPanel cardPanel = new JPanel();
 				cardPanel.setLayout(new GridLayout(1, 0));
 				cardPanel.setBorder(new TitledBorder (new EtchedBorder()));
 
-				JLabel newCard = new JLabel(testPerson.getDealtCards().get(i).getName());
+				JLabel newCard = new JLabel(board.getPlayerList().get(0).getDealtCards().get(i).getName());
 				cardPanel.add(newCard);
 				panel.add(cardPanel);
 				addedCards++;
@@ -138,16 +145,16 @@ public class CardInfoPanel extends JPanel {
 		panel.setLayout(new GridLayout(2, 0));
 
 		int addedCards = 0;
-		
+
 		// Loops through player's cards for matching type to add to panel
-		for(int i = 0; i < testPerson.getSeenCards().size(); i++)
+		for(int i = 0; i < board.getPlayerList().get(0).getSeenCards().size(); i++)
 		{
-			if(testPerson.getSeenCards().get(i).getType() == type) {
+			if(board.getPlayerList().get(0).getSeenCards().get(i).getType() == type) {
 				JPanel cardPanel = new JPanel();
 				cardPanel.setLayout(new GridLayout(1, 0));
 				cardPanel.setBorder(new TitledBorder (new EtchedBorder()));
 
-				JLabel newCard = new JLabel(testPerson.getSeenCards().get(i).getName());
+				JLabel newCard = new JLabel(board.getPlayerList().get(0).getSeenCards().get(i).getName());
 				cardPanel.add(newCard);
 				panel.add(cardPanel);
 				addedCards++;
@@ -164,7 +171,7 @@ public class CardInfoPanel extends JPanel {
 			cardPanel.add(newCard);
 			panel.add(cardPanel);
 		}
-		
+
 		return panel;
 	}
 
@@ -187,9 +194,9 @@ public class CardInfoPanel extends JPanel {
 		cardList.add(testCard);
 
 		testPerson.deltCard(cardList);
-		
-	
-		
+
+
+
 		cardList = new ArrayList<Card>();
 
 		testCard = new Card("TestRoom3", CardType.ROOM);
@@ -201,7 +208,7 @@ public class CardInfoPanel extends JPanel {
 		cardList.add(testCard);
 		testCard = new Card("TestWeapon4", CardType.WEAPON);
 		cardList.add(testCard);
-		
+
 		testPerson.seenCard(cardList);
 	}
 
@@ -210,10 +217,13 @@ public class CardInfoPanel extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	private static void updatePanels(JFrame frame, CardInfoPanel panel){
+	public static void updatePanels(JFrame frame, CardInfoPanel panel){
 		panel.removeAll();
-		panel = new CardInfoPanel();  // create the panel
-		frame.add(panel);
+		panel.populateBoard();	
+		frame.add(panel, BorderLayout.EAST);
+		panel.revalidate();
+		panel.repaint();
+		
 	}
 
 
@@ -222,7 +232,7 @@ public class CardInfoPanel extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	
+	/*
 	public static void main(String[] args) {
 		CardInfoPanel panel = new CardInfoPanel();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
@@ -238,4 +248,5 @@ public class CardInfoPanel extends JPanel {
 		updatePanels(frame, panel);
 
 	}
+	 */
 }

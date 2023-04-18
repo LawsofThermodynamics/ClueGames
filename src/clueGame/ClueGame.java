@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 public class ClueGame extends JFrame{
 
 	private static Board board;
+	private static ClueGame gameFrame;
 	private static GameControlPanel ctrlPanel;
 	private static CardInfoPanel cardPanel;
 	
@@ -23,6 +24,7 @@ public class ClueGame extends JFrame{
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt"); // Set both config file names
 		board.initialize(); // Load both config files	
+		//System.out.println(board.getPlayerList().get(0).getDealtList());
 		setTitle("Off brand clue");
 		setSize(750, 750);
 		
@@ -42,11 +44,15 @@ public class ClueGame extends JFrame{
 		JOptionPane.showMessageDialog(this, text, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
+	public static void update() {
+		CardInfoPanel.updatePanels(gameFrame, cardPanel);
+	}
+	
 	
 	public static void main(String[] args) {
 		
 		// Initialize game frame
-		ClueGame gameFrame = new ClueGame();
+		gameFrame = new ClueGame();
 		
 		// Place board and sub-panels
 		gameFrame.add(board, BorderLayout.CENTER);
@@ -56,7 +62,20 @@ public class ClueGame extends JFrame{
 		gameFrame.setVisible(true); // Makes window visible
 		gameFrame.splash(); // Display splash screen
 		
+		board.getPlayerList().get(0).seenCard(new Card("Room", CardType.ROOM));
+		board.getPlayerList().get(0).seenCard(new Card("Room2", CardType.ROOM));
+		board.getPlayerList().get(0).seenCard(new Card("Room3", CardType.ROOM));
+		System.out.println(board.getPlayerList().get(0).getSeenList());
+		System.out.println(board.getPlayerList().get(0).getDealtList());
+		
 		board.playerTurn();
 
 	}
+
+	public static CardInfoPanel getCardPanel() {
+		return cardPanel;
+	}
+	
+	
+	
 }

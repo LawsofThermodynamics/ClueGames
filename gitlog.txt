@@ -1,3 +1,15 @@
+commit d2595b78123ddb8b5a2f54198d392b0ca111163a
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:32:11 2023 -0600
+
+    Final refactoring. -Michael
+
+commit 9e902a398ac09f1e0048e9b5c0f3ce08037ceeb6
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:25:00 2023 -0600
+
+    Refactored gameControlPanel. -Michael
+
 commit 2ad1798df0f5300f6936093eeb82ac4691ecb3d9
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Apr 17 22:20:33 2023 -0600

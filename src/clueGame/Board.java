@@ -85,6 +85,7 @@ public class Board extends JPanel{
 
 			targetCells = new ArrayList<BoardCell>();
 			visitedCells = new HashSet<BoardCell>();
+			
 
 
 			// Load data from config files
@@ -262,6 +263,8 @@ public class Board extends JPanel{
 
 			numPlayers++;
 		}
+		
+		System.out.println(playerList.get(0).getDealtList());
 	}
 
 
@@ -633,9 +636,14 @@ public class Board extends JPanel{
 	 * Sihang, Michael 4/12/2023
 	 */
 	public void playerTurn() {	
+		ClueGame.update();
+		
+		
+		
 		// New turn.
 		currTurnDone = false;		
 		rollDice();
+		
 		
 		calcTargets(this.getCell(playerList.get(currPlayer % 6)), diceVal); // Calculate possible moving targets.
 
