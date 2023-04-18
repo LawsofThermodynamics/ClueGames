@@ -32,10 +32,12 @@ public abstract class Player {
 		this.col = col;
 	}
 	
+	// Method definition for computer player override
 	public BoardCell selectTarget(int steps) {
 		return null;
 	}
 	
+	// Moves the player to row, col in grid
 	public void move(int row, int col) {
 		this.row = row;
 		this.col = col;

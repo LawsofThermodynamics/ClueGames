@@ -23,6 +23,8 @@ public class Solution {
 		this.weapon = weapon;
 	}
 
+	
+	// Equals command for evaluation
 	public boolean equals(Solution target) {
 		if(this.room.equals(target.room) && this.person.equals(target.person) && this.weapon.equals(target.weapon)) {
 			return true;

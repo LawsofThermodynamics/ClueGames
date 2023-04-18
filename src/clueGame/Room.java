@@ -7,11 +7,10 @@ package clueGame;
 import java.util.ArrayList;
 
 public class Room {
-	private int occupants;
 	private String name; // Stores the name of the room
 	private BoardCell centerCell; // Stores the cell that is the center of the room
 	private BoardCell lableCell; // Stores the cell that will be used to display the name of the cell
-	private ArrayList<BoardCell> roomCells = new ArrayList<BoardCell>();
+	private ArrayList<BoardCell> roomCells = new ArrayList<BoardCell>(); // Stores the List of cells for the coloring of the entire room
 
 	// Default Constructor
 	public Room(String inName) {
@@ -19,27 +18,14 @@ public class Room {
 		name = inName;
 		centerCell = null;
 		lableCell = null;
-		occupants = 0;
 	}
 
-	public ArrayList<BoardCell> getRoomCells() {
-		return roomCells;
-	}
 
+	// Adds cells to a room's list of cells
 	public void addCell (BoardCell cell){
-
 		roomCells.add(cell);
 
 	}
-
-	public void enter() {
-		occupants++;
-	}
-	
-	public void leave() {
-		occupants--;
-	}
-	
 	
 
 	// Getters
@@ -55,8 +41,8 @@ public class Room {
 		return centerCell;
 	}
 
-	public int getOccupants() {
-		return occupants;
+	public ArrayList<BoardCell> getRoomCells() {
+		return roomCells;
 	}
 
 	// Setters
