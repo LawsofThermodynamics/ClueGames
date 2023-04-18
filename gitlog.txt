@@ -1,3 +1,9 @@
+commit 8035d527462bdeaf8720dc7cfaa9a2b5bb036fb7
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:12:04 2023 -0600
+
+    Refactored comments and variable usage comments.
+
 commit 8b9c547fa50fe1146c4a0506e41549b27c763fdf
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Apr 17 22:07:00 2023 -0600

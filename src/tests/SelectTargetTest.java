@@ -59,7 +59,6 @@ class SelectTargetTest {
 		assertTrue(visitedList.contains("Dining room"));
 	}
 
-
 	
 	// Tests access to 5 rooms at once
 	@Test
@@ -122,7 +121,6 @@ class SelectTargetTest {
 				
 		// Tests to see if the player has visited all 3 possible rooms
 		assertTrue(visitedList.size() == 0);
-		
 	}
 }
 

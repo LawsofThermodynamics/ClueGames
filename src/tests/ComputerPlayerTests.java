@@ -52,18 +52,14 @@ class ComputerPlayerTests {
 		
 		Solution Solution = new Solution(testRoom, fullPerson.get(personCard), fullWeapon.get(weaponCard));	
 
-		
-
 		// Removes the solution cards from the deck to prevent the players from getting the cards within the solution
 		fullRoom.remove(roomCard);
 		fullPerson.remove(personCard);
 		fullWeapon.remove(weaponCard);
 		
-		
 		testPlayer.seenCard(fullRoom);
 		testPlayer.seenCard(fullPerson);
 		testPlayer.seenCard(fullWeapon);
-		
 		
 		Solution guessSolution = testPlayer.createSuggestion();
 		
