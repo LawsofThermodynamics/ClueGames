@@ -17,7 +17,7 @@ public class ClueGame extends JFrame{
 	
 	/* In constructor, initialize whole game board and read in game setting files.
 	 * 
-	 * Author: Michael Basey 4/10/2023
+	 * Author: Sihang, Michael 4/10/2023
 	 */
 	public ClueGame() {
 		board = Board.getInstance();

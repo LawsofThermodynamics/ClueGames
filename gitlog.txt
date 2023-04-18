@@ -1,3 +1,9 @@
+commit 2ad1798df0f5300f6936093eeb82ac4691ecb3d9
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:20:33 2023 -0600
+
+    Added secondary helper function for loadLayout. -Micahel
+
 commit 1649c400cd495831e4d9ef98c291014527f83519
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Apr 17 22:15:17 2023 -0600

@@ -232,9 +232,9 @@ public class CardInfoPanel extends JPanel {
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
-	/*
+	
 	public static void main(String[] args) {
-		displayCardInterface panel = new displayCardInterface();  // create the panel
+		CardInfoPanel panel = new CardInfoPanel();  // create the panel
 		JFrame frame = new JFrame();  // create the frame 
 		frame.setContentPane(panel); // put the panel in the frame
 
@@ -245,7 +245,7 @@ public class CardInfoPanel extends JPanel {
 
 		configurePlayer();
 
-		//updatePanels(frame, panel);
+		updatePanels(frame, panel);
 
-	}*/
+	}
 }
