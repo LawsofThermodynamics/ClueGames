@@ -1,3 +1,9 @@
+commit fb5159e5f6204a8255fc99533e84d6e8de2f477c
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:01:25 2023 -0600
+
+    Removed temporary variables where unneeded, and renamed variables to be more discriptive. -Michael
+
 commit cbf4a7864577cc964f34febd4e67e7c720a6287e
 Author: Sihang Wang <sihangwang@mines.edu>
 Date:   Mon Apr 17 18:26:41 2023 -0600
