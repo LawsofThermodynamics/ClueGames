@@ -33,13 +33,13 @@ public class Board extends JPanel{
 	// Variable Declaration
 	private int numRows; // Number of rows that the board is made up of
 	private int numColumns; // Number of columns that the board is made up of
-	private String layoutConfigFile; // Location of the layout Config File
-	private String setupConfigFiles; // Location of the setup Config File
+	private int diceVal; // Stores the dice value
+	private int currPlayer; // Stores the index of current player in playerList
+	private boolean currTurnDone = false; // Stores information used to track when a player's turn ends
+	private String layoutConfigFile, setupConfigFiles; // Location of the layout Config File and setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private ArrayList<Card> cardList = new ArrayList<Card>(); // Stores the list of cards for dealing to players
-	private static ArrayList<Card> allRoom = new ArrayList<Card>(); // Stores the list of cards for dealing to players
-	private static ArrayList<Card> allPerson = new ArrayList<Card>(); // Stores the list of cards for dealing to players
-	private static ArrayList<Card> allWeapon = new ArrayList<Card>(); // Stores the list of cards for dealing to players
+	private static ArrayList<Card> allRoom, allPerson , allWeapon; // Stores the list of cards for dealing to players
 	private ArrayList<Player> playerList = new ArrayList<Player>(); // Stores the list of players
 	private ArrayList<BoardCell> targetCells; // Set responsible for storing temporary cells that the adjacency lists method uses
 	private Set<BoardCell> visitedCells; // Set responsible for storing the cells that the adjacency lists method has already visited
@@ -47,11 +47,8 @@ public class Board extends JPanel{
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
 	private Solution solution; // Stores the correct set of cards that the players must choose
-	private Random rand = new Random(); // Random generator
-	private int diceVal; // Stores the dice value
-	private int currPlayer; // Stores the index of current player in playerList
-	private boolean currTurnDone = false;
-	private PlayerMove playerMove = new PlayerMove();
+	private Random rand = new Random(); // Random generator	
+	private PlayerMove playerMove = new PlayerMove(); // Used to track player's interactions with the board
 
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 

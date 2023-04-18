@@ -1,9 +1,8 @@
-/* This class is to create game control panel.
+/* Class contains the instructions to create the games gui control panel including interfaces for next turn and information regarding the players turn
  * 
- * Author: Michael Basey, Sihang Wang 4/6/2023
+ * Author: Sihang Wang 4/17/2023
  */
 package clueGame;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;

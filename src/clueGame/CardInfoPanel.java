@@ -1,6 +1,6 @@
-/* This class is to create game control panel.
+/* Class contains the instructions to create the card panel for the game gui
  * 
- * Author: Michael Basey, Sihang Wang 4/6/2023
+ * Author: Michael Basey, Sihang Wang 4/17/2023
  */
 package clueGame;
 
@@ -186,21 +186,11 @@ public class CardInfoPanel extends JPanel {
 		testCard = new Card("TestRoom1", CardType.ROOM);
 		cardList.add(testCard);
 
-		//testCard = new Card("TestWeapon1", CardType.WEAPON);
-		//cardList.add(testCard);
-		//testCard = new Card("TestWeapon2", CardType.WEAPON);
-		//cardList.add(testCard);
-
 		testPerson.deltCard(cardList);
 		
 	
 		
 		cardList = new ArrayList<Card>();
-		
-		//testCard = new Card("TestPerson3", CardType.PERSON);
-		//cardList.add(testCard);
-		//testCard = new Card("TestPerson4", CardType.PERSON);
-		//cardList.add(testCard);
 
 		testCard = new Card("TestRoom3", CardType.ROOM);
 		cardList.add(testCard);
@@ -228,7 +218,7 @@ public class CardInfoPanel extends JPanel {
 
 
 
-	/* Loads player's card interface
+	/* Loads test of player's card interface
 	 *  
 	 * Author: Michael, Sihang 4/7/2023
 	 */
