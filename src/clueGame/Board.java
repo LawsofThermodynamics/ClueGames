@@ -364,8 +364,66 @@ public class Board extends JPanel{
 			throw new BadConfigFormatException("LayoutConfigFile Failed, empty cell detected");
 		}
 
+		loadLayoutFinal();
+	}
+
+	
+	
+
+
+	/* Helper function for loadLayoutConfig
+	 * 	Loads in data from layoutConfigFile.csv, and performs the initial data read to initialize the board
+	 * 	 Reads data line by line counting to detirmin the number of rows, then counts the number of cells in the final row to determine column count
+	 *   -Michael 3/27/2023
+	 * */
+	private void loadLayoutInitialSettup() throws BadConfigFormatException{
+		// Reset variables for multiple tests
+		numRows = 0;
+		numColumns = 0;
+		String tempStr = "";
+
+		try {
+			FileReader reader = new FileReader(layoutConfigFile);// Opens file
+			Scanner in = new Scanner(reader);
+
+			// Reads data from file
+			while(in.hasNextLine()) {
+				numRows++; // Counts rows
+				tempStr = in.nextLine(); // Stores string for column count
+			}
+			in.close(); // Close file	
+
+		} catch (FileNotFoundException e){
+			throw new BadConfigFormatException("loadLayoutConfig Failed, File Not Loaded Correctly");
+		}
+
+		String[] arrFromStr = tempStr.split(","); // Splits string into columns to determine column count
+		numColumns = arrFromStr.length;
+		if(debugger) {System.out.println("Rows: " + numRows); }
+		if(debugger) {System.out.println("Columns: " + numColumns);	}		
+
+		grid = new BoardCell[numRows][numColumns];
+
+
+		int rowCount;
+		int colCount;
+
+
 		for (rowCount = 0; rowCount < numRows; rowCount++) {
 			for (colCount = 0; colCount < numColumns; colCount++) {
+				grid[rowCount][colCount] = new BoardCell(rowCount, colCount);
+			}
+		}		
+	}
+	
+	/* Secondary helper function for loadLayoutConfig
+	 * 	Loads in data from layoutConfigFile.csv for the last time
+	 *  Reads in data relating to doorways and room data
+	 *   -Sihang, Michael 4/17/2023
+	 * */
+	private void loadLayoutFinal(){
+		for (int rowCount = 0; rowCount < numRows; rowCount++) {
+			for (int colCount = 0; colCount < numColumns; colCount++) {
 
 				BoardCell currentCell = grid[rowCount][colCount];
 				char currentCellInitial = currentCell.getInitial();
@@ -421,53 +479,6 @@ public class Board extends JPanel{
 				}
 			}
 		}
-	}
-
-
-
-	/* Helper function for loadLayoutConfig
-	 * 	Loads in data from layoutConfigFile.csv, and performs the initial data read to initialize the board
-	 * 	 Reads data line by line counting to detirmin the number of rows, then counts the number of cells in the final row to determine column count
-	 *   -Michael 3/27/2023
-	 * */
-	private void loadLayoutInitialSettup() throws BadConfigFormatException{
-		// Reset variables for multiple tests
-		numRows = 0;
-		numColumns = 0;
-		String tempStr = "";
-
-		try {
-			FileReader reader = new FileReader(layoutConfigFile);// Opens file
-			Scanner in = new Scanner(reader);
-
-			// Reads data from file
-			while(in.hasNextLine()) {
-				numRows++; // Counts rows
-				tempStr = in.nextLine(); // Stores string for column count
-			}
-			in.close(); // Close file	
-
-		} catch (FileNotFoundException e){
-			throw new BadConfigFormatException("loadLayoutConfig Failed, File Not Loaded Correctly");
-		}
-
-		String[] arrFromStr = tempStr.split(","); // Splits string into columns to determine column count
-		numColumns = arrFromStr.length;
-		if(debugger) {System.out.println("Rows: " + numRows); }
-		if(debugger) {System.out.println("Columns: " + numColumns);	}		
-
-		grid = new BoardCell[numRows][numColumns];
-
-
-		int rowCount;
-		int colCount;
-
-
-		for (rowCount = 0; rowCount < numRows; rowCount++) {
-			for (colCount = 0; colCount < numColumns; colCount++) {
-				grid[rowCount][colCount] = new BoardCell(rowCount, colCount);
-			}
-		}		
 	}
 
 

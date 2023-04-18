@@ -1,3 +1,9 @@
+commit 1649c400cd495831e4d9ef98c291014527f83519
+Author: MBasey <112577073+MBasey@users.noreply.github.com>
+Date:   Mon Apr 17 22:15:17 2023 -0600
+
+     Updated tests to now pass with refactored computer player's select target method. -Micahel
+
 commit 8035d527462bdeaf8720dc7cfaa9a2b5bb036fb7
 Author: MBasey <112577073+MBasey@users.noreply.github.com>
 Date:   Mon Apr 17 22:12:04 2023 -0600
