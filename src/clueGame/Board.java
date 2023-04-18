@@ -377,15 +377,23 @@ public class Board extends JPanel{
 					BoardCell centerCell = new BoardCell();
 
 					// Assigns links between cells based on door direction
-					if (roomLocation == DoorDirection.LEFT) {
+					switch (roomLocation) {
+					case LEFT:
 						centerCell = roomMap.get(grid[rowCount][colCount - 1].getInitial()).getCenterCell();
-					} else if (roomLocation == DoorDirection.UP) {
+						break;
+					case UP:
 						centerCell = roomMap.get(grid[rowCount - 1][colCount].getInitial()).getCenterCell();
-					} else if (roomLocation == DoorDirection.RIGHT) {
+						break;
+					case RIGHT:
 						centerCell = roomMap.get(grid[rowCount][colCount + 1].getInitial()).getCenterCell();
-					} else if (roomLocation == DoorDirection.DOWN) {
+						break;
+					case DOWN:
 						centerCell = roomMap.get(grid[rowCount + 1][colCount].getInitial()).getCenterCell();
+						break;
+					default:
+						break;
 					}
+					
 					// Links the currently selected cell with the center of the room, and vice versa
 					currentCell.addAdj(centerCell);
 					centerCell.addAdj(currentCell);
@@ -619,10 +627,7 @@ public class Board extends JPanel{
 	public void playerTurn() {	
 		// New turn.
 		currTurnDone = false;		
-
 		rollDice();
-		
-		diceVal = 6;
 		
 		calcTargets(this.getCell(playerList.get(currPlayer % 6)), diceVal); // Calculate possible moving targets.
 
@@ -671,8 +676,6 @@ public class Board extends JPanel{
 				splashScreen("Invalid location, out of bounds.");
 				return;
 			}
-			
-			
 
 			if (targetCells.contains(grid[currentCellY][currentCellX])) {
 				playerList.get(currPlayer % 6).move(currentCellY, currentCellX);
