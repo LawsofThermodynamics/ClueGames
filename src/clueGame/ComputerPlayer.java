@@ -33,9 +33,9 @@ public class ComputerPlayer extends Player {
 		ArrayList<Card> unseenWep = new ArrayList<Card>();
 		ArrayList<Card> unseenPer = new ArrayList<Card>();
 
-		ArrayList<Card> temp = new ArrayList<Card>();
-		temp.addAll(this.getDealtList());
-		temp.addAll(this.getSeenList());
+		ArrayList<Card> mergeCards = new ArrayList<Card>();
+		mergeCards.addAll(this.getDealtList());
+		mergeCards.addAll(this.getSeenList());
 
 		Room currentRoom = Board.getInstance().getRoom(Board.getInstance().getCell(getRow(),getCol()).getInitial());
 
@@ -44,14 +44,14 @@ public class ComputerPlayer extends Player {
 
 		// If the card is already known by the computer, do not use
 		for(Card card : Board.getAllWeapon()) {
-			if (!temp.contains(card)) {
+			if (!mergeCards.contains(card)) {
 				unseenWep.add(card);
 			} 
 		}
 
 		// If the card is already known by the computer, do not use
 		for(Card card : Board.getAllPerson()) {
-			if (!temp.contains(card)) {
+			if (!mergeCards.contains(card)) {
 				unseenPer.add(card);
 			} 
 
