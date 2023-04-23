@@ -13,13 +13,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
 	
-	private JTextField name, rollVal, guess, guessResult;
+	private JTextField name, rollVal;
+	JTextArea guess;
+	JTextArea guessResult;
 	private NextListener nextListener = new NextListener();
 	
 
@@ -87,13 +90,15 @@ public class GameControlPanel extends JPanel {
 		infoP.setLayout(new GridLayout(0,2));
 		
 		JPanel guessPanel = new JPanel();
-		guess = new JTextField(15);
+		guess = new JTextArea();
+		guess.setBounds(40,75,250,200);
 		guess.setEditable(false);
 		guessPanel.add(guess);
 		guessPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess"));
 		
 		JPanel guessResPanel = new JPanel();
-		guessResult = new JTextField(15);
+		guessResult = new JTextArea();
+		guessResult.setBounds(40,75,250,200);
 		guessResult.setEditable(false);
 		guessResPanel.add(guessResult);
 		guessResPanel.setBorder(new TitledBorder (new EtchedBorder(), "Guess Result"));

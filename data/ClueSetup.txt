@@ -12,7 +12,7 @@ Room, Billiard Room, I
 Space, Not Traversable, X
 Space, Walkway, W
 // Players
-Player, Miss Scarlett, RED, 2, 12
+Player, Miss Scarlett, RED, 1, 15
 Player, Colonel Mustard, YELLOW, 2, 18
 Player, Mrs. White, WHITE, 28, 12
 Player, Mr. Green, GREEN, 28, 18

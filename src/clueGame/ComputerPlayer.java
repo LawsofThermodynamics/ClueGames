@@ -34,8 +34,8 @@ public class ComputerPlayer extends Player {
 		ArrayList<Card> unseenPer = new ArrayList<Card>();
 
 		ArrayList<Card> mergeCards = new ArrayList<Card>();
-		mergeCards.addAll(this.getDealtList());
-		mergeCards.addAll(this.getSeenList());
+		mergeCards.addAll(this.getDealtCards());
+		mergeCards.addAll(this.getSeenCards());
 
 		Room currentRoom = Board.getInstance().getRoom(Board.getInstance().getCell(getRow(),getCol()).getInitial());
 
@@ -84,8 +84,8 @@ public class ComputerPlayer extends Player {
 
 		ArrayList<Card> cardList = new ArrayList<Card>();
 
-		cardList.addAll(getDealtList());
-		cardList.addAll(getSeenList());
+		cardList.addAll(getDealtCards());
+		cardList.addAll(getSeenCards());
 
 		ArrayList<Card> roomCards = new ArrayList<Card>();
 

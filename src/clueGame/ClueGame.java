@@ -40,7 +40,7 @@ public class ClueGame extends JFrame{
 	 */
 	public void splash() {
 		String title = "Welcome to CLUE";
-		String text = "You are Miss Scarlett\nCan you find solution\nbefore computer players?";
+		String text = "You are " + board.getPlayerList().get(0) + "\nCan you find solution\nbefore computer players?";
 		JOptionPane.showMessageDialog(this, text, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
@@ -62,11 +62,11 @@ public class ClueGame extends JFrame{
 		gameFrame.setVisible(true); // Makes window visible
 		gameFrame.splash(); // Display splash screen
 		
-		board.getPlayerList().get(0).seenCard(new Card("Room", CardType.ROOM));
-		board.getPlayerList().get(0).seenCard(new Card("Room2", CardType.ROOM));
-		board.getPlayerList().get(0).seenCard(new Card("Room3", CardType.ROOM));
-		System.out.println(board.getPlayerList().get(0).getSeenList());
-		System.out.println(board.getPlayerList().get(0).getDealtList());
+		//board.getPlayerList().get(0).seenCard(new Card("Room", CardType.ROOM));
+		//board.getPlayerList().get(0).seenCard(new Card("Room2", CardType.ROOM));
+		//board.getPlayerList().get(0).seenCard(new Card("Room3", CardType.ROOM));
+		//System.out.println(board.getPlayerList().get(0).getSeenCards());
+		//System.out.println(board.getPlayerList().get(0).getDealtCards());
 		
 		board.playerTurn();
 
@@ -74,6 +74,9 @@ public class ClueGame extends JFrame{
 
 	public static CardInfoPanel getCardPanel() {
 		return cardPanel;
+	}
+	public static GameControlPanel getControlPanel(){
+		return ctrlPanel;
 	}
 	
 	

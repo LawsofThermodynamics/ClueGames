@@ -20,6 +20,10 @@ public abstract class Player {
 	public Player() {
 
 	}
+	
+	public Player(String name) {
+		this.name = name;
+	}
 
 	// Parametric constructor
 	public Player(String name, Color color, int row, int col) {
@@ -103,14 +107,6 @@ public abstract class Player {
 		return name;
 	}
 
-	public ArrayList<Card> getDealtList() {
-		return dealtList;
-	}
-
-	public ArrayList<Card> getSeenList() {
-		return seenList;
-	}
-
 	public Color getColor() {
 		return color;
 	}
@@ -133,8 +129,7 @@ public abstract class Player {
 
 	@Override
 	public String toString() {
-		return "Player [name=" + name + ", color=" + color + ", row=" + row + ", col=" + col + ", dealtList="
-				+ dealtList + ", seenList=" + seenList + "]";
+		return name;
 	}
 
 

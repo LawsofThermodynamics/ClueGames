@@ -8,8 +8,11 @@ package clueGame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -20,7 +23,10 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -49,6 +55,7 @@ public class Board extends JPanel{
 	private Solution solution; // Stores the correct set of cards that the players must choose
 	private Random rand = new Random(); // Random generator	
 	private PlayerMove playerMove = new PlayerMove(); // Used to track player's interactions with the board
+	private Player disprover;
 
 	private static Board theInstance = new Board(); // The singleton of the Board instance
 
@@ -85,7 +92,7 @@ public class Board extends JPanel{
 
 			targetCells = new ArrayList<BoardCell>();
 			visitedCells = new HashSet<BoardCell>();
-			
+
 
 
 			// Load data from config files
@@ -263,8 +270,8 @@ public class Board extends JPanel{
 
 			numPlayers++;
 		}
-		
-		System.out.println(playerList.get(0).getDealtList());
+
+		System.out.println(playerList.get(0).getDealtCards());
 	}
 
 
@@ -304,9 +311,9 @@ public class Board extends JPanel{
 
 					grid[rowCount][colCount].setRoom(roomMap.get(temp.charAt(0)).getName());
 					roomMap.get(temp.charAt(0)).addCell(grid[rowCount][colCount]);
-					
 
-					
+
+
 
 				}
 				else {
@@ -352,7 +359,7 @@ public class Board extends JPanel{
 						in.close(); // Close file
 						throw new BadConfigFormatException("LayoutConfigFile Failed, Invalid Character Detected");
 					}
-					
+
 				}
 				colCount++;
 			}
@@ -367,8 +374,8 @@ public class Board extends JPanel{
 		loadLayoutFinal();
 	}
 
-	
-	
+
+
 
 
 	/* Helper function for loadLayoutConfig
@@ -415,7 +422,7 @@ public class Board extends JPanel{
 			}
 		}		
 	}
-	
+
 	/* Secondary helper function for loadLayoutConfig
 	 * 	Loads in data from layoutConfigFile.csv for the last time
 	 *  Reads in data relating to doorways and room data
@@ -451,7 +458,7 @@ public class Board extends JPanel{
 					default:
 						break;
 					}
-					
+
 					// Links the currently selected cell with the center of the room, and vice versa
 					currentCell.addAdj(centerCell);
 					centerCell.addAdj(currentCell);
@@ -553,11 +560,25 @@ public class Board extends JPanel{
 	 * Michael, Sihang 4/3/2023
 	 */
 	public Card handleSuggestion(Player suggester, Solution suggestion) {
+		
+		ClueGame.getControlPanel().setGuess(suggester + " suggested \"" + suggestion.getPerson().getName() + "\"\nin the \"" + suggestion.getRoom().getName() + "\" with the \"" + suggestion.getWeapon() + "\"");
+		
+		for(int i = 0; i < playerList.size(); i++) {
+			if (playerList.get(i).getName().equals(suggestion.getPerson().getName())){
+				playerList.get(i).move(suggester.getRow(), suggester.getCol());
+				repaint();
+				break;
+			}
+		}
+		
 		for (Player player : playerList) {
 			if ((player.disproveSuggestion(suggestion) != null) && !(player.getName().equals(suggester.getName()))) {
+				disprover = player;
+				currTurnDone = true;
 				return player.disproveSuggestion(suggestion);
 			}
 		}
+		currTurnDone = true;
 		return null;
 	}
 
@@ -604,14 +625,14 @@ public class Board extends JPanel{
 				}
 			}
 		}
-		
+
 		// Iterate every board cell, draw overlays like doorway and room name.
-				for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
-					for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
-						grid [drawRowNum][drawColNum].drawOverlay(g, size);
-					}
-				}
-		
+		for (int drawRowNum = 0; drawRowNum < numRows; drawRowNum++) {
+			for (int drawColNum = 0; drawColNum < numColumns; drawColNum++) {
+				grid [drawRowNum][drawColNum].drawOverlay(g, size);
+			}
+		}
+
 		// Draw players.
 		ArrayList<BoardCell> playerLocation = new ArrayList <BoardCell>();
 		for (int players = 0; players < playerList.size(); players++) {
@@ -623,11 +644,11 @@ public class Board extends JPanel{
 				}
 			}
 			playerList.get(players).draw(g, size, offset);
-			
-			
+
+
 		}
 
-		
+
 
 	}
 
@@ -635,16 +656,13 @@ public class Board extends JPanel{
 	 * 
 	 * Sihang, Michael 4/12/2023
 	 */
-	public void playerTurn() {	
-		ClueGame.update();
-		
-		
-		
+	public void playerTurn() {			
 		// New turn.
-		currTurnDone = false;		
+		currTurnDone = false;	
+		ClueGame.update();	
 		rollDice();
-		
-		
+
+
 		calcTargets(this.getCell(playerList.get(currPlayer % 6)), diceVal); // Calculate possible moving targets.
 
 		GameControlPanel.getCtrlPanel().setTurn(playerList.get(currPlayer % 6), diceVal); // Update GameControlPanel with new player index and dice value.
@@ -687,7 +705,7 @@ public class Board extends JPanel{
 		public void mouseClicked(MouseEvent e) {
 			int currentCellX = (int) (e.getX() / (getHeight() / numRows));
 			int currentCellY = (int) (e.getY() / (getHeight() / numRows));
-			
+
 			if(currentCellY > numRows || currentCellX > numRows) {
 				splashScreen("Invalid location, out of bounds.");
 				return;
@@ -696,26 +714,31 @@ public class Board extends JPanel{
 			if (targetCells.contains(grid[currentCellY][currentCellX])) {
 				playerList.get(currPlayer % 6).move(currentCellY, currentCellX);
 
+				if (grid[playerList.get(currPlayer % 6).getRow()][playerList.get(currPlayer % 6).getCol()].isRoomCenter()) {
+					makeSuggestion(playerList.get(currPlayer % 6));
+				}
+
 				targetCells.clear();
 
 				currTurnDone = true;
 
 				repaint();
 				return;
-				
 			} else {
-				for (int targetCounter = 0; targetCounter < targetCells.size(); targetCounter++) {
-					if(targetCells.get(targetCounter).isRoomCenter()) {
+				if(!(grid[currentCellY][currentCellX].getInitial() == 'W')) {
+					for (int targetCounter = 0; targetCounter < targetCells.size(); targetCounter++) {
+
 						if(roomMap.get(targetCells.get(targetCounter).getInitial()).getRoomCells().contains(grid[currentCellY][currentCellX])) {
 							playerList.get(currPlayer % 6).move(targetCells.get(targetCounter).getRow(), targetCells.get(targetCounter).getCol());
 
-							
 							targetCells.clear();
 
-							currTurnDone = true;
-
 							repaint();
+
+							makeSuggestion(playerList.get(currPlayer % 6));
+
 							return;
+
 						}
 					}
 				}
@@ -742,6 +765,118 @@ public class Board extends JPanel{
 	public void rollDice() {
 		diceVal = rand.nextInt(6) + 1;
 	}
+
+
+
+	public Solution makeSuggestion(Player humanPlayer) {
+		String[] room = {roomMap.get(grid[humanPlayer.getRow()][humanPlayer.getCol()].getInitial()).getName()};
+		String[] playerOp = new String[allPerson.size()];
+		String[] weapOp = new String[allWeapon.size()];
+
+		for(int i = 0; i < allPerson.size(); i++) {
+			playerOp[i] = allPerson.get(i).getName();
+		}
+
+		for(int i = 0; i < allWeapon.size(); i++) {
+			weapOp[i] = allWeapon.get(i).getName();
+		}
+
+		JFrame jFrame = new JFrame("Make a Suggestion");
+
+		JComboBox<String> jComboroom = new JComboBox<>(room);
+		jComboroom.setEnabled(false);
+		jComboroom.setBounds(150, 0, 150, 30);
+		JLabel roomLable = new JLabel();
+		roomLable.setText("Room");
+		roomLable.setBounds(0, 0, 150, 30);
+
+		JComboBox<String> jComboplayer = new JComboBox<>(playerOp);
+		jComboplayer.setBounds(150, 30, 150, 30);
+		JLabel personLable = new JLabel();
+		personLable.setText("Person");
+		personLable.setBounds(0, 30, 150, 30);
+
+		JComboBox<String> jComboweapon = new JComboBox<>(weapOp);
+		jComboweapon.setBounds(150, 60, 150, 30);
+		JLabel weaponLable = new JLabel();
+		weaponLable.setText("Weapon");
+		weaponLable.setBounds(0, 60, 150, 30);
+
+
+		JButton submitButton = new JButton("Submit");
+		submitButton.setBounds(150, 90, 150, 30);
+
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setBounds(0, 90, 150, 30);
+
+
+
+		jFrame.add(jComboroom);
+		jFrame.add(jComboplayer);
+		jFrame.add(jComboweapon);
+
+		jFrame.add(roomLable);
+		jFrame.add(personLable);
+		jFrame.add(weaponLable);
+
+		jFrame.add(submitButton);
+		jFrame.add(cancelButton);
+
+		jFrame.setLayout(null);
+		jFrame.setSize(320, 160);
+		jFrame.setVisible(true);
+
+		submitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Card roomSug = new Card(jComboroom.getItemAt(jComboroom.getSelectedIndex()), CardType.ROOM);
+				Card playerSug = new Card(jComboplayer.getItemAt(jComboplayer.getSelectedIndex()), CardType.PERSON);
+				Card weaponSug = new Card(jComboweapon.getItemAt(jComboweapon.getSelectedIndex()), CardType.WEAPON);
+
+				//                for(int i = 0; )
+				//                
+				//                playerList.get(jComboplyaer.getSelectedIndex()).move(0, 0);
+
+
+
+				Card matchingCard = handleSuggestion(humanPlayer, new Solution(roomSug, playerSug, weaponSug));
+				if (matchingCard == null) {
+					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess could not be disproved");
+					splashScreen("No other players can disprove your suggestion");
+				} else {
+					splashScreen(disprover + " can disprove your suggestion by revealing " + matchingCard + " to you.");
+					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess was disproved by " + disprover.getName());
+					if(!playerList.get(0).getSeenCards().contains(matchingCard) && !playerList.get(0).getDealtCards().contains(matchingCard)) {
+						playerList.get(0).seenCard(matchingCard);
+					}
+					ClueGame.update();
+				}
+
+				jFrame.dispose();
+			}
+
+		});
+
+
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				currTurnDone = true;
+				jFrame.dispose();
+			}
+
+		});
+
+
+
+
+
+		return null;
+
+	}
+
+
+
 
 
 	// Getters
