@@ -15,6 +15,7 @@ public abstract class Player {
 	private int row, col; // Stores position of player, read from clueSettup
 	private ArrayList<Card> dealtList; // Stores cards the player was dealt at the beginning of the game, only allowed cards the player can show other players
 	private ArrayList<Card> seenList; // Stores cards the player has been shown by other players, updates throughout the game
+	private boolean moved;
 
 	// Default constructor
 	public Player() {
@@ -23,6 +24,7 @@ public abstract class Player {
 	
 	public Player(String name) {
 		this.name = name;
+		this.moved = false;
 	}
 
 	// Parametric constructor
@@ -34,6 +36,7 @@ public abstract class Player {
 		seenList = new ArrayList<Card>();
 		this.row = row;
 		this.col = col;
+		this.moved = false;
 	}
 	
 	// Method definition for computer player override
@@ -125,6 +128,14 @@ public abstract class Player {
 
 	public int getCol() {
 		return col;
+	}
+
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void setMoved(boolean moved) {
+		this.moved = moved;
 	}
 
 	@Override

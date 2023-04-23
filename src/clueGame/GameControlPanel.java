@@ -24,6 +24,7 @@ public class GameControlPanel extends JPanel {
 	JTextArea guess;
 	JTextArea guessResult;
 	private NextListener nextListener = new NextListener();
+	private AccuListener AccuListener = new AccuListener();
 	
 
 	// The singleton of GameControlPanel instance
@@ -71,6 +72,7 @@ public class GameControlPanel extends JPanel {
 				
 		// Create two buttons and add mouse listeners.
 		JButton makeAccu = new JButton("Make Accusation");
+		makeAccu.addMouseListener(AccuListener);
 		JButton next = new JButton("NEXT!");
 		next.addMouseListener(nextListener);
 		
@@ -128,6 +130,24 @@ public class GameControlPanel extends JPanel {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			Board.getInstance().nextFlow();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+		@Override
+		public void mouseExited(MouseEvent e) {}
+		
+	}
+	
+	public class AccuListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			Board.getInstance().makeAccusation(Board.getInstance().getPlayerList().get(0));
 		}
 
 		@Override
