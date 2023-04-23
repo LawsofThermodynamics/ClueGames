@@ -224,7 +224,8 @@ public class Board extends JPanel{
 		int weaponCard = (int)(Math.random()*(weaponList.size()));  		
 
 		// Initializes the solution using the random card selection
-		solution = new Solution(roomList.get(roomCard), personList.get(personCard), weaponList.get(weaponCard));		
+		solution = new Solution(roomList.get(roomCard), personList.get(personCard), weaponList.get(weaponCard));	
+		System.out.println(solution);
 		if (debugger) {System.out.println(solution);} // Prints card if debugger is true
 
 		// Removes the solution cards from the deck to prevent the players from getting the cards within the solution
@@ -540,19 +541,35 @@ public class Board extends JPanel{
 	 * Sihang 4/3/2023
 	 */
 	public boolean checkAccusation(Solution accusation) {
-		if (accusation.getRoom() != solution.getRoom()) {
-			System.out.println("Wrong room!");
+		
+		for(int i = 0 ; i < playerList.size(); i++) {
+			playerList.get(i).move(15, 15);
+		}
+		targetCells.clear();		
+		repaint();
+		currTurnDone = true;
+		ClueGame.setGameDone(true);
+		
+		if (accusation.getRoom().equals(solution.getRoom())  && accusation.getPerson().equals(solution.getPerson()) && accusation.getPerson().equals(solution.getPerson())) {
+			if(currPlayer % 6 == 0) {
+				splashScreen("Congragulations!! You have won clue!!");
+				ClueGame.getControlPanel().setGuess("Congragulations!! You have solved the mystery!!");
+
+			} else {
+				splashScreen("An AI has won clue!! The correct accusation was:/n" + accusation.getPerson() + "in the " + accusation.getRoom() + " with the " + accusation.getWeapon());
+				ClueGame.getControlPanel().setGuess("An AI has solved the mystery!! Better luck next time!!");
+
+			}
+			currTurnDone = true;
+			ClueGame.setGameDone(true);
+			return true;
+			
+		} else {
+			splashScreen("Unfortunatly, you guess incorrectly. The correct accusation was: " + solution.getPerson() + "in the " + solution.getRoom() + " with the " + solution.getWeapon());
+			
+
 			return false;
 		}
-		if (accusation.getPerson() != solution.getPerson()) {
-			System.out.println("Wrong person!");
-			return false;
-		}
-		if (accusation.getWeapon() != solution.getWeapon()) {
-			System.out.println("Wrong weapon!");
-			return false;
-		}
-		return true;
 	}
 
 	/* Loop player list, return first non-null result, if all players cannot disprove, return null.
@@ -564,7 +581,7 @@ public class Board extends JPanel{
 		ClueGame.getControlPanel().setGuess(suggester + " suggested \"" + suggestion.getPerson().getName() + "\"\nin the \"" + suggestion.getRoom().getName() + "\" with the \"" + suggestion.getWeapon() + "\"");
 
 		for(int i = 0; i < playerList.size(); i++) {
-			if (playerList.get(i).getName().equals(suggestion.getPerson().getName())){
+			if (playerList.get(i).getName().equals(suggestion.getPerson().getName()) && !playerList.get(i).getName().equals(suggester.getName())){
 				playerList.get(i).move(suggester.getRow(), suggester.getCol());
 				playerList.get(i).setMoved(true);
 				repaint();
@@ -667,7 +684,6 @@ public class Board extends JPanel{
 		calcTargets(this.getCell(playerList.get(currPlayer % 6)), diceVal); // Calculate possible moving targets.
 
 		if(playerList.get(currPlayer % 6).isMoved()) {
-			System.out.println("Fuck");
 			playerList.get(currPlayer % 6).setMoved(false);
 			targetCells.add(grid[playerList.get(currPlayer % 6).getRow()][playerList.get(currPlayer % 6).getCol()]);
 			repaint();
@@ -704,7 +720,7 @@ public class Board extends JPanel{
 	 */
 	public void nextFlow() {
 		// First check if current turn finished.
-		if (currTurnDone) {
+		if (isCurrTurnDone()) {
 			currPlayer++;
 			playerTurn();
 		} else {
@@ -723,6 +739,11 @@ public class Board extends JPanel{
 				splashScreen("Invalid location, out of bounds.");
 				return;
 			}
+
+			System.out.println("Clicked: " + e.getY() + ", " + e.getX());
+			System.out.println("Calc Cell: " + currentCellY + ", " + currentCellX);
+
+
 
 			if (targetCells.contains(grid[currentCellY][currentCellX])) {
 				playerList.get(currPlayer % 6).move(currentCellY, currentCellX);
@@ -915,106 +936,94 @@ public class Board extends JPanel{
 
 
 
-	public Solution makeAccusation(Player humanPlayer) {
-		String[] room = {roomMap.get(grid[humanPlayer.getRow()][humanPlayer.getCol()].getInitial()).getName()};
-		String[] playerOp = new String[allPerson.size()];
-		String[] weapOp = new String[allWeapon.size()];
+	public void makeAccusation(Player player) {	
+		if(currPlayer % 6 == 0) {
+			String[] roomOp = new String[allRoom.size()];
+			String[] playerOp = new String[allPerson.size()];
+			String[] weapOp = new String[allWeapon.size()];
+
+			for(int i = 0; i < allRoom.size(); i++) {
+				roomOp[i] = allRoom.get(i).getName();
+			}		
+
+			for(int i = 0; i < allPerson.size(); i++) {
+				playerOp[i] = allPerson.get(i).getName();
+			}
+
+			for(int i = 0; i < allWeapon.size(); i++) {
+				weapOp[i] = allWeapon.get(i).getName();
+			}
+
+			JFrame jFrame = new JFrame("Make an Accusation");
+
+			JComboBox<String> jComboroom = new JComboBox<>(roomOp);
+			jComboroom.setBounds(150, 0, 150, 30);
+			JLabel roomLable = new JLabel();
+			roomLable.setText("Room");
+			roomLable.setBounds(0, 0, 150, 30);
+
+			JComboBox<String> jComboplayer = new JComboBox<>(playerOp);
+			jComboplayer.setBounds(150, 30, 150, 30);
+			JLabel personLable = new JLabel();
+			personLable.setText("Person");
+			personLable.setBounds(0, 30, 150, 30);
+
+			JComboBox<String> jComboweapon = new JComboBox<>(weapOp);
+			jComboweapon.setBounds(150, 60, 150, 30);
+			JLabel weaponLable = new JLabel();
+			weaponLable.setText("Weapon");
+			weaponLable.setBounds(0, 60, 150, 30);
+
+
+			JButton submitButton = new JButton("Submit");
+			submitButton.setBounds(150, 90, 150, 30);
+
+			JButton cancelButton = new JButton("Cancel");
+			cancelButton.setBounds(0, 90, 150, 30);
 
 
 
+			jFrame.add(jComboroom);
+			jFrame.add(jComboplayer);
+			jFrame.add(jComboweapon);
 
-		for(int i = 0; i < allPerson.size(); i++) {
-			playerOp[i] = allPerson.get(i).getName();
-		}
+			jFrame.add(roomLable);
+			jFrame.add(personLable);
+			jFrame.add(weaponLable);
 
-		for(int i = 0; i < allWeapon.size(); i++) {
-			weapOp[i] = allWeapon.get(i).getName();
-		}
+			jFrame.add(submitButton);
+			jFrame.add(cancelButton);
 
-		JFrame jFrame = new JFrame("Make an Accusation");
+			jFrame.setLayout(null);
+			jFrame.setSize(320, 160);
+			jFrame.setVisible(true);
 
-		JComboBox<String> jComboroom = new JComboBox<>(room);
-		jComboroom.setEnabled(false);
-		jComboroom.setBounds(150, 0, 150, 30);
-		JLabel roomLable = new JLabel();
-		roomLable.setText("Room");
-		roomLable.setBounds(0, 0, 150, 30);
-
-		JComboBox<String> jComboplayer = new JComboBox<>(playerOp);
-		jComboplayer.setBounds(150, 30, 150, 30);
-		JLabel personLable = new JLabel();
-		personLable.setText("Person");
-		personLable.setBounds(0, 30, 150, 30);
-
-		JComboBox<String> jComboweapon = new JComboBox<>(weapOp);
-		jComboweapon.setBounds(150, 60, 150, 30);
-		JLabel weaponLable = new JLabel();
-		weaponLable.setText("Weapon");
-		weaponLable.setBounds(0, 60, 150, 30);
+			submitButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Card roomSug = new Card(jComboroom.getItemAt(jComboroom.getSelectedIndex()), CardType.ROOM);
+					Card playerSug = new Card(jComboplayer.getItemAt(jComboplayer.getSelectedIndex()), CardType.PERSON);
+					Card weaponSug = new Card(jComboweapon.getItemAt(jComboweapon.getSelectedIndex()), CardType.WEAPON);
 
 
-		JButton submitButton = new JButton("Submit");
-		submitButton.setBounds(150, 90, 150, 30);
-
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setBounds(0, 90, 150, 30);
-
-
-
-		jFrame.add(jComboroom);
-		jFrame.add(jComboplayer);
-		jFrame.add(jComboweapon);
-
-		jFrame.add(roomLable);
-		jFrame.add(personLable);
-		jFrame.add(weaponLable);
-
-		jFrame.add(submitButton);
-		jFrame.add(cancelButton);
-
-		jFrame.setLayout(null);
-		jFrame.setSize(320, 160);
-		jFrame.setVisible(true);
-
-		submitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Card roomSug = new Card(jComboroom.getItemAt(jComboroom.getSelectedIndex()), CardType.ROOM);
-				Card playerSug = new Card(jComboplayer.getItemAt(jComboplayer.getSelectedIndex()), CardType.PERSON);
-				Card weaponSug = new Card(jComboweapon.getItemAt(jComboweapon.getSelectedIndex()), CardType.WEAPON);
-
-
-				Card matchingCard = handleSuggestion(humanPlayer, new Solution(roomSug, playerSug, weaponSug));
-				if (matchingCard == null) {
-					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess could not be disproved");
-				} else {
-					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess was disproved by " + disprover.getName());
-					if(!playerList.get(0).getSeenCards().contains(matchingCard) && !playerList.get(0).getDealtCards().contains(matchingCard)) {
-						playerList.get(0).seenCard(matchingCard);
-					}
-					ClueGame.update();
+					System.out.println(checkAccusation(new Solution(roomSug, playerSug, weaponSug)));
+					jFrame.dispose();
 				}
 
-				jFrame.dispose();
-			}
-
-		});
+			});
 
 
-		cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				currTurnDone = true;
-				jFrame.dispose();
-			}
+			cancelButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					jFrame.dispose();
+				}
 
-		});
+			});
 
+		} else {
 
-
-
-
-		return null;
+		}
 
 	}
 
@@ -1083,6 +1092,10 @@ public class Board extends JPanel{
 
 	public Map<Character, Room> getRoomMap() {
 		return roomMap;
+	}
+
+	public boolean isCurrTurnDone() {
+		return currTurnDone;
 	}
 
 }

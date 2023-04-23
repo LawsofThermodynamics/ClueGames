@@ -15,6 +15,7 @@ public class ClueGame extends JFrame{
 	private static ClueGame gameFrame;
 	private static GameControlPanel ctrlPanel;
 	private static CardInfoPanel cardPanel;
+	private static boolean gameDone = false;
 	
 	/* In constructor, initialize whole game board and read in game setting files.
 	 * 
@@ -40,7 +41,7 @@ public class ClueGame extends JFrame{
 	 */
 	public void splash() {
 		String title = "Welcome to CLUE";
-		String text = "You are " + board.getPlayerList().get(0) + "\nCan you find solution\nbefore computer players?";
+		String text = "You are " + board.getPlayerList().get(0) + "\nCan you find solution\nbefore the computer players?";
 		JOptionPane.showMessageDialog(this, text, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
@@ -77,6 +78,14 @@ public class ClueGame extends JFrame{
 	}
 	public static GameControlPanel getControlPanel(){
 		return ctrlPanel;
+	}
+
+	public static boolean isGameDone() {
+		return gameDone;
+	}
+
+	public static void setGameDone(boolean gameVal) {
+		gameDone = gameVal;
 	}
 	
 	
