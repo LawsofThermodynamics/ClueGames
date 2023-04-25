@@ -39,7 +39,7 @@ public class Board extends JPanel{
 	private int diceVal; // Stores the dice value
 	private int currPlayer; // Stores the index of current player in playerList
 	private boolean currTurnDone = false; // Stores information used to track when a player's turn ends
-	private boolean compMakeAccu = false;
+	private boolean compMakeAccu = false; // Stores flag that whether computer player propose an accusation
 	private String layoutConfigFile, setupConfigFiles; // Location of the layout Config File and setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private ArrayList<Card> cardList = new ArrayList<Card>(); // Stores the list of cards for dealing to players
@@ -51,7 +51,7 @@ public class Board extends JPanel{
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
 	private Solution solution; // Stores the correct set of cards that the players must choose
-	private Solution tmpSolution;
+	private Solution tmpSolution; // Stores the solution that cannot be disprove by anyone
 	private Random rand = new Random(); // Random generator	
 	private PlayerMove playerMove = new PlayerMove(); // Used to track player's interactions with the board
 	private Player disprover;
@@ -557,7 +557,7 @@ public class Board extends JPanel{
 
 			} 
 			else {
-				splashScreen("An AI has won clue!! The correct accusation was:/n" + accusation.getPerson() + "in the " + accusation.getRoom() + " with the " + accusation.getWeapon());
+				splashScreen("An AI has won clue!! The correct accusation was:\n" + accusation.getPerson() + "in the " + accusation.getRoom() + " with the " + accusation.getWeapon());
 				ClueGame.getControlPanel().setGuess("An AI has solved the mystery!! Better luck next time!!");
 
 			}
@@ -725,7 +725,7 @@ public class Board extends JPanel{
 	public void nextFlow() {
 		// First check if current turn finished.
 		if (isCurrTurnDone()) {
-			currPlayer++;
+			currPlayer = (currPlayer + 1) % 6;
 			playerTurn();
 		} else {
 			splashScreen("Please finish current turn fisrt.");
