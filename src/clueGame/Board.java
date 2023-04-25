@@ -42,6 +42,7 @@ public class Board extends JPanel{
 	private int diceVal; // Stores the dice value
 	private int currPlayer; // Stores the index of current player in playerList
 	private boolean currTurnDone = false; // Stores information used to track when a player's turn ends
+	private boolean compMakeAccu = false;
 	private String layoutConfigFile, setupConfigFiles; // Location of the layout Config File and setup Config File
 	private String fileLocation = "data//"; // Stores the relative path of the file names proved by the user
 	private ArrayList<Card> cardList = new ArrayList<Card>(); // Stores the list of cards for dealing to players
@@ -53,6 +54,7 @@ public class Board extends JPanel{
 	private Map<String, Color> colorMap = new HashMap<String, Color>(); // Set that stores the relationships between each room and the initials. Data is read in from setup Config File
 	private BoardCell grid[][]; // 2d Array that stores the BoardCell that makes up the games board
 	private Solution solution; // Stores the correct set of cards that the players must choose
+	private Solution tmpSolution;
 	private Random rand = new Random(); // Random generator	
 	private PlayerMove playerMove = new PlayerMove(); // Used to track player's interactions with the board
 	private Player disprover;
@@ -93,7 +95,7 @@ public class Board extends JPanel{
 			targetCells = new ArrayList<BoardCell>();
 			visitedCells = new HashSet<BoardCell>();
 
-
+			tmpSolution = new Solution();
 
 			// Load data from config files
 			loadSetupConfig();
@@ -548,14 +550,16 @@ public class Board extends JPanel{
 		targetCells.clear();		
 		repaint();
 		currTurnDone = true;
-		ClueGame.setGameDone(true);
+		ClueGame.setGameDone(true);//TODO: why set true here.
 		
+		// Correct accusation.
 		if (accusation.getRoom().equals(solution.getRoom())  && accusation.getPerson().equals(solution.getPerson()) && accusation.getPerson().equals(solution.getPerson())) {
 			if(currPlayer % 6 == 0) {
 				splashScreen("Congragulations!! You have won clue!!");
 				ClueGame.getControlPanel().setGuess("Congragulations!! You have solved the mystery!!");
 
-			} else {
+			} 
+			else {
 				splashScreen("An AI has won clue!! The correct accusation was:/n" + accusation.getPerson() + "in the " + accusation.getRoom() + " with the " + accusation.getWeapon());
 				ClueGame.getControlPanel().setGuess("An AI has solved the mystery!! Better luck next time!!");
 
@@ -564,9 +568,19 @@ public class Board extends JPanel{
 			ClueGame.setGameDone(true);
 			return true;
 			
-		} else {
-			splashScreen("Unfortunatly, you guess incorrectly. The correct accusation was: " + solution.getPerson() + "in the " + solution.getRoom() + " with the " + solution.getWeapon());
-			
+		} 
+		// Wrong accusation
+		else {
+			// If human player, game over.
+			if (currPlayer % 6 == 0) {
+				splashScreen("Unfortunatly, you guess incorrectly. The correct accusation was: " + solution.getPerson() + "in the " + solution.getRoom() + " with the " + solution.getWeapon());
+				ClueGame.setGameDone(true);
+			}
+			else {
+				//TODO: computer player make wrong accusation, computer player out?
+				//		Add a flag in computer player, and check before each turn?
+				ClueGame.getControlPanel().setGuessResult(playerList.get(currPlayer) + " made wrong accusation.");
+			}
 
 			return false;
 		}
@@ -700,6 +714,10 @@ public class Board extends JPanel{
 		// Computer player
 		else {
 			removeMouseListener(playerMove);
+			
+			if (compMakeAccu) {
+				makeAccusation(disprover);
+			}
 			BoardCell cellToMove = playerList.get(currPlayer % 6).selectTarget(diceVal);
 			playerList.get(currPlayer % 6).move(cellToMove.getRow(), cellToMove.getCol());
 			targetCells.clear();
@@ -728,6 +746,9 @@ public class Board extends JPanel{
 		}
 	}
 
+	/* Mouselistener for human player interacting with board area. 
+	 * 
+	 */
 	private class PlayerMove implements MouseListener {
 
 		@Override
@@ -744,7 +765,7 @@ public class Board extends JPanel{
 			System.out.println("Calc Cell: " + currentCellY + ", " + currentCellX);
 
 
-
+			// Case that clicking on the target cell.
 			if (targetCells.contains(grid[currentCellY][currentCellX])) {
 				playerList.get(currPlayer % 6).move(currentCellY, currentCellX);
 
@@ -758,7 +779,11 @@ public class Board extends JPanel{
 
 				repaint();
 				return;
-			} else {
+			} 
+			
+			// Case that didn't click on target cell.
+			else {
+				// Check if click on the room cell of the target room.
 				if(!(grid[currentCellY][currentCellX].getInitial() == 'W')) {
 					for (int targetCounter = 0; targetCounter < targetCells.size(); targetCounter++) {
 
@@ -870,7 +895,10 @@ public class Board extends JPanel{
 				Card matchingCard = handleSuggestion(player, new Solution(roomSug, playerSug, weaponSug));
 				if (matchingCard == null) {
 					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess could not be disproved");
-				} else {
+					compMakeAccu = true;
+					tmpSolution.modify(roomSug, playerSug, weaponSug);
+				} 
+				else {
 					ClueGame.getControlPanel().setGuessResult(playerList.get(0).getName() + "'s guess was disproved by " + disprover.getName());
 					if(!playerList.get(0).getSeenCards().contains(matchingCard) && !playerList.get(0).getDealtCards().contains(matchingCard)) {
 						playerList.get(0).seenCard(matchingCard);
@@ -897,7 +925,11 @@ public class Board extends JPanel{
 
 	}
 
+	/* This method is computer player propose a suggestion.
+	 * 
+	 */
 	public Solution computerMakeSuggestion(Player player) {
+		// TODO: room not used?
 		String[] room = {roomMap.get(grid[player.getRow()][player.getCol()].getInitial()).getName()};
 		String[] playerOp = new String[allPerson.size()];
 		String[] weapOp = new String[allWeapon.size()];
@@ -919,6 +951,8 @@ public class Board extends JPanel{
 		Card matchingCard = handleSuggestion(player, new Solution(roomSug, playerSug, weaponSug));
 		if (matchingCard == null) {
 			ClueGame.getControlPanel().setGuessResult(player.getName() + "'s guess could not be disproved");
+			compMakeAccu = true;
+			tmpSolution.modify(roomSug, playerSug, weaponSug);
 		} else {
 			ClueGame.getControlPanel().setGuessResult(player.getName() + "'s guess was disproved by " + disprover.getName());
 			if(!player.getSeenCards().contains(matchingCard) && !player.getDealtCards().contains(matchingCard)) {
@@ -927,8 +961,6 @@ public class Board extends JPanel{
 			ClueGame.update();
 		}
 
-
-
 		return null;
 
 	}
@@ -936,7 +968,9 @@ public class Board extends JPanel{
 
 
 
-	public void makeAccusation(Player player) {	
+	public void makeAccusation(Player player) {	//TODO: argument useless, delete?
+		
+		// Human player make accusation
 		if(currPlayer % 6 == 0) {
 			String[] roomOp = new String[allRoom.size()];
 			String[] playerOp = new String[allPerson.size()];
@@ -1021,8 +1055,12 @@ public class Board extends JPanel{
 
 			});
 
-		} else {
-
+		} 
+		
+		// Computer player make accusation.
+		else {
+			ClueGame.getControlPanel().setGuess(playerList.get(currPlayer) + " accused " + tmpSolution.getPerson() + "\"\nin the \"" + tmpSolution.getRoom() + "\" with the \"" + tmpSolution.getWeapon() + "\"");
+			System.out.println(checkAccusation(tmpSolution));
 		}
 
 	}

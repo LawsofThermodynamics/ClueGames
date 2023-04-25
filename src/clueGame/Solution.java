@@ -32,6 +32,12 @@ public class Solution {
 		return false;
 	}
 	
+	public void modify(Card room, Card person, Card weapon) {
+		this.room = room;
+		this.person = person;
+		this.weapon = weapon;
+	}
+	
 	// Getters (setters excluded as cards should never be overwritten once picked)
 	public Card getRoom() {
 		return room;
