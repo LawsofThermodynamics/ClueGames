@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.RoundRectangle2D;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -29,8 +28,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import clueGame.GameControlPanel.NextListener;
 
 public class Board extends JPanel{
 	// Debugger switch
@@ -550,7 +547,7 @@ public class Board extends JPanel{
 		targetCells.clear();		
 		repaint();
 		currTurnDone = true;
-		ClueGame.setGameDone(true);//TODO: why set true here.
+		ClueGame.setGameDone(true); // No matter human or computer propose a accusation, correct/wrong, the game will end.
 		
 		// Correct accusation.
 		if (accusation.getRoom().equals(solution.getRoom())  && accusation.getPerson().equals(solution.getPerson()) && accusation.getPerson().equals(solution.getPerson())) {
@@ -565,23 +562,12 @@ public class Board extends JPanel{
 
 			}
 			currTurnDone = true;
-			ClueGame.setGameDone(true);
 			return true;
 			
 		} 
-		// Wrong accusation
+		// Wrong accusation, only human player could make wrong, so no branch for human/computer here.
 		else {
-			// If human player, game over.
-			if (currPlayer % 6 == 0) {
-				splashScreen("Unfortunatly, you guess incorrectly. The correct accusation was: " + solution.getPerson() + "in the " + solution.getRoom() + " with the " + solution.getWeapon());
-				ClueGame.setGameDone(true);
-			}
-			else {
-				//TODO: computer player make wrong accusation, computer player out?
-				//		Add a flag in computer player, and check before each turn?
-				ClueGame.getControlPanel().setGuessResult(playerList.get(currPlayer) + " made wrong accusation.");
-			}
-
+			splashScreen("Unfortunatly, you guess incorrectly. The correct accusation was: " + solution.getPerson() + "in the " + solution.getRoom() + " with the " + solution.getWeapon());
 			return false;
 		}
 	}
@@ -716,7 +702,7 @@ public class Board extends JPanel{
 			removeMouseListener(playerMove);
 			
 			if (compMakeAccu) {
-				makeAccusation(disprover);
+				makeAccusation(playerList.get(currPlayer));
 			}
 			BoardCell cellToMove = playerList.get(currPlayer % 6).selectTarget(diceVal);
 			playerList.get(currPlayer % 6).move(cellToMove.getRow(), cellToMove.getCol());
@@ -826,7 +812,10 @@ public class Board extends JPanel{
 	}
 
 
-
+	/* Human player make a suggestion. Splash a panel with 3 combo box and buttons.
+	 * 
+	 * Author: Michael, 4/24/2023
+	 */
 	public Solution makeSuggestion(Player player) {
 		String[] room = {roomMap.get(grid[player.getRow()][player.getCol()].getInitial()).getName()};
 		String[] playerOp = new String[allPerson.size()];
@@ -925,12 +914,11 @@ public class Board extends JPanel{
 
 	}
 
-	/* This method is computer player propose a suggestion.
+	/* Computer player propose a suggestion. The room must be the room player at.
 	 * 
+	 * Author: Michael 4/24/2023
 	 */
 	public Solution computerMakeSuggestion(Player player) {
-		// TODO: room not used?
-		String[] room = {roomMap.get(grid[player.getRow()][player.getCol()].getInitial()).getName()};
 		String[] playerOp = new String[allPerson.size()];
 		String[] weapOp = new String[allWeapon.size()];
 
@@ -967,8 +955,11 @@ public class Board extends JPanel{
 
 
 
-
-	public void makeAccusation(Player player) {	//TODO: argument useless, delete?
+	/* Make accusation method, this method has two branches for human/computer player.
+	 * 
+	 * Author: Michael 4/24/2023
+	 */
+	public void makeAccusation(Player player) {
 		
 		// Human player make accusation
 		if(currPlayer % 6 == 0) {
@@ -1057,7 +1048,7 @@ public class Board extends JPanel{
 
 		} 
 		
-		// Computer player make accusation.
+		// Computer player make accusation. Update info in guess panel and check accusation.
 		else {
 			ClueGame.getControlPanel().setGuess(playerList.get(currPlayer) + " accused " + tmpSolution.getPerson() + "\"\nin the \"" + tmpSolution.getRoom() + "\" with the \"" + tmpSolution.getWeapon() + "\"");
 			System.out.println(checkAccusation(tmpSolution));
